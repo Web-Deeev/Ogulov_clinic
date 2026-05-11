@@ -14,9 +14,9 @@ export default function Header() {
           <span className="divider">|</span>
           <NavLink to="/academy" className="top-menu-link">Академия</NavLink>
           <span className="divider">|</span>
-          <a href="https://shop.example.com" target="_blank" rel="noopener noreferrer" className="top-menu-link">
+          <NavLink to="/shop"  className="top-menu-link">
             Интернет-магазин
-          </a>
+          </NavLink>
         </div>
       </div>
 

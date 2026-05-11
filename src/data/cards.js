@@ -2,7 +2,7 @@ export const cards = [
   {
     title: 'Клиника',
     image: '/images/1.jpg',
-    href: '#',
+    href: '/clinic',
     logo: '/images/1.png',
     description: 'Услуги по оздоровлению организма и улучшению качества жизни',
   },

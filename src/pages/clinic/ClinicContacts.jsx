@@ -8,19 +8,7 @@ export default function ClinicContacts() {
     <div className="clinic-page">
      
 
-      {/* Подменю клиники */}
-      <nav className="clinic-submenu">
-        <div className="container">
-          <NavLink to="/" className="submenu-link" end>Главная</NavLink>
-          <NavLink to="/clinic/about" className="submenu-link">О клинике</NavLink>
-          <NavLink to="/clinic/doctors" className="submenu-link">Специалисты</NavLink>
-          <NavLink to="/clinic/methods" className="submenu-link">Методы</NavLink>
-          <NavLink to="/clinic/prices" className="submenu-link">Цены</NavLink>
-          <NavLink to="/clinic/awards" className="submenu-link">Награды</NavLink>
-          <NavLink to="/clinic/faq" className="submenu-link">Вопрос-ответ</NavLink>
-          <NavLink to="/clinic/contacts" className="submenu-link active">Контакты</NavLink>
-        </div>
-      </nav>
+
 
       {/* Заголовок страницы */}
       <section className="clinic-banner">

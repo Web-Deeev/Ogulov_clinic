@@ -3,6 +3,7 @@ import HomePage from './pages/HomePage'
 import ShopPage from './pages/ShopPage'
 import ShopCategoryPage from './pages/ShopCategoryPage'
 import Header from './components/Header'
+import ClinicLayout from './pages/clinic/ClinicLayout'
 import ClinicAbout from './pages/clinic/ClinicAbout';
 import ClinicDoctors from './pages/clinic/ClinicDoctors';
 import ClinicMethods from './pages/clinic/ClinicMethods';
@@ -26,15 +27,18 @@ function App() {
         <Route path="/shop/category" element={<ShopCategoryPage />} />
       
             {/* Клиника */}
-        <Route path="/" element={<ClinicAbout />} />
-        <Route path="/clinic/about" element={<ClinicAbout />} />
-        <Route path="/clinic/doctors" element={<ClinicDoctors />} />
-        <Route path="/clinic/methods" element={<ClinicMethods />} />
-        <Route path="/clinic/prices" element={<ClinicPrices />} />
-        <Route path="/clinic/awards" element={<ClinicAwards />} />
-        <Route path="/clinic/faq" element={<ClinicFAQ />} />
-        <Route path="/clinic/contacts" element={<ClinicContacts />} />
-
+           
+        <Route path="/clinic" element={<ClinicLayout />}>
+         
+          <Route index element={<ClinicAbout />} /> {/* Это откроется по ссылке /clinic */}
+          <Route path="about" element={<ClinicAbout />} />
+          <Route path="doctors" element={<ClinicDoctors />} />
+          <Route path="methods" element={<ClinicMethods />} />
+          <Route path="prices" element={<ClinicPrices />} />
+          <Route path="awards" element={<ClinicAwards />} />
+          <Route path="faq" element={<ClinicFAQ />} />
+          <Route path="contacts" element={<ClinicContacts />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   )
