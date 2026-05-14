@@ -1,0 +1,340 @@
+/* Обертка всего магазина под основным хедером */
+.shop-layout-wrapper {
+  border-top: 1px solid #e5e7eb; /* Тонкая серая линия разделения */
+  background-color: #ffffff;
+}
+
+/* Стили под-логотипа магазина */
+.shop-sub-logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+  text-decoration: none;
+}
+
+/* Активное состояние для внутренних инфо-ссылок магазина */
+.shop-info-menu a.active {
+  color: #007bff;
+  font-weight: 600;
+}
+
+
+/* Общие параметры шапки магазина */
+.shop-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+}
+
+/* Сетка первой строки (Лого + Поиск + Корзина) */
+.shop-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+}
+
+/* Контейнер второй строки для меню категорий */
+.shop-menu-row {
+  border-top: 1px solid #f5f5f5;
+  background-color: #fafafa; /* Легкий контрастный фон для категорий */
+  padding: 8px 0;
+}
+
+/* Список категорий */
+.shop-menu-list {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto; /* Появится скролл на мобильных экранах */
+}
+
+/* Кнопки категорий товаров */
+.shop-menu-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #444444;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 0;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.shop-menu-btn:hover {
+  color: #007bff; /* Окрашивание в синий при наведении */
+}
+
+
+
+
+/* Обертка всего магазина под основным хедером */
+.shop-layout-wrapper {
+  border-top: 1px solid #e5e7eb; /* Тонкая серая линия разделения */
+  background-color: #ffffff;
+}
+
+/* Стили под-логотипа магазина */
+.shop-sub-logo {
+  font-size: 20px;
+  font-weight: bold;
+  color: #222;
+  text-decoration: none;
+}
+
+/* Активное состояние для внутренних инфо-ссылок магазина */
+.shop-info-menu a.active {
+  color: #007bff;
+  font-weight: 600;
+}
+
+
+/* Общие параметры шапки магазина */
+.shop-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid #eaeaea;
+}
+
+/* Сетка первой строки (Лого + Поиск + Корзина) */
+.shop-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 0;
+}
+
+/* Контейнер второй строки для меню категорий */
+.shop-menu-row {
+  border-top: 1px solid #f5f5f5;
+  background-color: #fafafa; /* Легкий контрастный фон для категорий */
+  padding: 8px 0;
+}
+
+/* Список категорий */
+.shop-menu-list {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  overflow-x: auto; /* Появится скролл на мобильных экранах */
+}
+
+/* Кнопки категорий товаров */
+.shop-menu-btn {
+  background: none;
+  border: none;
+  font-size: 14px;
+  color: #444444;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 0;
+  white-space: nowrap;
+  transition: color 0.15s ease;
+}
+
+.shop-menu-btn:hover {
+  color: #007bff; /* Окрашивание в синий при наведении */
+}
+
+
+
+.shop-breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+  margin-bottom: 25px;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+
+
+
+
+
+/* Ссылка "Главная" */
+.shop-breadcrumbs a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease, text-decoration 0.15s ease;
+}
+
+.shop-breadcrumbs a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Разделитель наклонная черта */
+.breadcrumbs-separator {
+  color: #b5b5b5;
+  user-select: none;
+}
+
+/* Название текущей открытой страницы */
+.breadcrumbs-current {
+  color: #7a7a7a;
+  pointer-events: none; /* Делает текст некликабельным */
+}
+
+
+
+
+
+
+/* Основные параметры футера */
+.shop-footer {
+  background-color: #f9f9f9;
+  border-top: 1px solid #eaeaea;
+  padding: 40px 0 20px 0;
+  margin-top: 60px;
+  font-family: sans-serif;
+}
+
+/* Сетка для колонок ссылок */
+.shop-footer-inner {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 30px;
+  padding-bottom: 30px;
+  border-bottom: 1px solid #05e3f3;
+}
+
+.shop-footer-col {
+  flex: 1;
+  min-width: 200px;
+}
+
+.shop-footer-col h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #e53e3e;
+  margin-bottom: 15px;
+}
+
+.shop-footer-col a {
+  display: block;
+  font-size: 14px;
+  color: #7e7e7d;
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.15s ease;
+}
+
+.shop-footer-col a:hover {
+  color: #007bff; /* Фирменный синий цвет при наведении */
+}
+
+/* Блок платежных систем */
+.shop-payments-inner {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.pay-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 4px;
+  background-color: #ffffff;
+  border: 1px solid #dddddd;
+  color: #555555;
+}
+
+
+
+/* Контейнер страницы */
+.info-page-content {
+  padding: 40px 15px;
+  min-height: 500px;
+  color: #333333;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Главный заголовок */
+.info-page-content h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111111;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 15px;
+}
+
+/* Текстовый блок */
+.about-text {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* Абзацы текста */
+.about-text p {
+  font-size: 16px;
+  line-height: 1.7;
+  color: #4a4a4a;
+  margin-bottom: 20px;
+}
+
+.about-text p strong {
+  color: #111111;
+}
+
+/* Подзаголовки (блоки преимуществ или истории) */
+.about-text h3 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #007bff; /* Фирменный синий цвет */
+  margin-top: 35px;
+  margin-bottom: 15px;
+}
+
+/* Списки */
+.about-text ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-bottom: 25px;
+}
+
+.about-text ul li {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4a4a4a;
+  margin-bottom: 12px;
+  position: relative;
+  padding-left: 25px;
+}
+
+/* Красивый маркер для списка в стиле Огулов Центра */
+.about-text ul li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #28a745; /* Зеленый цвет для галочки */
+  font-weight: bold;
+}
+
+/* Финальный призыв к действию */
+.about-accent-block {
+  background-color: #f8f9fa;
+  border-left: 4px solid #007bff;
+  padding: 20px;
+  margin-top: 40px;
+  border-radius: 0 8px 8px 0;
+}
+
+.about-accent-block h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111111;
+  margin: 0;
+}
+
+

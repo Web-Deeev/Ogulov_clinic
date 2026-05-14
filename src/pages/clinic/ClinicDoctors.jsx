@@ -1,20 +1,25 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './clinic.css';
+
+
 const doctors = [
-  { id: 1, name: "Огулов А.Т.", role: "Основатель центра" },
-  { id: 2, name: "Иванов И.И.", role: "Специалист по висцеральной практике" },
+  { 
+    id: "ogulov-aleksandr", // Поменяли на строковый ID для роутинга /clinic/doctors/ogulov-aleksandr
+    name: "Огулов Александр Тимофеевич", 
+    role: "Генеральный директор Учебно-оздоровительного Огулов Центра. Президент Профессиональной ассоциации специалистов висцеральных практик, профессор народной медицины, действительный член международной Европейской Академии Естественных наук (Ганновер. Германия). Основоположник и исследователь направления 'Висцеральная практика' - массаж внутренних органов через переднюю стенку живота. Профессиональное начало деятельности в области висцеральной практики с 1985 года.", 
+    image: "/images/Ogulov.jpg",
+    methods: ["visceralnaya-praktika"]
+  },
+  {
+    id: "smirnov-konstantin",
+    name: "Смирнов Константин Анатольевич",
+    role: "Специалист висцеральных практик высшей категории, специалист по оздоровлению пчелами, натуропат.",
+    image: "/images/smirnov.jpg",
+    methods: ["visceralnaya-praktika"]
+  }
 ];
 
 export default function ClinicDoctors() {
-  return (
-    <section className="clinic-doctors">
-      <h1>Наши специалисты</h1>
-      <div className="doctors-grid">
-        {doctors.map(doc => (
-          <div key={doc.id} className="doctor-card">
-            <h3>{doc.name}</h3>
-            <p>{doc.role}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+  return <h1>Специалисты</h1>;
 }

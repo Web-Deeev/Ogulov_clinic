@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import ShopPage from './pages/ShopPage'
-import ShopCategoryPage from './pages/ShopCategoryPage'
-import Header from './components/Header'
-import ClinicLayout from './pages/clinic/ClinicLayout'
+import HomePage from './pages/HomePage';
+import ShopPage from './components/shop/ShopPage';
+import ShopCategoryPage from './components/shop/ShopCategoryPage';
+import Header from './components/Header';
+import ClinicLayout from './pages/clinic/ClinicLayout';
 import ClinicAbout from './pages/clinic/ClinicAbout';
 import ClinicDoctors from './pages/clinic/ClinicDoctors';
 import ClinicMethods from './pages/clinic/ClinicMethods';
