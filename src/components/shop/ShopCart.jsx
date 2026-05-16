@@ -1,118 +1,171 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { useShop } from './ShopContext';
+import { Table, Button, Card, Row, Col, Form } from 'react-bootstrap';
 
-export default function ShopCart({ cart, setCart, setCurrentView }) {
-  
-  // Функция изменения количества товара (+ или -)
-  const changeCount = (id, delta) => {
-    setCart((prevCart) =>
-      prevCart
-        .map((item) =>
-          item.id === id ? { ...item, count: item.count + delta } : item
-        )
-        .filter((item) => item.count > 0) // Если количество стало 0, товар удаляется
-    );
+export default function Cart() {
+  // Достаем корзину и функции управления из глобального контекста
+  const { cart, updateQuantity, removeFromCart, clearCart } = useShop();
+
+  // Функция превращения строки "4 200 сом" в число 4200 для расчетов
+  const parsePrice = (priceStr) => {
+    if (!priceStr) return 0;
+    return parseInt(priceStr.toString().replace(/[^0-9]/g, ''), 10) || 0;
   };
 
-  // Функция полного удаления товара из корзины
-  const removeItem = (id) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
-
-  // Подсчет итоговой стоимости заказа
-  const totalPrice = cart.reduce((sum, item) => {
-    // Извлекаем только цифры из строки цены (например, "1200 сом" -> 1200)
-    const priceNum = parseInt(item.price) || 0;
-    return sum + priceNum * item.count;
+  // Считаем общую стоимость всей корзины
+  const totalCartPrice = cart.reduce((sum, item) => {
+    return sum + parsePrice(item.price) * item.quantity;
   }, 0);
 
-  // Имитация отправки формы заказа
-  const handleSubmitOrder = (e) => {
+  // Имитация отправки заказа в Django DRF (POST-запрос)
+  const handleCheckout = (e) => {
     e.preventDefault();
-    alert('Спасибо за заказ! Наш менеджер свяжется с вами в ближайшее время для подтверждения доставки.');
-    setCart([]); // Очищаем корзину после заказа
-    setCurrentView('home'); // Возвращаем на главную
+    
+    // Структура данных, которую мы позже отправим на бэкенд:
+    const orderData = {
+      items: cart.map(item => ({
+        product_id: item.id,
+        quantity: item.quantity
+      })),
+      total_amount: totalCartPrice,
+      city: 'Бишкек'
+    };
+
+    alert(`Заказ сформирован!\nСтруктура готова под Django DRF:\n${JSON.stringify(orderData, null, 2)}`);
+    clearCart(); // Очищаем корзину после заказа
   };
 
+  // Если корзина пуста
+  if (cart.length === 0) {
+    return (
+      <div className="container my-5 py-5 text-center bg-white rounded shadow-sm">
+        <h2 className="mb-3 text-dark">Ваша корзина пуста</h2>
+        <p className="text-muted small">Вы еще не добавили ни одного оздоровительного товара.</p>
+        <Link to="/shop" className="btn btn-success mt-3 btn-ogulov">
+          Перейти к покупкам
+        </Link>
+      </div>
+    );
+  }
+
   return (
-    <div className="container info-page-content">
-      {/* Хлебные крошки */}
-      <div className="shop-breadcrumbs">
-        <a href="#home" onClick={(e) => { e.preventDefault(); setCurrentView('home'); }}>Главная</a>
-        <span className="breadcrumbs-separator">/</span>
-        <span className="breadcrumbs-current">Корзина</span>
+    <div className="container my-5">
+      {/* ХЛЕБНЫЕ КРОШКИ */}
+      <div className="shop-breadcrumbs mb-4 small text-muted">
+        <Link to="/shop" className="text-decoration-none text-success">Главная магазина</Link>
+        <span className="mx-2">/</span>
+        <span className="text-dark">Корзина</span>
       </div>
 
-      <h1>Оформление заказа</h1>
+      <h1 className="mb-4 fw-bold text-dark">Оформление заказа</h1>
 
-      {cart.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '40px 0' }}>
-          <p style={{ fontSize: '18px', color: '#666' }}>Ваша корзина пуста.</p>
-          <button 
-            onClick={() => setCurrentView('home')}
-            style={{ padding: '10px 20px', background: '#007bff', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', marginTop: '15px' }}
-          >
-            Вернуться к покупкам
-          </button>
-        </div>
-      ) : (
-        <div className="cart-wrapper" style={{ display: 'flex', gap: '30px', flexWrap: 'wrap', marginTop: '30px' }}>
-          
-          {/* ЛЕВАЯ ЧАСТЬ: Список товаров */}
-          <div className="cart-items-list" style={{ flex: '2', minWidth: '300px' }}>
-            {cart.map((item) => {
-              const itemTotal = (parseInt(item.price) || 0) * item.count;
-              return (
-                <div key={item.id} className="cart-item" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '15px 0', borderBottom: '1px solid #eee' }}>
-                  <div style={{ flex: '1' }}>
-                    <div style={{ fontWeight: '500', fontSize: '16px' }}>{item.title}</div>
-                    <div style={{ color: '#666', fontSize: '14px', marginTop: '4px' }}>Цена: {item.price}</div>
-                  </div>
-                  
-                  {/* Управление количеством */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '0 20px' }}>
-                    <button onClick={() => changeCount(item.id, -1)} style={{ width: '30px', height: '30px', cursor: 'pointer' }}>-</button>
-                    <span style={{ fontSize: '16px', fontWeight: '500', minWidth: '20px', textAlign: 'center' }}>{item.count}</span>
-                    <button onClick={() => changeCount(item.id, 1)} style={{ width: '30px', height: '30px', cursor: 'pointer' }}>+</button>
-                  </div>
+      <Row className="g-4">
+        {/* ЛЕВАЯ ЧАСТЬ: Список товаров в корзине */}
+        <Col lg={8}>
+          <div className="bg-white p-4 rounded shadow-sm table-responsive">
+            <Table align="middle" className="mb-0 text-nowrap">
+              <thead>
+                <tr className="text-secondary small">
+                  <th>Товар</th>
+                  <th>Цена</th>
+                  <th className="text-center">Количество</th>
+                  <th>Итого</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {cart.map((item) => {
+                  const itemPrice = parsePrice(item.price);
+                  const itemTotalPrice = itemPrice * item.quantity;
 
-                  {/* Итого за позицию и удаление */}
-                  <div style={{ textAlign: 'right', minWidth: '100px' }}>
-                    <div style={{ fontWeight: 'bold' }}>{itemTotal} сом</div>
-                    <button onClick={() => removeItem(item.id)} style={{ background: 'none', border: 'none', color: '#dc3545', cursor: 'pointer', fontSize: '13px', marginTop: '5px' }}>Удалить</button>
-                  </div>
-                </div>
-              );
-            })}
-            
-            <div style={{ textAlign: 'right', marginTop: '20px', fontSize: '20px', fontWeight: 'bold' }}>
-              Итого: <span style={{ color: '#007bff' }}>{totalPrice} сом</span>
+                  return (
+                    <tr key={item.id}>
+                      {/* Картинка и Название */}
+                      <td style={{ minWidth: '250px' }}>
+                        <div className="d-flex align-items-center gap-3">
+                          <img src={item.image} alt={item.title} style={{ width: '50px', height: '50px', objectFit: 'contain' }} />
+                          <Link to={`/shop/product/${item.id}`} className="text-decoration-none text-dark fw-medium small text-wrap d-block">
+                            {item.title}
+                          </Link>
+                        </div>
+                      </td>
+                      
+                      {/* Цена за 1 шт */}
+                      <td className="fw-semibold text-secondary">{item.price}</td>
+                      
+                      {/* Кнопки + / - */}
+                      <td className="text-center">
+                        <div className="d-inline-flex align-items-center border rounded-pill bg-light px-2 py-1">
+                          <button 
+                            className="btn btn-sm p-0 border-0 fw-bold px-2 text-secondary"
+                            onClick={() => updateQuantity(item.id, 'decrease')}
+                          >
+                            -
+                          </button>
+                          <span className="mx-3 fw-bold small text-dark" style={{ minWidth: '15px' }}>{item.quantity}</span>
+                          <button 
+                            className="btn btn-sm p-0 border-0 fw-bold px-2 text-secondary"
+                            onClick={() => updateQuantity(item.id, 'increase')}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </td>
+
+                      {/* Итоговая цена за позицию */}
+                      <td className="fw-bold text-success">
+                        {itemTotalPrice.toLocaleString()} сом
+                      </td>
+
+                      {/* Удаление */}
+                      <td className="text-end">
+                        <Button 
+                          variant="link" 
+                          className="text-danger p-0 border-0 text-decoration-none"
+                          onClick={() => removeFromCart(item.id)}
+                        >
+                          ❌
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          </div>
+        </Col>
+
+        {/* ПРАВАЯ ЧАСТЬ: Итоговый чек и быстрая форма оформления */}
+        <Col lg={4}>
+          <Card className="border-0 shadow-sm p-4 sticky-top" style={{ top: '20px' }}>
+            <h5 className="fw-bold text-dark mb-3">Итого к оплате</h5>
+            <div className="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+              <span className="text-secondary small">Сумма заказа:</span>
+              <span className="fs-3 fw-bold text-success">{totalCartPrice.toLocaleString()} сом</span>
             </div>
-          </div>
 
-          {/* ПРАВАЯ ЧАСТЬ: Контактная форма оформления */}
-          <div className="cart-order-form" style={{ flex: '1', minWidth: '28px', background: '#f8f9fa', padding: '20px', borderRadius: '8px', border: '1px solid #eee' }}>
-            <h3 style={{ marginBottom: '15px', fontSize: '18px' }}>Контактные данные</h3>
-            <form onSubmit={handleSubmitOrder}>
-              <div style={{ marginBottom: '12px' }}>
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Ваше имя *</label>
-                <input type="text" required style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} />
-              </div>
-              <div style={{ marginBottom: '12px' }}>
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Телефон *</label>
-                <input type="tel" required placeholder="+996" style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc' }} />
-              </div>
-              <div style={{ marginBottom: '15px' }}>
-                <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px' }}>Адрес доставки *</label>
-                <textarea required placeholder="Город, улица, дом, квартира" style={{ width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid #ccc', minHeight: '60px' }}></textarea>
-              </div>
-              <button type="submit" style={{ width: '100%', padding: '12px', background: '#28a745', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '16px' }}>
-                Подтвердить заказ
-              </button>
-            </form>
-          </div>
+                {/* Временная форма сбора контактов покупателя */}
+            <Form onSubmit={handleCheckout}>
+              <Form.Group className="mb-3">
+                {/* ИСПРАВЛЕНО: тег </Form.Label> теперь закрывается правильно */}
+                <Form.Label className="small fw-semibold text-secondary">Ваше имя</Form.Label>
+                <Form.Control type="text" size="sm" placeholder="Иван Иванов" required className="border-secondary-subtle" />
+              </Form.Group>
 
-        </div>
-      )}
+              <Form.Group className="mb-4">
+                {/* ИСПРАВЛЕНО: тег </Form.Label> теперь закрывается правильно */}
+                <Form.Label className="small fw-semibold text-secondary">Телефон для связи</Form.Label>
+                <Form.Control type="tel" size="sm" placeholder="+996 (XXX) XX-XX-XX" required className="border-secondary-subtle" />
+              </Form.Group>
+
+              <Button type="submit" variant="success" className="w-100 py-2.5 fw-bold btn-ogulov">
+                Оформить заказ
+              </Button>
+            </Form>
+          </Card>
+        </Col>
+      </Row>
     </div>
   );
 }

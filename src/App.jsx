@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import HomePage from './pages/HomePage';
 import ShopPage from './components/shop/ShopPage';
 import ShopCategoryPage from './components/shop/ShopCategoryPage';
@@ -14,18 +14,25 @@ import ClinicContacts from './pages/clinic/ClinicContacts';
 import './style.css'
 import './pages/clinic/clinic.css'
 
+import RouterShop from './components/shop/RouterShop';
+
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
 
       <Header />
 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/shop" element={<ShopPage />} />
-        <Route path="/shop/category" element={<ShopCategoryPage />} />
+        
+        
       
+        {/* Интернет-магазин */}
+
+        <Route path="/shop/*" element={<RouterShop />} />
+
+
             {/* Клиника */}
            
         <Route path="/clinic" element={<ClinicLayout />}>
@@ -40,7 +47,7 @@ function App() {
           <Route path="contacts" element={<ClinicContacts />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </Router>
   )
 }
 

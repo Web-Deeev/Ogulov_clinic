@@ -1,114 +1,97 @@
-import { useState } from 'react';
+import React from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useShop } from './ShopContext';
+// Импортируем общую базу товаров, чтобы шапка знала, в каких категориях есть товары
+import { productsData } from './shopData.js'; 
 
-
-export function ShopTopBar({ city = 'Бишкек', setCurrentView }) {
+export function ShopTopBar({ city = 'Бишкек' }) {
+  const { favorites = [] } = useShop();
   return (
     <div className="shop-topbar">
       <div className="container shop-topbar-inner">
         <div>Ваш город: {city}</div>
         <div className="shop-topbar-right">
-          <span onClick={() => setCurrentView('cart')} style={{ cursor: 'pointer' }}>Список желаний (0)</span>
-          <span onClick={() => setCurrentView('cart')} style={{ cursor: 'pointer', marginLeft: '15px' }}>Личный кабинет</span>
+          <Link to="/shop/wishlist" style={{ textDecoration: 'none', color: 'inherit' }}>
+            Список желаний ({favorites.length})
+          </Link>
+          <Link to="/shop/profile" style={{ marginLeft: '15px', textDecoration: 'none', color: 'inherit' }}>
+            Личный кабинет
+          </Link>
         </div>
       </div>
     </div>
   );
 }
 
+export function ShopHeader() {
+  const navigate = useNavigate();
+  
+  // Достаем методы управления и данные из нашего глобального контекста
+  const { 
+    activeCategory, 
+    setActiveCategory, 
+    setActiveSubcategory, // Забираем метод сброса подкатегорий
+    searchQuery, 
+    setSearchQuery, 
+    cart = [], 
+    menuItems 
+  } = useShop();
 
-export function ShopHeader({ setCurrentView, currentView, totalItems = 0, setActiveCategory, activeCategory }) {
-  // Список категорий товаров с добавленным пунктом сброса "Все товары"
-  const menuItems = [
-    { title: 'Все товары', id: 'all' },
-    { title: 'Книги', id: 'knigi' },
-    { title: 'Плакаты Огулова А.Т.', id: 'plakati' },
-    { title: 'Пищевые добавки/БАД', id: 'bad' },
-    { title: 'Микросферы', id: 'microspheres' },
-    { title: 'Устройство очистки ПВВК', id: 'pvvk' },
-    { title: 'Скребки/Массажеры', id: 'scrapers' },
-    { title: 'Банки', id: 'banks' },
-    { title: 'Остальные категории', id: 'others' },
-  ];
+  // Вычисляем общее количество штук товаров в корзине
+  const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   return (
     <header className="shop-header">
-      {/* СТРОКА 1: Основная навигация, Поиск и Корзина */}
-      <div className="container shop-header-inner">
-        <a 
-          href="#shop" 
-          className="shop-sub-logo"
-          onClick={(e) => { e.preventDefault(); setCurrentView('home'); }}
-        >
-          Каталог продукции
-        </a>
+      <div className="container shop-header-inner shop-header-top-row">
+        {/* Логотип при клике сбрасывает категорию на 'all', возвращая на главную витрину */}
+        <Link to="/shop" className="shop-sub-logo-link" onClick={() => setActiveCategory('all')}>
+          <img src="/images/logo.png?v=2" alt="Интернет-магазин" className="shop-logo-img" style={{ maxHeight: '45px', objectFit: 'contain', display: 'block' }} />
+        </Link>
 
         <div className="shop-center">
           <nav className="shop-info-menu">
-            <a 
-              href="#about" 
-              className={currentView === 'about' ? 'active' : ''}
-              onClick={(e) => { e.preventDefault(); setCurrentView('about'); }}
-            >
-              О магазине
-            </a>
-            <a 
-              href="#payment" 
-              className={currentView === 'payment' ? 'active' : ''}
-              onClick={(e) => { e.preventDefault(); setCurrentView('payment'); }}
-            >
-              Оплата
-            </a>
-            <a 
-              href="#delivery" 
-              className={currentView === 'delivery' ? 'active' : ''}
-              onClick={(e) => { e.preventDefault(); setCurrentView('delivery'); }}
-            >
-              Доставка
-            </a>
-            <a 
-            href="#contacts" 
-            className={currentView === 'contacts' ? 'active-link' : ''}
-            onClick={(e) => {
-              e.preventDefault();
-              setCurrentView('contacts');
-            }}
-            >
-              Контакты
-            </a>
-
+            <NavLink to="/shop/about" className={({ isActive }) => isActive ? 'active' : ''}>О магазине</NavLink>
+            <NavLink to="/shop/payment" className={({ isActive }) => isActive ? 'active' : ''}>Оплата</NavLink>
+            <NavLink to="/shop/delivery" className={({ isActive }) => isActive ? 'active-link' : ''}>Доставка</NavLink>
+            <NavLink to="/shop/contacts" className={({ isActive }) => isActive ? 'active-link' : ''}>Контакты</NavLink>
           </nav>
-
           <div className="shop-search">
-            <input placeholder="Поиск по товарам..." />
-            <button>🔍</button>
+            <input placeholder="Поиск по товарам..." value={searchQuery || ''} onChange={(e) => setSearchQuery(e.target.value)} />
+            <button type="button">🔍</button>
           </div>
         </div>
 
         <div className="shop-actions">
-          <button className="shop-cart" onClick={() => setCurrentView('cart')}>
+          <button className="shop-cart" onClick={() => navigate('/shop/cart')}>
             🛒 Корзина: {totalItems > 0 ? `${totalItems} шт.` : 'пусто'}
           </button>
         </div>
       </div>
 
-      {/* СТРОКА 2: Встроенное меню категорий магазина (ShopMenu) */}
+{/* Желтая строка категорий — ВСЕ разделы из контекста, начиная с Книг */}
       <nav className="shop-menu-row">
         <div className="container">
           <ul className="shop-menu-list">
-            {menuItems.map((item) => (
-              <li key={item.id} className="shop-menu-item">
-                <button 
-                  /* ИСПРАВЛЕНО: Добавлен шаблон строки для динамического класса активности .active */
-                  className={`shop-menu-btn ${activeCategory === item.id ? 'active' : ''}`}
-                  onClick={() => {
-                    setCurrentView('home'); // Принудительно возвращаем на витрину
-                    setActiveCategory(item.id); // Фильтруем товары
-                  }}
-                >
-                  {item.title}
-                </button>
-              </li>
-            ))}
+            {menuItems
+              // Оставляем ТОЛЬКО этот фильтр — он убирает "Все товары" (если он есть в массиве)
+              .filter(item => item.id !== 'all') 
+              // Напрямую рендерим абсолютно все элементы без скрытия
+              .map((item) => (
+                <li key={item.id} className="shop-menu-item">
+                  <button 
+                    className={`shop-menu-btn ${activeCategory === item.id ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveCategory(item.id); 
+                      if (setActiveSubcategory) {
+                        setActiveSubcategory(`all-${item.id}`);
+                      }
+                      navigate('/shop');          
+                    }}
+                  >
+                    {item.title}
+                  </button>
+                </li>
+              ))}
           </ul>
         </div>
       </nav>

@@ -1,36 +1,28 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; 
+import './shop.css';
 
-// Компонент принимает функцию setCurrentView для управления навигацией
-export default function ShopFooter({ setCurrentView }) {
-  
-  // Утилита для переключения экранов и автоматического плавного скролла наверх
-  const handleNavigate = (e, viewName) => {
-    e.preventDefault();
-    // Проверяем, что функция была успешно передана из главного файла
-    if (typeof setCurrentView === 'function') {
-      setCurrentView(viewName);
-    }
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
+export default function ShopFooter() {
   return (
     <footer className="shop-footer">
       <div className="container shop-footer-inner">
         {/* Блок 1: Навигация по инфо-страницам */}
         <div className="shop-footer-col">
           <h4>Информация</h4>
-          <a href="#about" onClick={(e) => handleNavigate(e, 'about')}>О магазине</a>
-          <a href="#payment" onClick={(e) => handleNavigate(e, 'payment')}>Оплата</a>
-          <a href="#delivery" onClick={(e) => handleNavigate(e, 'delivery')}>Доставка</a>
-          <a href="#contacts" onClick={(e) => handleNavigate(e, 'contacts')}>Контакты</a>
+      
+          <Link to="/shop/about">О магазине</Link>
+          <Link to="/shop/payment">Оплата</Link>
+          <Link to="/shop/delivery">Доставка</Link>
+          <Link to="/shop/contacts">Контакты</Link>
         </div>
 
-        {/* Блок 2: Личный кабинет пользователя */}
+        {/* Блок 2: Личный кабинет покупателя */}
         <div className="shop-footer-col">
           <h4>Личный кабинет</h4>
-          <a href="#login" onClick={(e) => handleNavigate(e, 'login')}>Вход</a>
-          <a href="#register" onClick={(e) => handleNavigate(e, 'register')}>Регистрация</a>
-          <a href="#forgot" onClick={(e) => handleNavigate(e, 'forgot')}>Забыли пароль?</a>
+          {/* Ссылки на будущие страницы авторизации */}
+          <Link to="/shop/login">Вход</Link>
+          <Link to="/shop/register">Регистрация</Link>
+          <Link to="/shop/forgot-password">Забыли пароль?</Link>
         </div>
 
         {/* Блок 3: Социальные сети Представительства */}
@@ -41,7 +33,7 @@ export default function ShopFooter({ setCurrentView }) {
         </div>
       </div>
 
-      {/* Нижняя плашка со значками платежных систем */}
+      {/* Нижня плашка со значками платежных систем */}
       <div className="shop-payments container">
         <div className="shop-payments-inner">
           <span className="pay-badge mircard">МИР</span>
