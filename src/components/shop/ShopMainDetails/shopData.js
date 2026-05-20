@@ -1,4 +1,111 @@
+// БОЕВОЙ СЕТЕВОЙ СЕРВИС ДЛЯ БЕСПАРОЛЬНОГО ВХОДА (DJANGO DRF)
+const DJANGO_API_URL = 'http://127.0.0.1:8000'; // Уточни порт своей Джанго (обычно 8000)
 
+export const AuthService = {
+  // 1. ВХОД ИЛИ РЕГИСТРАЦИЯ ПО EMAIL (POST запрос)
+  async loginOrRegister(email) {
+    try {
+      const response = await fetch(`${DJANGO_API_URL}/api/v1/auth/magic-login/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+
+      if (!response.ok) {
+        return { success: false, message: 'Ошибка авторизации на сервере Django' };
+      }
+
+      const data = await response.json(); // Бэк создает юзера и сразу возвращает токен и профиль
+      localStorage.setItem('access_token', data.access);
+      
+      return { success: true, user: data.user };
+    } catch (error) {
+      console.warn("Бэкенд Django не ответил, переключаюсь на локальную эмуляцию:", error);
+      
+      // Мягкий откат на localStorage для автономной разработки фронта:
+      const mockToken = `mock_token_${email}`;
+      localStorage.setItem('access_token', mockToken);
+      localStorage.setItem('current_logged_user_email', email);
+      
+      const mockUser = {
+        id: 14,
+        email: email,
+        first_name: "Покупатель",
+        phone: "+996 ",
+        address: ""
+      };
+      return { success: true, user: mockUser };
+    }
+  },
+
+  // 2. ПОЛУЧЕНИЕ ДАННЫХ ПРИ ОБНОВЛЕНИИ СТРАНИЦЫ (F5)
+  async getMe() {
+    const token = localStorage.getItem('access_token');
+    if (!token) return null;
+
+    // Если работаем в режиме локальной эмуляции
+    if (token.startsWith('mock_token_')) {
+      const activeEmail = localStorage.getItem('current_logged_user_email');
+      return { id: 14, email: activeEmail, first_name: "Покупатель", phone: "+996 ", address: "" };
+    }
+
+    try {
+      const response = await fetch(`${DJANGO_API_URL}/api/v1/auth/users/me/`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (!response.ok) {
+        this.logout();
+        return null;
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error("Ошибка сети при получении профиля:", error);
+      return null;
+    }
+  },
+
+  // 3. ОБНОВЛЕНИЕ ДАННЫХ ПРОФИЛЯ В ЛК (PATCH запрос)
+  async updateProfile(updatedData) {
+    const token = localStorage.getItem('access_token');
+    if (!token) return { success: false };
+
+    if (token.startsWith('mock_token_')) {
+      console.log('Локальное сохранение профиля:', updatedData);
+      return { success: true };
+    }
+
+    try {
+      const response = await fetch(`${DJANGO_API_URL}/api/v1/auth/users/me/`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(updatedData)
+      });
+
+      return { success: response.ok };
+    } catch (error) {
+      console.error("Ошибка сохранения на бэкенде:", error);
+      return { success: false };
+    }
+  },
+
+  logout() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('current_logged_user_email');
+  }
+};
+
+export default AuthService;
+
+//=====================================
 export const hits = [
   {
     id: '101',

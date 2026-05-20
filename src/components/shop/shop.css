@@ -19,59 +19,6 @@
 }
 
 
-/* Общие параметры шапки магазина */
-.shop-header {
-  background-color: #ffffff;
-  border-bottom: 1px solid #eaeaea;
-}
-
-/* Сетка первой строки (Лого + Поиск + Корзина) */
-.shop-header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 0;
-}
-
-/* Контейнер второй строки для меню категорий */
-.shop-menu-row {
-  border-top: 1px solid #f5f5f5;
-  background-color: #fafafa; /* Легкий контрастный фон для категорий */
-  padding: 8px 0;
-}
-
-/* Список категорий */
-.shop-menu-list {
-  display: flex;
-  gap: 20px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow-x: auto; /* Появится скролл на мобильных экранах */
-}
-
-/* Кнопки категорий товаров */
-.shop-menu-btn {
-  background: none;
-  border: none;
-  font-size: 14px;
-  color: #444444;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 6px 0;
-  white-space: nowrap;
-  transition: color 0.15s ease;
-}
-
-.shop-menu-btn:hover {
-  color: #007bff; /* Окрашивание в синий при наведении */
-}
-
-
-
-
-
-
 
 /* Обертка всего магазина под основным хедером */
 .shop-layout-wrapper {
@@ -93,57 +40,7 @@
   font-weight: 600;
 }
 
-
-/* Общие параметры шапки магазина */
-.shop-header {
-  background-color: #ffffff;
-  border-bottom: 1px solid #eaeaea;
-}
-
-/* Сетка первой строки (Лого + Поиск + Корзина) */
-.shop-header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 15px 0;
-}
-
-/* Контейнер второй строки для меню категорий */
-.shop-menu-row {
-  border-top: 1px solid #f5f5f5;
-  background-color: #fafafa; /* Легкий контрастный фон для категорий */
-  padding: 8px 0;
-}
-
-/* Список категорий */
-.shop-menu-list {
-  display: flex;
-  gap: 20px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow-x: auto; /* Появится скролл на мобильных экранах */
-}
-
-/* Кнопки категорий товаров */
-.shop-menu-btn {
-  background: none;
-  border: none;
-  font-size: 14px;
-  color: #444444;
-  font-weight: 500;
-  cursor: pointer;
-  padding: 6px 0;
-  white-space: nowrap;
-  transition: color 0.15s ease;
-}
-
-.shop-menu-btn:hover {
-  color: #007bff; /* Окрашивание в синий при наведении */
-}
-
-
-
+/* Хлебные крошки (Общий компонент навигации сайта) */
 .shop-breadcrumbs {
   display: flex;
   align-items: center;
@@ -154,6 +51,32 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
+
+
+/* Ссылка "Главная" в хлебных крошках */
+.shop-breadcrumbs a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease, text-decoration 0.15s ease;
+}
+
+.shop-breadcrumbs a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* Разделитель наклонная черта */
+.breadcrumbs-separator {
+  color: #b5b5b5;
+  user-select: none;
+}
+
+/* Название текущей открытой страницы */
+.breadcrumbs-current {
+  color: #7a7a7a;
+  pointer-events: none; /* Делает текст некликабельным */
+}
 
 
 
@@ -189,676 +112,269 @@
 
 
 
+/* ==========================================================================
+   ПОДВАЛ МАГАЗИНА 
+   ========================================================================== */
 
-
-
-/* Основные параметры футера */
+/* Основные параметры футера — глубокий темно-графитовый фон */
 .shop-footer {
-  background-color: #f9f9f9;
-  border-top: 1px solid #eaeaea;
-  padding: 40px 0 20px 0;
-  margin-top: 60px;
-  font-family: sans-serif;
+  background-color: #1a1a1a !important;   /* Плотный темный цвет как на оригинальном сайте */
+  border-top: 3px solid #bfa15f !important; /* Наша главная фирменная золотая полоса */
+  padding: 50px 0 30px 0 !important;
+  margin-top: 60px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  color: #e0e0e0 !important;              /* Комфортный для чтения светло-серый текст */
 }
 
-/* Сетка для колонок ссылок */
+/* Сетка для колонок со ссылками */
 .shop-footer-inner {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 30px;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #05e3f3;
+  display: flex !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 30px !important;
+  padding-bottom: 40px !important;
+  border-bottom: 1px solid #333333 !important; /* Строгая благородная темная линия */
 }
 
 .shop-footer-col {
-  flex: 1;
-  min-width: 200px;
+  flex: 1 !important;
+  min-width: 220px !important;
 }
 
+/* Заголовки разделов в подвале */
 .shop-footer-col h4 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #e53e3e;
-  margin-bottom: 15px;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #fc0505 !important;              /* Контрастный белый цвет для названий колонок */
+  margin-bottom: 20px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
 }
 
+/* Ссылки на страницы (Оплата, Доставка, Контакты) */
 .shop-footer-col a {
-  display: block;
-  font-size: 14px;
-  color: #7e7e7d;
-  text-decoration: none;
-  margin-bottom: 10px;
-  transition: color 0.15s ease;
+  display: block !important;
+  font-size: 15px !important;
+  color: #b0b0b0 !important;              /* Спокойный серый цвет, текст больше не сливается с фоном */
+  text-decoration: none !important;
+  margin-bottom: 12px !important;
+  transition: color 0.2s ease-in-out, padding-left 0.2s ease-in-out !important;
 }
 
+/* Эффект наведения мышки — мягкое песочное золото с легким сдвигом */
 .shop-footer-col a:hover {
-  color: #007bff; /* Фирменный синий цвет при наведении */
+  color: #1f99fd !important;              /* Плавная подсветка золотом Огулов Центра */
+  padding-left: 4px !important;           /* Элегантное интерактивное смещение вправо */
 }
 
-/* Блок платежных систем */
+/* Блок иконок платежных систем */
 .shop-payments-inner {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  margin-top: 20px !important;
 }
 
+/* Аккуратные темные бэджи карт (Visa, MasterCard), чтобы не выбивались из стиля */
 .pay-badge {
-  display: inline-block;
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 4px;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  color: #555555;
+  display: inline-block !important;
+  padding: 5px 12px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  border-radius: 4px !important;
+  background-color: #262626 !important;    /* Темная подложка плашки */
+  border: 1px solid #3d3d3d !important;   /* Тонкая серая обводка */
+  color: #ffffff !important;              /* Белый текст */
+  text-transform: uppercase !important;
+}
+
+/* Копирайт и нижняя текстовая строка */
+.shop-footer-bottom {
+  padding-top: 20px !important;
+  font-size: 13px !important;
+  color: #777777 !important;
+  text-align: center !important;
 }
 
 
 
-/* Контейнер страницы */
-.info-page-content {
-  padding: 40px 15px;
-  min-height: 500px;
-  color: #333333;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-/* Главный заголовок */
-.info-page-content h1 {
-  font-size: 32px;
-  font-weight: 700;
-  color: #111111;
-  margin-bottom: 25px;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 15px;
-}
-
-/* Текстовый блок */
-.about-text {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-/* Абзацы текста */
-.about-text p {
-  font-size: 16px;
-  line-height: 1.7;
-  color: #4a4a4a;
-  margin-bottom: 20px;
-}
-
-.about-text p strong {
-  color: #111111;
-}
-
-/* Подзаголовки (блоки преимуществ или истории) */
-.about-text h3 {
-  font-size: 22px;
-  font-weight: 600;
-  color: #007bff; /* Фирменный синий цвет */
-  margin-top: 35px;
-  margin-bottom: 15px;
-}
-
-/* Списки */
-.about-text ul {
-  list-style-type: none;
-  padding-left: 0;
-  margin-bottom: 25px;
-}
-
-.about-text ul li {
-  font-size: 16px;
-  line-height: 1.6;
-  color: #4a4a4a;
-  margin-bottom: 12px;
-  position: relative;
-  padding-left: 25px;
-}
-
-/* Красивый маркер для списка в стиле Огулов Центра */
-.about-text ul li::before {
-  content: "✓";
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: #28a745; /* Зеленый цвет для галочки */
-  font-weight: bold;
-}
-
-/* Финальный призыв к действию */
-.about-accent-block {
-  background-color: #f8f9fa;
-  border-left: 4px solid #007bff;
-  padding: 20px;
-  margin-top: 40px;
-  border-radius: 0 8px 8px 0;
-}
-
-.about-accent-block h4 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #111111;
-  margin: 0;
-}
 
 
-/* Общие отступы для всей шапки магазина */
-.shop-header {
-  background-color: #ffffff;
-  padding-top: 15px;    /* Отступ от самой верхней панели (TopBar) до логотипа */
-  padding-bottom: 0px;  /* Нижний край прижимается к меню категорий */
-  border-bottom: 1px solid #eef2f5;
-}
-
-/* Стилизация первой строки (Лого, Поиск, Корзина) */
-.shop-header-top-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 30px;            /* Расстояние между логотипом, центром и корзиной */
-  margin-bottom: 20px;  /* КРИТИЧЕСКИ ВАЖНО: Отступ СНИЗУ от логотипа и поиска до зеленой полосы меню */
-}
-
-/* Отступы внутри центрального блока (между инфо-меню и инпутом поиска) */
-.shop-center {
-  flex-grow: 1;
-  max-width: 650px;     /* Ограничиваем максимальную ширину поиска, чтобы он не растягивался на весь экран */
-  display: flex;
-  flex-direction: column;
-  gap: 12px;            /* Отступ между текстовыми ссылками (О магазине...) и поисковой строкой */
-}
-
-/* Отступы для инпута поиска, чтобы он был повыше и аккуратнее */
-.shop-search {
-  display: flex;
-  position: relative;
+/* Кнопка сброса фильтра цен */
+/* Контейнер одиночного ползунка цены */
+.single-slider-container {
   width: 100%;
+  padding: 0 0.25rem;
 }
 
-.shop-search input {
+/* Стилизация дорожки и ползунка */
+.modern-single-range {
   width: 100%;
-  padding: 10px 45px 10px 15px; /* Внутренние отступы внутри самого инпута */
-  border: 1px solid #1a7f64;     /* Фирменная зеленая рамка Огулов Центра */
-  border-radius: 4px;
-  font-size: 14px;
-  outline: none;
-}
-
-.shop-search button {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  width: 45px;
-  background: transparent;
-  border: none;
   cursor: pointer;
 }
 
-/* Корзина - выравнивание и внутренние отступы кнопки */
-.shop-cart {
-  padding: 10px 20px;
-  border: 1px solid #1a7f64;
-  background-color: transparent;
-  color: #1a7f64;
-  font-weight: 600;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
+/* Окрашивание кружка в наш фирменный зеленый цвет клиники */
+.modern-single-range::-webkit-slider-thumb {
+  background-color: #198754 !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
-.shop-cart:hover {
-  background-color: #1a7f64;
-  color: #ffffff;
+.modern-single-range::-moz-range-thumb {
+  background-color: #198754 !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
 }
 
-
-/* 1. Фон всей строки меню категорий (Строка 2) */
-.shop-menu-row {
-  background-color: #d9a74a; /* Фирменный песочно-желтый/золотой цвет Огулов Центра */
-  padding: 5px 0;            /* Небольшие отступы сверху и снизу строки */
-  margin-top: 10px;          /* Отступ от первой строки (логотип и поиск) */
-}
-
-/* Контейнер списка категорий */
-.shop-menu-list {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;           /* Если категории не влезают в одну строку, они перенесутся */
-  gap: 10px;                 /* Расстояние между кнопками категорий */
-  margin: 0;
-  padding: 0;
-}
-
-.shop-menu-item {
-  display: inline-block;
-}
-
-/* 2. Базовый стиль кнопок категорий внутри желтой строки */
-.shop-menu-btn {
-  background: transparent;
-  color: #ffffff;            /* Белый текст отлично читается на желтом фоне */
-  border: none;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-/* Эффект при наведении мышки на категорию */
-.shop-menu-btn:hover {
-  background-color: rgba(255, 255, 255, 0.15); /* Легкое белое свечение */
-  color: #ffffff;
-}
-
-/* 3. Стиль АКТИВНОЙ (выбранной) категории */
-.shop-menu-btn.active {
-  background-color: #b8852b; /* Более темный, благородный золотой оттенок для нажатой кнопки */
-  color: #ffffff;            /* Текст остается белым */
-  font-weight: 600;          /* Делаем шрифт чуть толще для акцента */
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1); /* Легкая внутренняя тень для эффекта нажатия */
-}
-
-
-
-
-
-/* ProdCard Принудительно делаем картинку и название интерактивными */
-.shop-product-image,
-.shop-product-image img,
-.shop-product-title {
-  cursor: pointer !important; /* !important заставит Windows поменять курсор в любом случае */
-  pointer-events: auto !important; /* Убеждаемся, что клики физически не заблокированы другими div-ами */
-}
-
-/* Эффект легкого прозрачного наведения для картинок, чтобы пользователь видел кликабельность */
-.shop-product-image:hover img {
-  opacity: 0.85;
-  transition: opacity 0.2s ease-in-out;
-}
-
-/* Подсветка текста при наведении как на официальном сайте Огулова */
-.shop-product-title:hover {
-  color: #dc3545 !important; /* Текст названия станет красным при наведении */
-  transition: color 0.2s ease-in-out;
-}
-
-/* Увеличиваем размер букв для текста описания товара */
-.tab-content .lh-lg p {
-  font-size: 18px !important; /* Было 14px, стало 16px (крупнее и читабельнее) */
-  line-height: 1.6 !important; /* Делаем комфортный отступ между строками текста */
-  color: #0206fa !important; /* Насыщенный темно-серый цвет для удобства чтения */
-}
-
-/* Изменяем цвет текста для вкладки "Характеристики" */
-.tab-content .lh-lg ul {
-  padding-left: 20px !important; /* Аккуратный отступ для маркеров списка */
-}
-
-.tab-content .lh-lg li {
-  font-size: 15px !important; /* Чуть крупнее стандартного */
-  color: #e53e3e !important; /* Меняем цвет текста характеристик на красивый красный */
-  margin-bottom: 8px !important; /* Отступ между строчками характеристик */
-}
-
-/* Оставляем названия самих характеристик (например, "Производитель:") темными */
-.tab-content .lh-lg li strong {
-  color: #0653fc !important; /* Названия параметров останутся четкими и темными */
-}
-
-
-
-.shop-product-card-container {
-  position: relative;
-  background: #fff;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.shop-card-favorite-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #fff;
-  border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.2s ease;
-}
-
-.shop-card-favorite-btn:hover {
-  transform: scale(1.1);
-}
-
-.shop-card-favorite-btn span {
-  font-size: 16px;
-}
-
-.shop-card-image-link {
-  display: block;
-  cursor: pointer;
-  text-align: center;
-  margin-bottom: 12px;
-  position: relative;
-}
-
-.shop-card-image-link img {
-  max-height: 180px;
-  width: 100%;
-  object-fit: contain;
-}
-
-.shop-card-badge {
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: #dc3545;
-  color: #fff;
-  padding: 4px 8px;
-  font-size: 11px;
-  font-weight: 600;
-  border-radius: 4px;
-}
-
-.shop-card-badge.badge-blue {
-  background-color: #0d6efd;
-}
-
-.shop-card-title-link {
-  display: block;
-  cursor: pointer;
-  text-decoration: none;
-  color: #212529;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 1.4;
-  margin-bottom: 8px;
-  flex-grow: 1;
-}
-
-.shop-card-title-link:hover {
-  color: #dc3545;
-}
-
-.shop-product-old-price {
-  color: #6c757d;
-  text-decoration: line-through;
-  font-size: 13px;
-  margin-bottom: 2px;
-}
-
-.shop-product-current-price {
-  color: #dc3545;
-  font-weight: 700;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
-
-.shop-card-buy-btn {
-  width: 100%;
-  background-color: #dc3545;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.shop-card-buy-btn:hover {
-  background-color: #bd2130;
-}
-
-
-
-
-
-
-
-/* Эффект наведения на элементы меню каталога */
-.hover-menu-item:hover {
-  background-color: #f8f9fa !important;
-  color: #198754 !important; /* Фирменный зеленый цвет при наведении */
-  padding-left: 28px !important; /* Мягкое смещение вправо */
-}
-
-/* Плавный поворот иконки стрелочки */
-.transition-transform {
-  transition: transform 0.2s ease-in-out;
-}
-.rotate-180 {
-  transform: rotate(180deg);
-}
-
-/* Скрытие дефолтных рамок кнопок Bootstrap */
-.custom-shop-menu .btn:focus {
+/* Фокусная обводка */
+.modern-single-range:focus {
   box-shadow: none !important;
 }
 
-
-
-
-/* Общая карточка блоков сайдбара */
-.modern-sidebar-card {
-  background-color: #ffffff;
-  border: 1px solid #dee2e6;
-  border-radius: 16px;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-  padding: 1.25rem;
-}
-
-.card-categories {
-  margin-bottom: 1.5rem;
-}
-
-/* Шапка блоков */
-.modern-sidebar-header {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding-bottom: 0.75rem;
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid #f1f3f5;
-}
-
-.modern-sidebar-title {
-  font-weight: 700;
-  color: #212529;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  font-size: 0.8rem;
-}
-
-.icon-green {
-  color: #198754;
-  font-size: 1.2rem;
-}
-
-/* Кнопка возврата на главную */
-.btn-modern-back {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  background: transparent;
-  border: 0;
-  border-radius: 8px;
-  color: #6c757d;
-  font-size: 0.9rem;
-  text-align: left;
-  transition: all 0.2s ease-in-out;
-  margin-bottom: 0.25rem;
-}
-
-.btn-modern-back i {
-  font-size: 1.25rem;
-}
-
-.btn-modern-back:hover {
-  background-color: #fff3cd;
-  color: #664d03;
-}
-
-/* Кнопки родительских категорий */
-.modern-menu-list {
-  display: flex;
-  flex-column: column;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.btn-modern-menu-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 0.65rem 0.75rem;
-  background: transparent;
-  border: 0;
-  border-radius: 8px;
-  color: #212529;
-  font-size: 0.92rem;
-  text-align: left;
-  transition: all 0.2s ease-in-out;
-}
-
-.btn-modern-menu-item:hover {
-  background-color: #f8f9fa;
-  color: #198754;
-  padding-left: 1rem;
-}
-
-.btn-modern-menu-item.active {
-  background-color: #e8f5e9;
-  color: #198754;
-  font-weight: 700;
-}
-
-/* Индикатор стрелочки */
-.arrow-indicator {
-  font-size: 0.75rem;
-  color: #6c757d;
-  transition: transform 0.2s ease-in-out;
-  opacity: 0.5;
-}
-
-.btn-modern-menu-item.active .arrow-indicator {
-  color: #198754;
-  opacity: 1;
-}
-
-.arrow-indicator.rotated {
-  transform: rotate(90deg);
-}
-
-/* Блок подкатегорий */
-.modern-sub-list {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  padding-left: 1rem;
-  margin-top: 0.25rem;
-  margin-bottom: 0.5rem;
-}
-
-/* Вертикальная направляющая линия */
-.modern-sub-line {
-  position: absolute;
-  left: 0.5rem;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background-color: #dee2e6;
-}
-
-/* Кнопки подкатегорий */
-.btn-modern-sub-item {
-  width: 100%;
-  padding: 0.4rem 0.75rem;
-  background: transparent;
-  border: 0;
-  border-radius: 6px;
-  color: #495057;
-  font-size: 0.85rem;
-  text-align: left;
-  transition: all 0.15s ease;
-}
-
-.btn-modern-sub-item:hover {
-  color: #198754;
-  background-color: #f1f3f5;
-}
-
-.btn-modern-sub-item.active {
-  color: #198754;
-  background-color: #e8f5e9;
-  font-weight: 600;
-}
-
-/* Поля фильтра цен */
+/* Стили полей ввода (остаются аккуратными) */
 .modern-price-inputs {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
 }
 
-.modern-price-field {
-  border: 1px solid #dee2e6 !important;
-  border-radius: 10px !important;
-  font-size: 0.9rem !important;
-  padding: 0.5rem 0.75rem !important;
+.modern-field-group {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  padding-left: 0.6rem;
+  flex-grow: 1;
+}
+
+.modern-field-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  user-select: none;
+}
+
+.modern-field-group .modern-price-field {
+  border: none !important;
+  background: transparent !important;
+  padding: 0.4rem 0.4rem !important;
+  font-size: 0.88rem !important;
+  width: 100%;
   box-shadow: none !important;
-  transition: border-color 0.2s ease !important;
-}
-
-.modern-price-field:focus {
-  border-color: #198754 !important;
 }
 
 .modern-price-separator {
-  color: #6c757d;
-  font-size: 0.85rem;
+  color: #dee2e6;
 }
 
-/* Кнопка сброса фильтра цен */
-.btn-modern-clear {
-  width: 100%;
-  padding: 0.5rem !important;
-  border-radius: 8px !important;
-  border: 1px solid #f1f3f5 !important;
-  color: #dc3545 !important;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+
+
+
+/* 1. Возвращаем сочный песочно-желтый фон для строки категорий (Строка 2) */
+.shop-menu-row {
+  background-color: #d9a74a !important; /* Тот самый фирменный золотой цвет Огулов Центра */
+  padding: 8px 0 !important;            /* Комфортные отступы сверху и снизу */
+  margin-top: 10px !important;          /* Отступ от первой строки с логотипом */
+  border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
-.btn-modern-clear:hover {
-  background-color: #fde8e8 !important;
+/* Контейнер списка категорий */
+.shop-menu-list {
+  list-style: none !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;          /* Не переносим на мобильных, а даем скроллить */
+  gap: 15px !important;                 /* Оптимальное расстояние между категориями */
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow-x: auto !important;          /* Плавный горизонтальный скролл на смартфонах */
+  scrollbar-width: none !important;     /* Прячем дефолтный скроллбар в Firefox */
 }
 
-/* Сброс фокусных стилей у кнопок */
-.modern-menu-list .btn:focus,
-.btn-modern-back:focus {
-  box-shadow: none !important;
-  outline: none !important;
+/* Прячем скроллбар строки категорий в Chrome/Safari, чтобы было чисто */
+.shop-menu-list::-webkit-scrollbar {
+  display: none !important;
+}
+
+/* 2. Стиль кнопок категорий внутри желтой строки */
+.shop-menu-btn {
+  background: transparent !important;
+  color: #ffffff !important;            /* Контрастный белый текст на желтом фоне */
+  border: none !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;       /* Текст категории не должен разрываться на 2 строки */
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+  border-radius: 4px !important;
+}
+
+/* Эффект при наведении на категорию — легкое белое свечение */
+.shop-menu-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important; 
+  color: #ffffff !important;
+}
+
+/* 3. Стиль АКТИВНОЙ (выбранной) категории */
+.shop-menu-btn.active {
+  background-color: #b8852b !important; /* Более глубокий, благородный оттенок золота при нажатии */
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15) !important; /* Эффект утопленной кнопки */
+}
+
+
+
+
+/* ==========================================================================
+   ИНТЕРАКТИВНАЯ ПОДСВЕТКА В ШАПКЕ (Фирменный золотой ховер)
+   ========================================================================== */
+
+/* 1. Верхнее текстовое инфо-меню (Интернет-магазин, О магазине, Оплата...) */
+.shop-center .shop-info-menu a,
+.shop-header a {
+  transition: color 0.2s ease-in-out !important;
+}
+
+/* При наведении ссылки плавно загораются золотом Огулова */
+.shop-center .shop-info-menu a:hover,
+.shop-header a:hover {
+  color: #0b8ffc !important; /* Наш песочно-желтый бренд-цвет */
+  text-decoration: none !important; /* Убираем дефолтное подчеркивание */
+}
+
+/* Изменяем цвет активной (выбранной) страницы в верхнем меню */
+.shop-info-menu a.active {
+  color: #0670fa !important; /* Вместо синего делаем золотым */
+  font-weight: 600 !important;
+}
+
+/* ==========================================================================
+   КНОПКА КОРЗИНЫ НАОБОРОТ (Базовый желтый цвет + синий ховер при наведении)
+   ========================================================================== */
+.shop-cart, 
+.btn-shop-cart-header {
+  padding: 10px 20px !important;
+  background-color: #d9a74a !important; /* Базовый цвет — фирменный песочно-желтый */
+  border: 1px solid #d9a74a !important;  /* Желтая рамка */
+  color: #ffffff !important;             /* Контрастный белый текст и счетчик */
+  font-weight: 600 !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease-in-out !important; /* Плавная смена цветов */
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/* Эффект при наведении мышки — кнопка становится насыщенно-синей */
+.shop-cart:hover,
+.btn-shop-cart-header:hover {
+  background-color: #007bff !important; /* Перекрашиваем в яркий синий цвет Bootstrap */
+  border-color: #007bff !important;     /* Синяя рамка */
+  color: #ffffff !important;             /* Текст и цифры остаются белыми */
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3) !important; /* Мягкое синее неоновое свечение */
+  transform: translateY(-1px) !important; /* Интерактивный микро-подъем кнопки */
 }

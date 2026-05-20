@@ -1,41 +1,17 @@
 import React from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
-import { useShop } from './ShopContext';
-// Импортируем общую базу товаров, чтобы шапка знала, в каких категориях есть товары
-import { productsData } from './shopData.js'; 
+import { useShop } from './ShopMainDetails/ShopContext';
+import ShopTopBar from './ShopHeader/ShopTopBar'; // Подключаем вынесенный TopBar
+import ShopSearchDropdown from './ShopHeader/ShopSearchDropdown'; // Подключаем вынесенный Поиск
 
-export function ShopTopBar({ city = 'Бишкек' }) {
-  const { favorites = [] } = useShop();
-  return (
-    <div className="shop-topbar">
-      <div className="container shop-topbar-inner">
-        <div>Ваш город: {city}</div>
-        <div className="shop-topbar-right">
-          <Link to="/shop/wishlist" style={{ textDecoration: 'none', color: 'inherit' }}>
-            Список желаний ({favorites.length})
-          </Link>
-          <Link to="/shop/profile" style={{ marginLeft: '15px', textDecoration: 'none', color: 'inherit' }}>
-            Личный кабинет
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
+import './ShopHeader/ShopHeader.css';
+
+
+export { ShopTopBar }; // Экспортируем наружу для совместимости с твоим роутером
 
 export function ShopHeader() {
   const navigate = useNavigate();
-  
-  // Достаем методы управления и данные из нашего глобального контекста
-  const { 
-    activeCategory, 
-    setActiveCategory, 
-    setActiveSubcategory, // Забираем метод сброса подкатегорий
-    searchQuery, 
-    setSearchQuery, 
-    cart = [], 
-    menuItems 
-  } = useShop();
+  const { activeCategory, setActiveCategory, setActiveSubcategory, setSearchQuery, cart = [], menuItems = [] } = useShop();
 
   // Вычисляем общее количество штук товаров в корзине
   const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
@@ -43,24 +19,25 @@ export function ShopHeader() {
   return (
     <header className="shop-header">
       <div className="container shop-header-inner shop-header-top-row">
-        {/* Логотип при клике сбрасывает категорию на 'all', возвращая на главную витрину */}
-        <Link to="/shop" className="shop-sub-logo-link" onClick={() => setActiveCategory('all')}>
+        {/* Логотип */}
+        <Link to="/shop" className="shop-sub-logo-link" onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}>
           <img src="/images/logo.png?v=2" alt="Интернет-магазин" className="shop-logo-img" style={{ maxHeight: '45px', objectFit: 'contain', display: 'block' }} />
         </Link>
 
+        {/* Центр: Инфо-меню и Вынесенный умный поиск */}
         <div className="shop-center">
           <nav className="shop-info-menu">
-            <NavLink to="/shop/about" className={({ isActive }) => isActive ? 'active' : ''}>О магазине</NavLink>
-            <NavLink to="/shop/payment" className={({ isActive }) => isActive ? 'active' : ''}>Оплата</NavLink>
-            <NavLink to="/shop/delivery" className={({ isActive }) => isActive ? 'active-link' : ''}>Доставка</NavLink>
-            <NavLink to="/shop/contacts" className={({ isActive }) => isActive ? 'active-link' : ''}>Контакты</NavLink>
+            <NavLink to="/shop/about" className={({ isActive }) => isActive ? 'shop-active' : ''}>О магазине</NavLink>
+            <NavLink to="/shop/payment" className={({ isActive }) => isActive ? 'shop-active' : ''}>Оплата</NavLink>
+            <NavLink to="/shop/delivery" className={({ isActive }) => isActive ? 'shop-active' : ''}>Доставка</NavLink>
+            <NavLink to="/shop/contacts" className={({ isActive }) => isActive ? 'shop-active' : ''}>Контакты</NavLink>
           </nav>
-          <div className="shop-search">
-            <input placeholder="Поиск по товарам..." value={searchQuery || ''} onChange={(e) => setSearchQuery(e.target.value)} />
-            <button type="button">🔍</button>
-          </div>
+          
+          {/* Аккуратный вызов вынесенного компонента */}
+          <ShopSearchDropdown />
         </div>
 
+        {/* Правая часть: СТРОГО ТОЛЬКО КОРЗИНА (Лишние кнопки Профиля и Избранного полностью удалены!) */}
         <div className="shop-actions">
           <button className="shop-cart" onClick={() => navigate('/shop/cart')}>
             🛒 Корзина: {totalItems > 0 ? `${totalItems} шт.` : 'пусто'}
@@ -68,20 +45,19 @@ export function ShopHeader() {
         </div>
       </div>
 
-{/* Желтая строка категорий — ВСЕ разделы из контекста, начиная с Книг */}
-      <nav className="shop-menu-row">
-        <div className="container">
-          <ul className="shop-menu-list">
+      {/* Желтая строка категорий */}
+      <div className="container px-0 my-2">
+        <nav className="shop-menu-row rounded shadow-sm" style={{ padding: '5px 15px' }}>
+          <ul className="shop-menu-list mb-0">
             {menuItems
-              // Оставляем ТОЛЬКО этот фильтр — он убирает "Все товары" (если он есть в массиве)
               .filter(item => item.id !== 'all') 
-              // Напрямую рендерим абсолютно все элементы без скрытия
               .map((item) => (
                 <li key={item.id} className="shop-menu-item">
                   <button 
                     className={`shop-menu-btn ${activeCategory === item.id ? 'active' : ''}`}
                     onClick={() => {
                       setActiveCategory(item.id); 
+                      setSearchQuery(''); 
                       if (setActiveSubcategory) {
                         setActiveSubcategory(`all-${item.id}`);
                       }
@@ -93,8 +69,8 @@ export function ShopHeader() {
                 </li>
               ))}
           </ul>
-        </div>
-      </nav>
+        </nav>
+      </div>
     </header>
   );
 }

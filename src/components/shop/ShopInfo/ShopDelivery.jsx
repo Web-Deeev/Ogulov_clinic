@@ -1,36 +1,36 @@
 import React from 'react';
-import './shop.css';
+import { Link } from 'react-router-dom'; 
+import { useShop } from "../ShopMainDetails/ShopContext";
 
-export default function ShopDelivery({ setCurrentView }) {
+import '../shop.css';
+
+export default function ShopDelivery() {
   return (
-    <div className="container info-page-content">
-      {/* ХЛЕБНЫЕ КРОШКИ */}
-      <div className="shop-breadcrumbs">
-        <a 
-          href="#home" 
-          onClick={(e) => { 
-            e.preventDefault(); 
-            if (typeof setCurrentView === 'function') setCurrentView('home'); 
-          }}
-        >
-          Главная
-        </a>
-        <span className="breadcrumbs-separator">/</span>
-        <span className="breadcrumbs-current">Доставка</span>
+    <div className="container info-page-content py-4">
+      
+      {/* ХЛЕБНЫЕ КРОШКИ  */}
+      <div className="shop-breadcrumbs mb-3 small text-muted">
+        <Link to="/shop" className="text-decoration-none text-success">
+          Главная магазина
+        </Link>
+        <span className="breadcrumbs-separator mx-2">/</span>
+        <span className="breadcrumbs-current text-dark">Доставка</span>
       </div>
 
-      <h1>Доставка продукции</h1>
+      <h1 className="mb-4 fw-bold">Доставка продукции</h1>
       
       <div className="about-text">
-        <p>
-          We осуществляем оперативную доставку учебно-оздоровительной литературы, плакатов и оборудования Представительства А.Т. Огулова по всему региону и странам СНГ.
+        <p className="lead">
+          Мы осуществляем оперативную доставку учебно-оздоровительной литературы, плакатов и оборудования Представительства А.Т. Огулова по всему региону и странам СНГ.
         </p>
-        <h3>1. Доставка по городу Бишкек</h3>
+        
+        <h3 className="mt-4 fw-bold fs-5 text-success">1. Доставка по городу Бишкек</h3>
         <ul>
           <li><strong>Курьерская доставка:</strong> Осуществляется в течение 1–2 рабочих дней со дня подтверждения заказа менеджером.</li>
           <li><strong>Самовывоз:</strong> Вы можете забрать оплаченный заказ самостоятельно из нашего локального пункта выдачи филиала.</li>
         </ul>
-        <h3>2. Доставка в регионы и страны СНГ</h3>
+        
+        <h3 className="mt-4 fw-bold fs-5 text-success">2. Доставка в регионы и страны СНГ</h3>
         <p>
           Отправка в другие города и страны выполняется надежными транспортными компаниями и логистическими службами:
         </p>
@@ -38,10 +38,11 @@ export default function ShopDelivery({ setCurrentView }) {
           <li><strong>Транспортные компании (СДЭК, Boxberry и др.):</strong> Самый быстрый способ доставки до пункта выдачи заказов (ПВЗ) или прямо до вашей двери.</li>
           <li><strong>Почта:</strong> Отправка посылок и мелких пакетов в любые, даже самые удаленные населенные пункты.</li>
         </ul>
-        <div className="about-accent-block">
-          <h4>
+        
+        <div className="about-accent-block mt-4 p-4 rounded bg-light border-start border-danger" style={{ borderLeftWidth: '5px' }}>
+          <h5 className="mb-0 fw-semibold text-danger">
             📦 Внимание: Отправка заказов в регионы транспортными компаниями производится только после 100% предоплаты заказа на сайте.
-          </h4>
+          </h5>
         </div>
       </div>
     </div>

@@ -1,0 +1,497 @@
+/* ==========================================================================
+   ГЛОБАЛЬНЫЙ МОДУЛЬ: СТИЛИ КАРТОЧЕК И ДЕТАЛЬНОЙ СТРАНИЦЫ (shopproducts.css)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   РАЗДЕЛ 1. СТИЛИ КАРТОЧКИ ТОВАРА (Витрина каталога)
+   -------------------------------------------------------------------------- */
+
+/* Контейнер карточки (Минимализм без жестких границ, как на WB) */
+.shop-product-card-container {
+  position: relative !important;
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  padding: 12px !important;              
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;                
+  transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out !important;
+  z-index: 1 !important;
+  cursor: pointer;
+}
+
+/* Мягкая объемная тень появляется только при наведении мышки */
+.shop-product-card-container:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+  transform: translateY(-2px) !important; 
+}
+
+/* Зона изображения товара (Увеличенная) */
+.shop-card-image-link {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 180px !important;           
+  max-height: 180px !important;
+  margin-bottom: 10px !important;
+  overflow: hidden !important;
+  border-radius: 8px !important;
+  background-color: #f8f9fa !important;   
+  cursor: pointer !important;
+}
+
+.shop-card-image-link img {
+  max-height: 100% !important;
+  width: 100% !important;
+  object-fit: contain !important;         
+  transition: transform 0.3s ease !important;
+}
+
+.shop-product-card-container:hover .shop-card-image-link img {
+  transform: scale(1.03) !important;       
+}
+
+/* Аккуратное прозрачное сердечко в углу фотографии */
+.shop-card-favorite-btn {
+  position: absolute !important;
+  top: 15px !important;
+  right: 15px !important;
+  background: transparent !important;     
+  border: none !important;
+  cursor: pointer !important;
+  z-index: 10 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.shop-card-favorite-btn:hover {
+  transform: scale(1.2) !important;       
+}
+
+/* Маленький аккуратный бейдж на картинке ("ХИТ" — перекрашен в сочный КРАСНЫЙ) */
+.shop-product-card-container .shop-card-badge {
+  position: absolute !important;
+  top: 12px !important;
+  left: 12px !important;
+  background-color: #dc3545 !important;   /* Яркий красный цвет клиники */
+  color: #ffffff !important;
+  padding: 3px 8px !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  border-radius: 4px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  z-index: 5 !important;
+}
+
+/* Бейдж для Новинок или Рекомендаций (Перекрашен в СИНИЙ цвет) */
+.shop-product-card-container .shop-card-badge.badge-blue,
+.shop-product-card-container .shop-card-badge[class*="new"],
+.shop-product-card-container .shop-card-badge[class*="recommend"] {
+  background-color: #007bff !important;   /* Насыщенный синий цвет под стиль кнопок */
+}
+
+/* Название товара (Строго 2 строчки) */
+.shop-card-title-link {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;       
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-decoration: none !important;
+  color: #333333 !important;              
+  font-weight: 600 !important;
+  font-size: 13px !important;             
+  line-height: 1.3 !important;
+  margin-top: 6px !important;
+  margin-bottom: 0 !important;
+  min-height: 34px !important;            
+  cursor: pointer !important;
+  transition: color 0.2s ease !important;
+}
+
+/* Название сверху горит КРАСНЫМ цветом при наведении */
+.shop-card-title-link:hover {
+  color: #dc3545 !important;              
+}
+
+/* БЛОК НИЖНЕЙ СТЫКОВКИ: Цены сверху, управление снизу */
+.shop-bottom-wrapper {
+  margin-top: auto !important;            
+  display: flex !important;
+  flex-direction: column !important;     
+  gap: 10px !important;                   
+  width: 100% !important;
+  padding-top: 12px !important;
+}
+
+/* Сетка цен (Горизонтально в один ряд) */
+.shop-price-block {
+  display: flex !important;
+  flex-direction: row !important;         
+  align-items: baseline !important;       
+  gap: 8px !important;
+}
+
+/* Крупная актуальная стоимость */
+.shop-product-current-price {
+  color: #f64d00 !important;              
+  font-weight: 800 !important;
+  font-size: 18px !important;
+  margin: 0 !important;
+}
+
+/* Мелкая зачеркнутая старая цена рядом */
+.shop-product-old-price {
+  color: #999999 !important;
+  text-decoration: line-through !important;
+  font-size: 12px !important;
+  margin: 0 !important;
+}
+
+/* Зона для кнопки или счетчика — идет строго ПОД ценой */
+.shop-action-zone {
+  width: 100% !important;
+}
+
+/* Стандартная кнопка "Купить" в СИНИЙ цвет */
+.shop-card-buy-btn {
+  width: 100% !important;                 
+  height: 36px !important;
+  background-color: #007bff !important;   
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s ease, transform 0.2s ease !important;
+}
+
+.shop-card-buy-btn:hover {
+  background-color: #0056b3 !important;   
+}
+
+/* Интерактивный счетчик количества с СИНИМИ кнопками и рамкой */
+.shop-card-counter-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  height: 36px !important;
+  background-color: #ffffff !important;   
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  border: 1px solid #007bff !important;   
+}
+
+.shop-card-counter-wrapper .counter-btn {
+  width: 36px !important;
+  height: 100% !important;
+  background-color: #0056b3 !important;   
+  border: none !important;
+  color: #ffffff !important;               
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background-color 0.15s ease !important;
+}
+
+.shop-card-counter-wrapper .counter-btn:hover {
+  background-color: #0056b3 !important;   
+}
+
+.shop-card-counter-wrapper .counter-value {
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  color: #070707 !important;              
+  user-select: none !important;
+}
+
+
+/* --------------------------------------------------------------------------
+   РАЗДЕЛ 2. СТИЛИ ДЕТАЛЬНОЙ СТРАНИЦЫ ТОВАРА (ShopProductPage.jsx)
+   -------------------------------------------------------------------------- */
+
+/* Блок отображения большой картинки товара */
+.detail-image-block {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  padding: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: 400px !important;
+  max-height: 400px !important;
+  overflow: hidden !important;
+}
+
+.detail-image-block img {
+  max-height: 100% !important;
+  max-width: 100% !important;
+  object-fit: contain !important;
+}
+
+/* Главный заголовок товара */
+.detail-product-title {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  line-height: 1.3 !important;
+  margin-bottom: 15px !important;
+}
+
+/* Карточка управления покупкой на детальной странице */
+.detail-buy-card {
+  background-color: #f8f9fa !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 16px !important;
+  padding: 25px !important;
+}
+
+/* Большая цена на детальной странице */
+.detail-price-actual {
+  font-size: 32px !important;
+  font-weight: 800 !important;
+  color: #dc3545 !important; 
+  line-height: 1 !important;
+}
+
+.detail-price-old {
+  font-size: 16px !important;
+  color: #94a3b8 !important;
+  text-decoration: line-through !important;
+}
+
+/* Кнопка добавления в корзину на детальной странице (Большая синяя кнопка) */
+.btn-detail-buy {
+  background-color: #007bff !important;
+  border: 1px solid #007bff !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  padding: 14px 24px !important;
+  border-radius: 10px !important;
+  width: 100% !important;
+  transition: all 0.2s ease-in-out !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.btn-detail-buy:hover {
+  background-color: #0056b3 !important;
+  border-color: #0056b3 !important;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25) !important;
+}
+
+/* Кнопка "В корзине" на деталке */
+.btn-detail-buy.in-cart {
+  background-color: #198754 !important;
+  border-color: #198754 !important;
+}
+
+/* Большой счетчик количества на детальной странице товара */
+.detail-counter-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 140px !important;
+  height: 45px !important;
+  background-color: #ffffff !important;
+  border: 1px solid #007bff !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+
+.detail-counter-btn {
+  width: 45px !important;
+  height: 100% !important;
+  background-color: #007bff !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.detail-counter-value {
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  color: #007bff !important;
+}
+
+/* Кастомизация вкладок табов описания (Bootstrap Nav Tabs) */
+.product-detail-tabs .nav-link {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #64748b !important;
+  border: none !important;
+  border-bottom: 3px solid transparent !important;
+  padding: 12px 20px !important;
+  transition: all 0.2s ease !important;
+}
+
+.product-detail-tabs .nav-link.active {
+  color: #d9a74a !important; /* Фирменное золото клиники для активной вкладки */
+  border-bottom-color: #d9a74a !important;
+  background-color: transparent !important;
+}
+
+/* Интерактивные элементы деталки */
+.shop-product-image,
+.shop-product-image img,
+.shop-product-title {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+.shop-product-image:hover img {
+  opacity: 0.85;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.shop-product-title:hover {
+  color: #dc3545 !important;
+  transition: color 0.2s ease-in-out;
+}
+
+/* Читабельность большого описания товара */
+.tab-content .lh-lg p {
+  font-size: 16px !important;            
+  line-height: 1.7 !important;
+  color: #2c3e50 !important;              
+}
+
+/* Табличная структура вкладки "Характеристики" */
+.tab-content .lh-lg ul {
+  padding-left: 0 !important;
+  list-style-type: none !important;
+}
+
+.tab-content .lh-lg li {
+  font-size: 15px !important;
+  color: #495057 !important;            
+  margin-bottom: 12px !important;
+  border-bottom: 1px dashed #dee2e6 !important; 
+  padding-bottom: 8px !important;
+  display: flex !important;
+  justify-content: space-between !important; 
+}
+
+.tab-content .lh-lg li strong {
+  color: #1a1a1a !important;            
+  font-weight: 600 !important;
+  display: inline-block !important;
+  min-width: 180px !important;            
+}
+
+
+
+
+/* ==========================================================================
+   КНОПКА ИЗБРАННОГО В ОДИН РЯД С КОРЗИНОЙ НА ДЕТАЛЬНОЙ СТРАНИЦЕ
+   ========================================================================== */
+.detail-inline-favorite-btn {
+  width: 52px !important;                 /* Квадратная кнопка, равная высоте корзины */
+  height: 52px !important;
+  background-color: #ffffff !important;   /* Белый чистый фон */
+  border: 1px solid #e2e8f0 !important;   /* Аккуратная серая обводка */
+  border-radius: 10px !important;         /* Округлость краев один в один как у корзины */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02) !important;
+  transition: all 0.2s ease-in-out !important;
+  padding: 0 !important;
+}
+
+/* Эффект ховера кнопки сердечка */
+.detail-inline-favorite-btn:hover {
+  background-color: #f8f9fa !important;   /* Легкий серый фон при наведении */
+  border-color: #cbd5e1 !important;       /* Обводка становится чуть темнее */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Иконка внутри нижнего сердечка */
+.detail-inline-favorite-btn span {
+  font-size: 24px !important;             /* Крупный, заметный и удобный размер */
+  line-height: 1 !important;
+  transition: transform 0.2s ease !important;
+}
+
+.detail-inline-favorite-btn:hover span {
+  transform: scale(1.1) !important;       /* Микро-зум самого сердечка при ховере */
+}
+
+
+
+/* ==========================================================================
+   КОМПАКТНЫЙ СЧЕТЧИК (Убрали пустоту, ужали до размера контента)
+   ========================================================================== */
+.detail-page-counter-box {
+  display: inline-flex !important;       /* ИСПРАВЛЕНО: Схлопывает блок до размеров контента */
+  align-items: center !important;
+  gap: 15px !important;                   /* Аккуратный фиксированный зазор между 🛒 и кнопками */
+  height: 52px !important;                /* Высота строго совпадает с кнопкой "В корзину" */
+  background-color: #ffffff !important;   /* Белый фон плашки */
+  border: 2px solid #007bff !important;   /* Синяя рамка */
+  border-radius: 10px !important;         
+  padding: 0 15px !important;
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.06) !important;
+  user-select: none !important;
+  width: auto !important;                 /* Отменяем растягивание на всю ширину */
+}
+
+/* Ярлык корзины слева */
+.detail-page-counter-box .counter-cart-icon {
+  font-size: 20px !important;
+}
+
+/* Блок с кнопками управления количеством */
+.detail-page-counter-box .counter-controls-wrap {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;                   /* Фиксированное расстояние между - цифра + */
+  height: 100% !important;
+}
+
+/* Кнопки плюс и минус внутри детального счетчика */
+.detail-page-counter-box .ctrl-btn-minus,
+.detail-page-counter-box .ctrl-btn-plus {
+  width: 32px !important;
+  height: 32px !important;
+  background-color: #007bff !important;   /* Синие кнопки */
+  border: none !important;
+  color: #ffffff !important;               /* Белые знаки */
+  border-radius: 6px !important;
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: background-color 0.15s ease !important;
+}
+
+.detail-page-counter-box .ctrl-btn-minus:hover,
+.detail-page-counter-box .ctrl-btn-plus:hover {
+  background-color: #0056b3 !important;   
+}
+
+/* Жирная контрастная цифра количества по центру */
+.detail-page-counter-box .ctrl-value-num {
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  color: #1a1a1a !important;              /* Черный цвет цифры */
+  min-width: 20px !important;
+  text-align: center !important;
+}

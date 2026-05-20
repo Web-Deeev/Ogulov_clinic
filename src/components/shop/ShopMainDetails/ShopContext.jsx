@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { productsData } from './shopData.js';
 
 // 1. Создаем сам контекст
-const ShopContext = createContext();
+export const ShopContext = createContext();
 
 // 2. Создаем Провайдер, который будет хранить все стейты
 export function ShopProvider({ children }) {
@@ -14,13 +15,43 @@ export function ShopProvider({ children }) {
     return savedCart ? JSON.parse(savedCart) : [];
   });
   
-  // Инициализация списка желаний из localStorage (Дубли удалены)
+  // Инициализация списка желаний из localStorage
   const [favorites, setFavorites] = useState(() => {
     const savedFavs = localStorage.getItem('ogulov_shop_favorites');
     return savedFavs ? JSON.parse(savedFavs) : [];
   });
 
-  // Единый источник правды для категорий (ID совпадают с твоим файлом shopData.js)
+  // --- Стейты авторизации и Личного Кабинета ---
+  const [isAuthenticated, setIsAuthenticated] = useState(true); // true для разработки
+
+  const [userProfile, setUserProfile] = useState({
+    id: 14,
+    email: "user@ogulov.com",
+    first_name: "Александр",
+    last_name: "Петров",
+    phone: "+996 (555) 12-34-56",
+    city: "Бишкек",
+    address: "ул. Чуй, д. 114, кв. 42"
+  });
+
+  const [userOrders, setUserOrders] = useState([
+    {
+      order_number: "OG-2026-001",
+      created_at: "2026-05-20T15:30:00Z",
+      status: "processing", // под бэк: processing, shipped, delivered, canceled
+      delivery_method: "bishkek",
+      total_price: "2400.00",
+      items: [
+        {
+          product_title: "Книга «Азбука висцеральной терапии»",
+          quantity: 2,
+          price_at_purchase: "1200.00"
+        }
+      ]
+    }
+  ]);
+
+  // Единый источник правды для категорий
   const menuItems = [
     { title: 'Книги', id: 'books' }, 
     { title: 'Плакаты Огулова А.Т.', id: 'posters' },
@@ -42,6 +73,25 @@ export function ShopProvider({ children }) {
     localStorage.setItem('ogulov_shop_favorites', JSON.stringify(favorites));
   }, [favorites]);
 
+  // Утилита для очистки строки цены и превращения её в число
+  const parsePrice = (priceStr) => {
+    if (!priceStr) return 0;
+    return parseInt(priceStr.toString().replace(/[^0-9]/g, ''), 10) || 0;
+  };
+
+  // Подсчет общего количества единиц товара в корзине
+  const getCartCount = () => {
+    return cart.reduce((total, item) => total + item.quantity, 0);
+  };
+
+  // Подсчет итоговой суммы заказа в сомах
+  const getCartTotal = () => {
+    return cart.reduce((total, item) => {
+      const price = parsePrice(item.price);
+      return total + (price * item.quantity);
+    }, 0);
+  };
+
   // Функция добавления товара в корзину
   const addToCart = (product) => {
     setCart((prevCart) => {
@@ -55,7 +105,7 @@ export function ShopProvider({ children }) {
     });
   };
 
-  // Полное удаление товара из корзины (по кнопке крестика)
+  // Полное удаление товара из корзины
   const removeFromCart = (productId) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
   };
@@ -80,6 +130,17 @@ export function ShopProvider({ children }) {
     setCart([]);
   };
 
+  // Функция переключения (добавления/удаления) товара в Избранное
+  const toggleFavorite = (product) => {
+    setFavorites((prevFavs) => {
+      const exists = prevFavs.find((item) => item.id === product.id);
+      if (exists) {
+        return prevFavs.filter((item) => item.id !== product.id);
+      }
+      return [...prevFavs, product];
+    });
+  };
+
   // Все данные и функции, к которым мы хотим дать доступ всему сайту
   const value = {
     activeCategory,
@@ -93,7 +154,16 @@ export function ShopProvider({ children }) {
     clearCart,      
     favorites,
     setFavorites,
-    menuItems
+    toggleFavorite,
+    menuItems,
+    getCartCount, 
+    getCartTotal,
+    isAuthenticated,
+    setIsAuthenticated,
+    userProfile,
+    setUserProfile,
+    userOrders,
+    setUserOrders
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

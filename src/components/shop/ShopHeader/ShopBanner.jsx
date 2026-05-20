@@ -24,8 +24,7 @@ export default function ShopBanner() {
         </div>
 
       </div>
-
-      {/* стрелки */}
+ 
       <button
         className="carousel-control-prev"
         type="button"

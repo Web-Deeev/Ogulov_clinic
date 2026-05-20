@@ -1,53 +1,55 @@
-import React from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { ShopProvider } from "./ShopContext";
+import React from 'react';
+import { Routes, Route, Navigate } from 'react-router-dom';
 
-// 1. Главный шаблон (Layout) модуля магазина
-import ShopPage from "./ShopPage";
+import { ShopProvider } from './ShopMainDetails/ShopContext.jsx';
+import ShopPage from './ShopPage.jsx';
+import ShopProductsTab from './ShopProductsTab/ShopProductsTab.jsx';
+import ShopProductPage from './ShopMainDetails/ShopProductPage.jsx';
+import ShopCart from './ShopCart/ShopCart.jsx';
+import ShopCheckout from './ShopCart/ShopCheckout.jsx';
+import ShopProfile from './ShopProfile/ShopProfile.jsx';
+import ShopAuth from './ShopProfile/ShopAuth.jsx';
+import ShopFavorites from './ShopCart/ShopFavorites.jsx';
 
-// 2. Страница витрины и деталка (Синхронизировано с твоими импортами)
+import ShopAbout from './ShopInfo/ShopAbout.jsx';
+import ShopDelivery from './ShopInfo/ShopDelivery.jsx';
+import ShopPayment from './ShopInfo/ShopPayment.jsx';
+import ShopContacts from './ShopInfo/ShopContacts.jsx';
 
-import ShopProductPage from "./ShopProductPage";
-import ShopProductsTab from "./ShopProductsTab";
-
-// 3. Твои готовые инфо-страницы
-import ShopAbout from "./ShopAbout";
-import ShopPayment from "./ShopPayment";
-import ShopDelivery from "./ShopDelivery";
-import ShopContacts from "./ShopContacts";
-
-// Импортируем страницу корзины (убедись, что имя файла ShopCart.jsx совпадает)
-import ShopCart from "./ShopCart";
-import ShopFavorites from "./ShopFavorites";
-
-// Экспорт по умолчанию настроен правильно под имя твоего файла routerShop.jsx
-export default function ShopRoutes() {
+export default function RouterShop() {
   return (
- <ShopProvider>
-    <Routes>
-      {/* Корневой роут магазина. Загружает рамку сайта (Шапку/Футер) */}
-      <Route path="/" element={<ShopPage />}>
-        
-        {/* ИСПРАВЛЕНО: Вместо несуществующего Catalog ставим твою витрину с табами */}
-        <Route index element={<ShopProductsTab />} />
+    <ShopProvider>
+      <Routes>
+        {/* Главная обертка всего магазина */}
+        <Route path="/" element={<ShopPage />}>
+          
+          {/* Главная страница (Витрина каталога) */}
+          <Route index element={<ShopProductsTab />} />
+          <Route path="catalog" element={<ShopProductsTab />} />
+          
+          {/* Детальная страница товара */}
+          <Route path="product/:id" element={<ShopProductPage />} />
+          
+          {/* Корзина, Избранное и Оформление заказа */}
+          <Route path="cart" element={<ShopCart />} />
+          <Route path="checkout" element={<ShopCheckout />} />
+          <Route path="wishlist" element={<ShopFavorites />} />
 
-        {/* Инфо-страницы */}
-        <Route path="about" element={<ShopAbout />} />
-        <Route path="payment" element={<ShopPayment />} />
-        <Route path="delivery" element={<ShopDelivery />} />
-        <Route path="contacts" element={<ShopContacts />} />
+          {/* Авторизация и Личный кабинет */}
+          <Route path="profile" element={<ShopProfile />} />
+          {/* ИСПРАВЛЕНО: Добавлен обязательный маршрут для формы входа */}
+          <Route path="auth" element={<ShopAuth />} />
+         
+          {/* Инфо-страницы */}
+          <Route path="about" element={<ShopAbout />} />
+          <Route path="delivery" element={<ShopDelivery />} />
+          <Route path="payment" element={<ShopPayment />} />
+          <Route path="contacts" element={<ShopContacts />} />
 
-        {/* Подключаем твою реальную детальную страницу товара и корзину */}
-        <Route path="product/:id" element={<ShopProductPage />} />
-        <Route path="cart" element={<ShopCart />} />
-        <Route path="wishlist" element={<ShopFavorites />} />
-        {/* Заглушки для будущих динамических страниц */}
-        <Route path="profile" element={<div className="container py-5"><h3>Личный кабинет</h3></div>} />
-      </Route>
-
-      {/* Если юзер ввел /shop/непонятную-ерунду, перенаправляем в корень магазина */}
-      <Route path="*" element={<Navigate to="" replace />} />
-    </Routes>
+          {/* Защита от ввода несуществующих URL — редирект на витрину */}
+          <Route path="*" element={<Navigate to="" replace />} />
+        </Route>
+      </Routes>
     </ShopProvider>
   );
 }

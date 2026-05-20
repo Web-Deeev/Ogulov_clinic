@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; 
-import './shop.css';
+import { useShop } from "../ShopMainDetails/ShopContext";
+
+import './shopInfo.css';
 
 
 export default function ShopPayment() {
@@ -39,10 +41,10 @@ export default function ShopPayment() {
           Если вы оформляете заказ от имени организации, при оформлении выберите тип плательщика «Юридическое лицо». Наш менеджер сформирует и вышлет счет на оплату. Полный комплект закрывающих документов (УПД) будет отправлен вместе с товаром.
         </p>
         
-        <div className="about-accent-block mt-4 p-4 rounded bg-light border-start border-warning" style={{ borderLeftWidth: '5px' }}>
-          <h5 className="mb-0 fw-semibold text-dark">
+        <div className="about-accent-block mt-4 p-4 rounded text-center" style={{ backgroundColor: '#e8f5e9', borderLeft: '5px solid var(--ogulov-green)' }}>
+          <h4 className="mb-0 fw-semibold text-success">
             🔒 Безопасность данных: Все транзакции шифруются по протоколу SSL. Мы не собираем и не храним данные ваших банковских карт.
-          </h5>
+          </h4>
         </div>
       </div>
     </div>
