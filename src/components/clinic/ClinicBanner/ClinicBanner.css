@@ -1,0 +1,165 @@
+.clinic-hero {
+  position: relative;
+
+  min-height: 600px;
+
+  display: flex;
+  align-items: center;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  overflow: hidden;
+}
+
+.clinic-hero__overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,0,0,0.72) 0%,
+      rgba(0,0,0,0.45) 40%,
+      rgba(0,0,0,0.15) 100%
+    );
+}
+
+.clinic-hero__inner {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+.clinic-hero__content {
+  max-width: 620px;
+  /* color: #fff; */
+}
+
+.clinic-hero__subtitle {
+  margin: 0 0 14px;
+
+  color: #ffcd33;
+
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.clinic-hero h1 {
+  margin: 0 0 24px;
+
+  font-size: 72px;
+  line-height: 1.05;
+  font-weight: 700;
+}
+
+.clinic-hero__text {
+  margin: 0 0 36px;
+
+  font-size: 20px;
+  line-height: 1.7;
+
+  /* color: rgba(255,255,255,0.9); */
+}
+
+.clinic-hero__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 220px;
+  height: 58px;
+
+  padding: 0 28px;
+
+  border-radius: 999px;
+
+  background: #ffcd33;
+
+  color: #151515;
+  text-decoration: none;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  transition:
+    transform .25s,
+    background .25s;
+}
+
+.clinic-hero__btn:hover {
+  background: #fff;
+
+  transform: translateY(-2px);
+}
+
+.clinic-hero {
+  transition: background-image 0.4s ease;
+}
+
+.clinic-hero__dots {
+  position: absolute;
+  left: 50%;
+  bottom: 28px;
+  z-index: 5;
+
+  display: flex;
+  gap: 12px;
+
+  transform: translateX(-50%);
+}
+
+.clinic-hero__dot {
+  width: 12px;
+  height: 12px;
+
+  border: 2px solid #000000;
+  border-radius: 50%;
+
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+
+  transition: 0.25s;
+}
+
+.clinic-hero__dot--active {
+  background: #000000;
+  border-color: #000000;
+  transform: scale(1.15);
+}
+
+@media (max-width: 900px) {
+  .clinic-hero {
+    min-height: 620px;
+  }
+
+  .clinic-hero h1 {
+    font-size: 52px;
+  }
+
+  .clinic-hero__text {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 600px) {
+  .clinic-hero {
+    min-height: 520px;
+  }
+
+  .clinic-hero h1 {
+    font-size: 40px;
+  }
+
+  .clinic-hero__subtitle {
+    font-size: 16px;
+  }
+
+  .clinic-hero__text {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+}

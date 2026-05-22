@@ -549,7 +549,7 @@ h1, h2, h3 {
 .shop-page {
   min-height: 100vh;
   background: #f7f7f7 url("../public/images/Geometry.jpg") repeat;
-  font-family: Meiryo, Arial, Helvetica, sans-serif;
+  /* font-family: Meiryo, Arial, Helvetica, sans-serif; */
   color: #333;
   font-size: 13px;
 }

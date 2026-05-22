@@ -152,25 +152,30 @@
   width: 100% !important;
 }
 
-/* Стандартная кнопка "Купить" в СИНИЙ цвет */
-.shop-card-buy-btn {
+/* НОВАЯ МОЩНАЯ СИНЯЯ КНОПКА "КУПИТЬ" В ОДИН КУБИК С ИКОНКОЙ */
+.shop-card-buy-btn-blue {
   width: 100% !important;                 
-  height: 36px !important;
-  background-color: #007bff !important;   
+  height: 38px !important;
+  background-color: #0d6efd !important; /* Насыщенный синий цвет */
+  border: 1px solid #0d6efd !important;
   color: #ffffff !important;
-  border: none !important;
-  border-radius: 8px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
+  gap: 8px !important;
   font-weight: 600 !important;
   font-size: 14px !important;
+  border-radius: 8px !important;
   cursor: pointer !important;
-  transition: background-color 0.2s ease, transform 0.2s ease !important;
+  transition: all 0.2s ease-in-out !important;
+  box-shadow: 0 2px 4px rgba(13, 110, 253, 0.15) !important;
 }
 
-.shop-card-buy-btn:hover {
-  background-color: #0056b3 !important;   
+.shop-card-buy-btn-blue:hover {
+  background-color: #0b5ed7 !important; /* Чуть темнее при наведении */
+  border-color: #0a58ca !important;
+  box-shadow: 0 4px 8px rgba(13, 110, 253, 0.25) !important;
+  transform: translateY(-1px) !important;
 }
 
 /* Интерактивный счетчик количества с СИНИМИ кнопками и рамкой */
@@ -179,17 +184,17 @@
   align-items: center !important;
   justify-content: space-between !important;
   width: 100% !important;
-  height: 36px !important;
+  height: 38px !important;
   background-color: #ffffff !important;   
   border-radius: 8px !important;
   overflow: hidden !important;
-  border: 1px solid #007bff !important;   
+  border: 1px solid #0d6efd !important;   
 }
 
 .shop-card-counter-wrapper .counter-btn {
   width: 36px !important;
   height: 100% !important;
-  background-color: #0056b3 !important;   
+  background-color: #0d6efd !important;   
   border: none !important;
   color: #ffffff !important;               
   font-size: 16px !important;
@@ -202,7 +207,7 @@
 }
 
 .shop-card-counter-wrapper .counter-btn:hover {
-  background-color: #0056b3 !important;   
+  background-color: #0b5ed7 !important;   
 }
 
 .shop-card-counter-wrapper .counter-value {
@@ -210,6 +215,104 @@
   font-size: 14px !important;
   color: #070707 !important;              
   user-select: none !important;
+}
+
+/* Ссылка быстрой покупки в 1 клик */
+.shop-fast-buy-link {
+  color: #d9a74a !important; /* Фирменное золото Огулова */
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  background: transparent !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: color 0.15s ease !important;
+}
+
+.shop-fast-buy-link:hover {
+  color: #1a1d20 !important; /* Темнеет при наведении */
+  text-decoration: underline !important;
+}
+
+
+
+/* Стилизация официальных вкладок Огулов-шоп */
+.nav-tabs .nav-link.active {
+  border-color: #dee2e6 #dee2e6 #ffffff !important;
+  border-radius: 8px 8px 0 0 !important;
+}
+
+.tab-content {
+  border-radius: 0 8px 8px 8px !important;
+}
+
+/* Красивый эффект затухания при переключении */
+.tab-pane {
+  animation: fadeInTab 0.2s ease-in-out;
+}
+
+@keyframes fadeInTab {
+  from { opacity: 0; transform: translateY(2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* ==========================================================================
+ НИЖНЯЯ КАРУСЕЛЬ ФОТО 
+   ========================================================================== */
+
+/* Общий нижний контейнер для фоток и стрелочек */
+.shop-bottom-carousel-wrapper {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  gap: 10px !important;
+  position: relative !important;
+  margin-top: 10px !important;
+  padding: 0 35px !important; /* Место под стрелочки по бокам */
+}
+
+/* Лента миниатюр строго по центру */
+.shop-horizontal-thumbnails-row {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-wrap: nowrap !important; /* Фотки стоят строго в одну линию */
+}
+
+/* Маленькие стрелочки карусели снизу */
+.shop-mini-arrow {
+  background-color: #ffffff !important;
+  border: 1px solid #dee2e6 !important;
+  color: #495057 !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: 50% !important;
+  font-size: 1.3rem !important;
+  line-height: 24px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05) !important;
+  transition: all 0.2s ease !important;
+  user-select: none !important;
+}
+
+.shop-mini-arrow:hover {
+  background-color: #0d6efd !important; /* Синеет при наведении */
+  color: #ffffff !important;
+  border-color: #0d6efd !important;
+}
+
+/* Активный ракурс подсвечивается синим */
+.shop-thumbnail-item.active-border {
+  border-color: #0d6efd !important;
+  border-width: 2px !important;
+  opacity: 1 !important;
 }
 
 
@@ -494,4 +597,20 @@
   color: #1a1a1a !important;              /* Черный цвет цифры */
   min-width: 20px !important;
   text-align: center !important;
+}
+
+
+
+
+/* Кнопка быстрой покупки в 1 клик */
+.btn-link:hover {
+  color: #1a1d20 !important; /* При наведении становится строгой темной */
+  text-decoration: underline !important;
+}
+
+/* Фикс высоты карточки, чтобы кнопка 1 клика всегда стояла строго внизу */
+.shop-product-card-container {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
 }

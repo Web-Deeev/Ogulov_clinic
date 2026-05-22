@@ -187,13 +187,14 @@
 /* Контейнер одиночного ползунка цены */
 .single-slider-container {
   width: 100% !important;
-  padding: 0 0.25rem !important;
+  padding: 0 0.1rem !important;
 }
 
 /* Стилизация дорожки и ползунка */
 .modern-single-range {
   width: 100% !important;
   cursor: pointer !important;
+  margin-top: 0.25rem !important;
 }
 
 /* Окрашивание кружка в наш фирменный зеленый цвет клиники */
@@ -249,4 +250,17 @@
 
 .modern-price-separator {
   color: #dee2e6 !important;
+}
+
+/* Стилизация кнопки сброса фильтра */
+.btn-modern-clear {
+  border: 1px solid #dee2e6 !important;
+  border-radius: 10px !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-modern-clear:hover {
+  background-color: #dc3545 !important;
+  color: #ffffff !important;
+  border-color: #dc3545 !important;
 }

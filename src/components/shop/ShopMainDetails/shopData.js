@@ -110,8 +110,15 @@ export const hits = [
   {
     id: '101',
     title: 'Книга "Клиническая анатомия человека"',
-    image: '/images/shop/products/hit-1.jpg',
+    image: 'https://shop.ogulov.com/pictures/product/big/5806_big.jpg',
     price: '4 200 сом',
+    images: [ 
+      'https://shop.ogulov.com/pictures/product/big/5806_big.jpg',
+      'https://shop.ogulov.com/pictures/product/middle/5807_middle.jpg',
+      'https://shop.ogulov.com/pictures/product/middle/5813_middle.jpg',
+      'https://shop.ogulov.com/pictures/product/middle/5812_middle.jpg',
+      'https://shop.ogulov.com/pictures/product/middle/5814_middle.jpg'
+    ],
     oldPrice: null, // Нет скидки
     label: 'Хит',
     category: 'books',

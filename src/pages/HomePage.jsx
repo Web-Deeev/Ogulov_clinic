@@ -1,4 +1,3 @@
-import Header from '../components/Header'
 import PromoBanner from '../components/PromoBanner'
 import CardGrid from '../components/CardGrid'
 import Footer from '../components/Footer'
