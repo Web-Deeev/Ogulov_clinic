@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useShop } from './ShopContext'; 
 import { productsData } from './shopData.js'; 
-import { Row, Col, Button, Card } from 'react-bootstrap';
+import { Row, Col, Button, Card, Modal } from 'react-bootstrap';
 
 /* Подключаем файл стилей */
 import './shopMainDetails.css';
@@ -10,7 +10,8 @@ import './shopMainDetails.css';
 export default function ShopProductPage() {
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
+
   // Достаем полный набор необходимых методов и стейтов из контекста
   const { addToCart, cart = [], favorites = [], toggleFavorite, updateQuantity } = useShop();
 
@@ -71,6 +72,7 @@ export default function ShopProductPage() {
     if (!value.startsWith('+996 ')) return;
     setFastPhone(value);
   };
+
 
   // Отправка быстрого заказа в 1 клик
   const handleFastSubmit = (e) => {
@@ -134,13 +136,12 @@ export default function ShopProductPage() {
               <div className="shop-horizontal-thumbnails-row">
                 {product.images.map((imgUrl, idx) => (
                   <div 
-                    key={idx}
-                    className={`shop-thumbnail-item border rounded-2 bg-white ${activeImg === imgUrl ? 'active-border' : ''}`}
-                    style={{ width: '60px', height: '60px', padding: '3px', overflow: 'hidden', cursor: 'pointer' }}
-                    onClick={() => setActiveImg(imgUrl)}
-                    onMouseEnter={() => setActiveImg(imgUrl)}
+                  key={idx}
+                  className={`shop-thumbnail-item border rounded-2 bg-white ${activeImg === imgUrl ? 'active-border' : ''}`}
+                  style={{ width: '60px', height: '60px', padding: '3px', overflow: 'hidden', cursor: 'pointer' }}
+                  onClick={() => setActiveImg(imgUrl)} // <-- Оставляем только клик!
                   >
-                    <img src={imgUrl} alt={`Ракурс ${idx + 1}`} className="w-100 h-100" style={{ objectFit: 'contain' }} />
+                  <img src={imgUrl} alt={`Ракурс ${idx + 1}`} className="w-100 h-100" style={{ objectFit: 'contain' }} />
                   </div>
                 ))}
               </div>

@@ -1,0 +1,19 @@
+/* 1. Исправляем поведение флекс-сетки формы чекаута */
+form.row.align-items-start {
+  align-items: flex-start !important; /* Не дает колонкам растягиваться по высоте друг друга */
+}
+
+/* 2. Задаем липкость для правой колонки через CSS с наивысшим приоритетом */
+.col-lg-5.position-sticky {
+  position: -webkit-sticky !important; /* Поддержка для браузеров Safari */
+  position: sticky !important;         /* Включаем липкость для остальных браузеров */
+  top: 24px !important;               /* Отступ от верхнего края экрана при прокрутке */
+  z-index: 100 !important;             /* Поднимаем над другими элементами при скролле */
+  align-self: flex-start !important;  /* Принудительно сжимает высоту колонки под размер чека */
+  height: auto !important;
+}
+
+/* 3. Защита от скрытого свойства overflow у родительских блоков клиники */
+html, body, #root, .shop-page-wrapper {
+  overflow-x: clip !important;        /* Заменяем hidden на clip, чтобы не ломать sticky */
+}

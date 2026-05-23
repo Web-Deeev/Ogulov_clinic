@@ -6,6 +6,7 @@ import ShopPage from './ShopPage.jsx';
 import ShopProductsTab from './ShopProductsTab/ShopProductsTab.jsx';
 import ShopProductPage from './ShopMainDetails/ShopProductPage.jsx';
 import ShopCart from './ShopCart/ShopCart.jsx';
+import ShopOrderSuccess from './ShopCart/ShopOrderSuccess.jsx';
 import ShopCheckout from './ShopCart/ShopCheckout.jsx';
 import ShopProfile from './ShopProfile/ShopProfile.jsx';
 import ShopAuth from './ShopProfile/ShopAuth.jsx';
@@ -33,11 +34,12 @@ export default function RouterShop() {
           {/* Корзина, Избранное и Оформление заказа */}
           <Route path="cart" element={<ShopCart />} />
           <Route path="checkout" element={<ShopCheckout />} />
+          <Route path="order-success" element={<ShopOrderSuccess />} />
           <Route path="wishlist" element={<ShopFavorites />} />
 
           {/* Авторизация и Личный кабинет */}
           <Route path="profile" element={<ShopProfile />} />
-          {/* ИСПРАВЛЕНО: Добавлен обязательный маршрут для формы входа */}
+          
           <Route path="auth" element={<ShopAuth />} />
          
           {/* Инфо-страницы */}

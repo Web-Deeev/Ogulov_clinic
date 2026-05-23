@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { productsData } from './shopData.js';
 
 // 1. Создаем сам контекст
 export const ShopContext = createContext();
@@ -7,6 +6,9 @@ export const ShopContext = createContext();
 // 2. Создаем Провайдер, который будет хранить все стейты
 export function ShopProvider({ children }) {
   const [activeCategory, setActiveCategory] = useState('all');
+  
+  // Передаем сквозные стейты для подкатегорий и окошек сайдбара
+  const [activeSubcategory, setActiveSubcategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   
   // Инициализация корзины из localStorage
@@ -51,16 +53,28 @@ export function ShopProvider({ children }) {
     }
   ]);
 
-  // Единый источник правды для категорий
+  // Единый источник правды для категорий.
+  // Сохранили твой родной ID 'bad' для сайдбара и зашили структуру окошек-подкатегорий
   const menuItems = [
-    { title: 'Книги', id: 'books' }, 
-    { title: 'Плакаты Огулова А.Т.', id: 'posters' },
-    { title: 'Устройство очистки ПВВК', id: 'equipment' },
-    { title: 'Пищевые добавки/БАД', id: 'bad' },
-    { title: 'Микросферы', id: 'microspheres' },
-    { title: 'Скребки/Массажеры', id: 'scrapers' },
-    { title: 'Банки', id: 'banks' },
-    { title: 'Остальные категории', id: 'others' },
+    { title: 'Книги', id: 'books', subcategories: [] }, 
+    { title: 'Плакаты Огулова А.Т.', id: 'posters', subcategories: [] },
+    { title: 'Устройство очистки ПВВК', id: 'equipment', subcategories: [] },
+    { 
+      title: 'Пищевые добавки/БАД', 
+      id: 'bad', // Твой родной ID
+      subcategories: [
+        { id: 'bady-fulvo', title: 'Фульво-гуминовые комплексы' },
+        { id: 'bady-vitauct', title: 'VITAUCT' },
+        { id: 'bady-herbs-honey', title: 'Травы и мёд' },
+        { id: 'bady-health', title: 'Мужское и женское здоровье' },
+        { id: 'bady-bee-power', title: 'Сила пчелы' },
+        { id: 'bady-tea', title: 'Чай' }
+      ]
+    },
+    { title: 'Микросферы', id: 'microspheres', subcategories: [] },
+    { title: 'Скребки/Массажеры', id: 'scrapers', subcategories: [] },
+    { title: 'Банки', id: 'banks', subcategories: [] },
+    { title: 'Остальные категории', id: 'others', subcategories: [] },
   ];
 
   // Эффект автоматического сохранения корзины
@@ -145,6 +159,8 @@ export function ShopProvider({ children }) {
   const value = {
     activeCategory,
     setActiveCategory,
+    activeSubcategory,    
+    setActiveSubcategory, 
     searchQuery,
     setSearchQuery,
     cart,
@@ -169,7 +185,7 @@ export function ShopProvider({ children }) {
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
 }
 
-// 3. Создаем кастомный хук
+// 3. Тот самый экспортируемый кастомный хук, который искал Vite
 export function useShop() {
   const context = useContext(ShopContext);
   if (!context) {

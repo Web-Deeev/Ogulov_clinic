@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useShop } from '../ShopMainDetails/ShopContext'; 
-import { productsData } from '../ShopMainDetails/shopData.js'; 
+import { productsData } from '../ShopMainDetails/shopData.js'; // ОСТАЛСЯ ТОЛЬКО ОДИН ЧИСТЫЙ ИМПОРТ
 import { filterAndSortProducts } from './shopHelpers.js'; 
 import ShopSidebar from './ShopSidebar'; 
 
-/* ИСПРАВЛЕНО: Импортируем существующие модульные CSS-файлы */
-import './shopProduct.css';            /* Стили для сайдбара и табов фильтров */
+/* Модульные CSS-файлы */
+import './shopProduct.css';            /* Стили для сайдбара и таборов фильтров */
 import '../ShopMainDetails/shopMainDetails.css'; /* Стили для отображения самих карточек товаров */
 
 import ShopProductCards from '../ShopMainDetails/ShopProductCards'; 
@@ -31,6 +31,10 @@ export default function ShopProductsTab() {
 
   const isSearchMode = searchQuery && searchQuery.trim() !== '';
   const isMainLanding = activeCategory === 'all' && !isSearchMode;
+
+  // Находим текущую активную родительскую категорию в меню для проверки подкатегорий
+  const currentParentCategory = menuItems?.find(item => item.id === activeCategory);
+  const hasSubcategories = currentParentCategory && currentParentCategory.subcategories?.length > 0;
 
   // Избранное
   const toggleFavorite = (product) => {
@@ -72,7 +76,6 @@ export default function ShopProductsTab() {
           <ul className="nav nav-tabs border-bottom-0 mb-0">
             {['hits', 'news', 'sales'].map((tab) => (
               <li className="nav-item" key={tab}>
-                {/* ИСПРАВЛЕНО: Заменили дефолтный красный цвет Bootstrap на фирменное золото клиники Огулова */}
                 <button
                   className={`nav-link fs-5 fw-bold px-3 py-2 border-0 bg-transparent ${
                     activeTab === tab 
@@ -103,7 +106,7 @@ export default function ShopProductsTab() {
         <div className="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3 mb-4 pt-2 border-bottom pb-3">
           <div>
             <h4 className="fw-bold mb-0 text-dark">
-              {isSearchMode ? `Результаты поиска по запросу: "${searchQuery}"` : 'Каталог товаров'}
+              {isSearchMode ? `Результаты поиска по запросу: "${searchQuery}"` : currentParentCategory?.title || 'Каталог товаров'}
               <small className="text-muted fs-6 d-block mt-1">Найдено товаров: {currentProducts.length}</small>
             </h4>
           </div>
@@ -134,8 +137,53 @@ export default function ShopProductsTab() {
           />
         )}
 
-        {/* СЕТКА С КАРТОЧКАМИ ТОВАРОВ */}
+        {/* СЕТКА С КАРТОЧКАМИ ТОВАРОВ И ПЛИТКАМИ-ОКОШКАМИ */}
         <div className={(isMainLanding || isSearchMode) ? "col-12" : "col-lg-9 col-md-8"}>
+          
+          {/* Динамические окошки подкатегорий (выводятся только в БАДах) */}
+          {!isMainLanding && !isSearchMode && hasSubcategories && (
+            <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 mb-4">
+              <div className="col">
+                <div 
+                  className={`card text-center p-3 h-100 border transition-all ${
+                    activeSubcategory === 'all' || activeSubcategory === `all-${activeCategory}`
+                      ? 'border-primary bg-primary bg-opacity-10 shadow-sm fw-bold' 
+                      : 'bg-white border-light-subtle'
+                  }`}
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => setActiveSubcategory(`all-${activeCategory}`)}
+                >
+                  <div className="card-body d-flex align-items-center justify-content-center p-0">
+                    <span className={activeSubcategory === 'all' || activeSubcategory === `all-${activeCategory}` ? 'text-primary' : 'text-dark'}>
+                      Все товары раздела
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {currentParentCategory.subcategories.map((sub) => (
+                <div className="col" key={sub.id}>
+                  <div 
+                    className={`card text-center p-3 h-100 border transition-all ${
+                      activeSubcategory === sub.id 
+                        ? 'border-primary bg-primary bg-opacity-10 shadow-sm fw-bold' 
+                        : 'bg-white border-light-subtle'
+                    }`}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => setActiveSubcategory(sub.id)}
+                  >
+                    <div className="card-body d-flex align-items-center justify-content-center p-0">
+                      <span className={activeSubcategory === sub.id ? 'text-primary' : 'text-dark'}>
+                        {sub.title}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* ВЫВОД КАРТОЧЕК */}
           {currentProducts.length === 0 ? (
             <div className="text-center my-5 py-5 text-muted bg-white rounded border shadow-sm">
               <h5>Товары не найдены</h5>
@@ -146,7 +194,6 @@ export default function ShopProductsTab() {
               {currentProducts.map((product) => {
                 return (
                   <div key={product.id} className="col">
-                    {/* ИСПРАВЛЕНО: Убрали лишние пропсы, карточка сама заберет нужные методы из контекста */}
                     <ShopProductCards product={product} />
                   </div>
                 );

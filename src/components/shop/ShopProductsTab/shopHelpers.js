@@ -1,4 +1,3 @@
-
 export const parsePrice = (priceStr) => {
   if (!priceStr) return 0;
   return parseInt(priceStr.toString().replace(/[^0-9]/g, ''), 10) || 0;
@@ -18,6 +17,9 @@ export const filterAndSortProducts = ({
   sortOrder,
   isSearchMode
 }) => {
+  // Защита от пустых данных, если массив товаров ещё не загрузился
+  if (!products || !Array.isArray(products)) return [];
+
   let result = [];
 
   // 1. Разделение на главную и категории
@@ -31,9 +33,19 @@ export const filterAndSortProducts = ({
       else result = products.filter(p => p.is_hit === true);
     }
   } else {
-    result = products.filter(product => product.category === activeCategory);
+    // ИСПРАВЛЕНО: Умная фильтрация родительских категорий (решает баг пустых БАДов)
+    result = products.filter(product => {
+      // Если кликнули на БАДы (id: 'bad'), пропускаем все товары, категория которых начинается на 'bady-'
+      if (activeCategory === 'bad' && product.category?.startsWith('bady-')) {
+        return true;
+      }
+      // Для всех остальных категорий (books, posters, scrapers, banks, microspheres) оставляем твое строгое совпадение
+      return product.category === activeCategory;
+    });
+
+    // ИСПРАВЛЕНО: Фильтрация по кликам на плитки-окошки (сверяем с конечным полем category)
     if (activeSubcategory && !activeSubcategory.startsWith('all')) {
-      result = result.filter(product => product.subcategory === activeSubcategory);
+      result = result.filter(product => product.category === activeSubcategory);
     }
   }
 

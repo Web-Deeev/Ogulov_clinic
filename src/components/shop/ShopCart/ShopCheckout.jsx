@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useShop } from '../ShopMainDetails/ShopContext'; 
+import './cart.css';
 
 export default function ShopCheckout() {
   const { cart = [], getCartTotal, clearCart } = useShop();
@@ -89,14 +90,24 @@ export default function ShopCheckout() {
       items: orderItems 
     };
 
-    console.log("=== ГОТОВЫЙ JSON ПАКЕТ ДЛЯ POST-ЗАПРОСА В DJANGO DRF ===");
+     console.log("=== ГОТОВЫЙ JSON ПАКЕТ ДЛЯ POST-ЗАПРОСА В DJANGO DRF ===");
     console.log(JSON.stringify(djangoOrderPayload, null, 2));
     
-    alert(`Заказ успешно сформирован!\nИтого к оплате: ${finalTotalSum.toLocaleString()} сом.\nДанные упакованы для API.`);
+    // 1. Генерируем временный ID заказа (пока нет бэкенда Django)
+    const mockDjangoOrderId = Math.floor(1000 + Math.random() * 9000);
     
+    // 2. Очищаем корзину через метод из глобального контекста
     if (clearCart) clearCart(); 
-    navigate('/shop'); 
+    
+    // 3. ПЕРЕХОДИМ на страницу успеха и пробрасываем туда данные заказа
+    navigate('/shop/order-success', { 
+      state: { 
+        orderId: mockDjangoOrderId,
+        totalSum: finalTotalSum
+      } 
+    }); 
   };
+
 
   if (!cart || cart.length === 0) {
     return (
@@ -122,7 +133,9 @@ export default function ShopCheckout() {
         <span className="text-dark fw-semibold">Оформление заказа</span>
       </nav>
 
-      <form onSubmit={handleSubmit} className="row g-4">
+      <form onSubmit={handleSubmit} className="row g-4 align-items-start">
+
+
         
         {/* ЛЕВАЯ ЧАСТЬ: Блоки ввода данных */}
         <div className="col-lg-7">
@@ -253,16 +266,17 @@ export default function ShopCheckout() {
           </button>
         </div>
 
-        {/* ПРАВАЯ ЧАСТЬ: Состав заказа */}
-        <div className="col-lg-5">
-          <div className="card p-4 border shadow-sm bg-white rounded position-sticky" style={{ top: '20px', zIndex: 1 }}>
+      
+         {/* ПРАВАЯ ЧАСТЬ: Состав заказа — ОКОНЧАТЕЛЬНЫЙ ФИКС ПРИЛИПАНИЯ */}
+        <div className="col-lg-5" style={{ position: 'sticky', top: '24px', zIndex: 10, alignSelf: 'flex-start' }}>
+          <div className="card p-4 border shadow-sm bg-white rounded">
             <h4 className="fw-bold mb-4 text-uppercase border-bottom pb-2 text-dark fs-5">Ваш заказ</h4>
-            
+
             <ul className="list-group list-group-flush mb-3 bg-transparent overflow-y-auto" style={{ maxHeight: '240px' }}>
               {cart.map(item => (
                 <li key={item.id} className="list-group-item d-flex justify-content-between align-items-center bg-transparent px-0 border-light-subtle py-3">
                   <div style={{ maxWidth: '75%' }}>
-                    <h6 className="my-0 fw-bold text-dark text-truncate">{item.title}</h6>
+                    <h6 className="my-0 fw-bold text-dark text-truncate" style={{ maxWidth: '240px' }}>{item.title}</h6>
                     <small className="text-secondary">{item.quantity} шт. × {Number(parsePrice(item.price)).toLocaleString('ru-RU')} сом</small>
                   </div>
                   <span className="fw-bold text-dark">
@@ -289,7 +303,8 @@ export default function ShopCheckout() {
               <span className="text-success fw-bold">{finalTotalSum.toLocaleString('ru-RU')} сом</span>
             </div>
             
-            <small className="text-muted d-block mt-3 text-center style-italic" style={{ fontSize: '0.8rem' }}>
+            {/* ИСПРАВЛЕНО: Заменили неверный класс style-italic на валидный Bootstrap-класс fst-italic */}
+            <small className="text-muted d-block mt-3 text-center fst-italic" style={{ fontSize: '0.8rem' }}>
               {deliveryType === 'PICKUP' 
                 ? '* Оплата производится при получении в филиале клиники' 
                 : '* Оплата производится при получении (Курьеру в Бишкеке или в ПВЗ СДЭК)'}

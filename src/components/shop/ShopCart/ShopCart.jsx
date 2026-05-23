@@ -2,6 +2,8 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useShop } from '../ShopMainDetails/ShopContext.jsx';
 
+import './cart.css'; 
+
 const ShopCart = () => {
   // Забираем строго твои названия стейтов и функций из контекста
   const { cart = [], updateQuantity, removeFromCart, getCartTotal } = useShop();
