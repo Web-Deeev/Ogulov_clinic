@@ -1,0 +1,21 @@
+/* ==========================================================================
+   СИНЯЯ ПОДСВЕТКА ДЛЯ КНОПОК МЕНЮ ЛИЧНОГО КАБИНЕТА ПРИ НАВЕДЕНИИ
+   ========================================================================== */
+
+/* 1. Эффект при наведении на обычные вкладки (Заказы, Избранное, Адреса) */
+#shopProfileContainer .list-group-item-action:hover:not(.bg-warning):not(.text-danger),
+.list-group-item-action:hover:not(.bg-warning):not(.text-danger) {
+  color: #0d6efd !important;             /* Текст ссылки становится сочным синим */
+  background-color: rgba(13, 110, 253, 0.06) !important; /* Мягкий, полупрозрачный синий фон */
+  transition: all 0.2s ease-in-out !important;
+}
+
+/* 2. Эффект при наведении на опасную кнопку "Выйти" */
+#shopProfileContainer .list-group-item.text-danger:hover,
+.list-group-item.text-danger:hover {
+  background-color: #0d6efd !important; /* Фон кнопки "Выйти" становится синим */
+  color: #ffffff !important;           /* Текст внутри неё становится белым */
+  font-weight: 700 !important;
+  box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25) !important; /* Синяя e-commerce тень */
+  transition: all 0.2s ease-in-out !important;
+}

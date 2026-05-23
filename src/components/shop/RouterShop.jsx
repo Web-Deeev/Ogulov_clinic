@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-import { ShopProvider } from './ShopMainDetails/ShopContext.jsx';
+import { ShopProvider, ShopContext } from './ShopMainDetails/ShopContext.jsx';
 import ShopPage from './ShopPage.jsx';
 import ShopProductsTab from './ShopProductsTab/ShopProductsTab.jsx';
 import ShopProductPage from './ShopMainDetails/ShopProductPage.jsx';
@@ -16,6 +16,17 @@ import ShopAbout from './ShopInfo/ShopAbout.jsx';
 import ShopDelivery from './ShopInfo/ShopDelivery.jsx';
 import ShopPayment from './ShopInfo/ShopPayment.jsx';
 import ShopContacts from './ShopInfo/ShopContacts.jsx';
+
+// ВНУТРЕННИЙ КОМПОНЕНТ ДЛЯ ЗАЩИТЫ ЗАКРЫТЫХ СТРАНИЦ (Защита профиля)
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated } = useContext(ShopContext);
+  
+  // Если пользователь не авторизован — жестко перенаправляем на страницу входа
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace />;
+  }
+  return children;
+};
 
 export default function RouterShop() {
   return (
@@ -37,8 +48,15 @@ export default function RouterShop() {
           <Route path="order-success" element={<ShopOrderSuccess />} />
           <Route path="wishlist" element={<ShopFavorites />} />
 
-          {/* Авторизация и Личный кабинет */}
-          <Route path="profile" element={<ShopProfile />} />
+          {/* Авторизация и Личный кабинет (Теперь под надежной защитой) */}
+          <Route 
+            path="profile" 
+            element={
+              <ProtectedRoute>
+                <ShopProfile />
+              </ProtectedRoute>
+            } 
+          />
           
           <Route path="auth" element={<ShopAuth />} />
          
@@ -48,8 +66,8 @@ export default function RouterShop() {
           <Route path="payment" element={<ShopPayment />} />
           <Route path="contacts" element={<ShopContacts />} />
 
-          {/* Защита от ввода несуществующих URL — редирект на витрину */}
-          <Route path="*" element={<Navigate to="" replace />} />
+          {/* НАДЕЖНЫЙ РЕДИРЕКТ: Защита от ввода несуществующих URL — редирект строго на главную витрину */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>
     </ShopProvider>
