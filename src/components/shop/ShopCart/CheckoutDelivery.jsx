@@ -1,6 +1,14 @@
 import React from 'react';
 
-export default function CheckoutDelivery({ deliveryType, formData, handleTypeTabChange, handleInputChange }) {
+export default function CheckoutDelivery({ 
+  deliveryType, 
+  formData, 
+  handleTypeTabChange, 
+  handleInputChange,
+  // НОВЫЕ ПРОПСЫ: Массив сохраненных адресов и функция для быстрой подстановки в стейт
+  savedAddresses = [],
+  onSelectSavedAddress
+}) {
   return (
     <div className="p-4 bg-white rounded shadow-sm border">
       <h4 className="mb-4 fw-bold text-uppercase border-bottom pb-2 text-dark fs-5">
@@ -45,6 +53,28 @@ export default function CheckoutDelivery({ deliveryType, formData, handleTypeTab
               <option value="BISHKEK">Курьерская доставка по Бишкеку (+200 сом)</option>
               <option value="CDEK">Регионы Кыргызстана / СНГ через СДЭК (+400 сом)</option>
             </select>
+          </div>
+        )}
+
+        {/* НОВЫЙ БЛОК: Выбор из сохранённых адресов Личного кабинета */}
+        {deliveryType === 'DELIVERY' && savedAddresses.length > 0 && (
+          <div className="col-12 animate-fade-in">
+            <label className="form-label small fw-semibold text-success mb-1">
+              📋 Выберите из сохранённых адресов:
+            </label>
+            <div className="d-flex flex-wrap gap-2 pt-1">
+              {savedAddresses.map((addr, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  className="btn btn-sm btn-outline-success text-start text-truncate rounded-2 fw-medium px-2.5 py-1.5"
+                  style={{ maxWidth: '100%', fontSize: '0.8rem', borderStyle: 'dashed' }}
+                  onClick={() => onSelectSavedAddress && onSelectSavedAddress(addr)}
+                >
+                  📍 {addr}
+                </button>
+              ))}
+            </div>
           </div>
         )}
 

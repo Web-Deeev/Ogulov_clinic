@@ -118,12 +118,12 @@
 
 /* Основные параметры футера — глубокий темно-графитовый фон */
 .shop-footer {
-  background-color: #1a1a1a !important;   /* Плотный темный цвет как на оригинальном сайте */
-  border-top: 3px solid #bfa15f !important; /* Наша главная фирменная золотая полоса */
+  background-color: #1a1a1a !important;   
+  border-top: 3px solid #bfa15f !important; 
   padding: 50px 0 30px 0 !important;
   margin-top: 60px !important;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-  color: #e0e0e0 !important;              /* Комфортный для чтения светло-серый текст */
+  color: #e0e0e0 !important;              
 }
 
 /* Сетка для колонок со ссылками */
@@ -133,7 +133,7 @@
   flex-wrap: wrap !important;
   gap: 30px !important;
   padding-bottom: 40px !important;
-  border-bottom: 1px solid #333333 !important; /* Строгая благородная темная линия */
+  border-bottom: 1px solid #333333 !important; 
 }
 
 .shop-footer-col {
@@ -141,11 +141,11 @@
   min-width: 220px !important;
 }
 
-/* Заголовки разделов в подвале */
+/* Заголовки разделов в подвале — ТВОЙ КРАСНЫЙ ЦВЕТ */
 .shop-footer-col h4 {
   font-size: 16px !important;
   font-weight: 600 !important;
-  color: #fc0505 !important;              /* Контрастный белый цвет для названий колонок */
+  color: #fc0505 !important;              /* Названия колонок строго КРАСНЫЕ */
   margin-bottom: 20px !important;
   text-transform: uppercase !important;
   letter-spacing: 0.5px !important;
@@ -155,16 +155,37 @@
 .shop-footer-col a {
   display: block !important;
   font-size: 15px !important;
-  color: #b0b0b0 !important;              /* Спокойный серый цвет, текст больше не сливается с фоном */
+  color: #b0b0b0 !important;              
   text-decoration: none !important;
   margin-bottom: 12px !important;
   transition: color 0.2s ease-in-out, padding-left 0.2s ease-in-out !important;
 }
 
-/* Эффект наведения мышки — мягкое песочное золото с легким сдвигом */
-.shop-footer-col a:hover {
-  color: #1f99fd !important;              /* Плавная подсветка золотом Огулов Центра */
-  padding-left: 4px !important;           /* Элегантное интерактивное смещение вправо */
+/* Эффект наведения мышки на обычные ссылки — ТВОЙ СИНИЙ ЦВЕТ */
+.shop-footer-col a:not(.whatsapp-color):not(.telegram-color):hover {
+  color: #1f99fd !important;              /* Подсветка СИНИМ при наведении */
+  padding-left: 4px !important;           
+}
+
+/* --- СТИЛИ ДЛЯ МЕССЕНДЖЕРОВ С ИКОНКАМИ В СООТВЕТСТВИИ С ИХ ЦВЕТОМ --- */
+
+/* WhatsApp при наведении становится брендовым ЗЕЛЕНЫМ */
+.shop-footer-col a.whatsapp-color:hover {
+  color: #25D366 !important;              
+  padding-left: 4px !important;
+}
+
+/* Telegram при наведении становится брендовым ГОЛУБЫМ */
+.shop-footer-col a.telegram-color:hover {
+  color: #26A5E4 !important;              
+  padding-left: 4px !important;
+}
+
+/* Центрирование Bootstrap-иконок мессенджеров */
+.shop-footer-col a i {
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
 }
 
 /* Блок иконок платежных систем */
@@ -175,26 +196,28 @@
   margin-top: 20px !important;
 }
 
-/* Аккуратные темные бэджи карт (Visa, MasterCard), чтобы не выбивались из стиля */
+/* Аккуратные темные бэджи карт */
 .pay-badge {
   display: inline-block !important;
   padding: 5px 12px !important;
   font-size: 11px !important;
   font-weight: 600 !important;
   border-radius: 4px !important;
-  background-color: #262626 !important;    /* Темная подложка плашки */
-  border: 1px solid #3d3d3d !important;   /* Тонкая серая обводка */
-  color: #ffffff !important;              /* Белый текст */
+  background-color: #262626 !important;    
+  border: 1px solid #3d3d3d !important;   
+  color: #ffffff !important;              
   text-transform: uppercase !important;
 }
 
-/* Копирайт и нижняя текстовая строка */
+/* Копирайт */
 .shop-footer-bottom {
   padding-top: 20px !important;
   font-size: 13px !important;
   color: #777777 !important;
   text-align: center !important;
 }
+
+
 
 
 

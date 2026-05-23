@@ -9,7 +9,6 @@ export default function ShopFooter() {
         {/* Блок 1: Навигация по инфо-страницам */}
         <div className="shop-footer-col">
           <h4>Информация</h4>
-      
           <Link to="/shop/about">О магазине</Link>
           <Link to="/shop/payment">Оплата</Link>
           <Link to="/shop/delivery">Доставка</Link>
@@ -19,21 +18,39 @@ export default function ShopFooter() {
         {/* Блок 2: Личный кабинет покупателя */}
         <div className="shop-footer-col">
           <h4>Личный кабинет</h4>
-          {/* Ссылки на будущие страницы авторизации */}
-          <Link to="/shop/login">Вход</Link>
-          <Link to="/shop/register">Регистрация</Link>
-          <Link to="/shop/forgot-password">Забыли пароль?</Link>
+          <Link to="/shop/auth">Вход в кабинет</Link>
+          <Link to="/shop/profile/orders">Мои заказы</Link>
+          <Link to="/shop/profile/favorites">Избранное</Link>
         </div>
 
-        {/* Блок 3: Социальные сети Представительства */}
+        {/* Блок 3: Мессенджеры с правильными иконками */}
         <div className="shop-footer-col">
-          <h4>Мы в соц сетях</h4>
-          <a href="https://ok.ru" target="_blank" rel="noreferrer">Одноклассники</a>
-          <a href="https://youtube.com" target="_blank" rel="noreferrer">YouTube</a>
+          <h4>Связаться с нами</h4>
+          <div className="d-flex flex-column gap-2">
+            <a 
+              href="https://wa.me" 
+              target="_blank" 
+              rel="noreferrer"
+              className="d-flex align-items-center text-decoration-none footer-social-link whatsapp-color"
+            >
+              <i className="bi bi-whatsapp me-2 fs-5"></i>
+              <span>WhatsApp</span>
+            </a>
+
+            <a 
+              href="https://t.me" 
+              target="_blank" 
+              rel="noreferrer"
+              className="d-flex align-items-center text-decoration-none footer-social-link telegram-color"
+            >
+              <i className="bi bi-telegram me-2 fs-5"></i>
+              <span>Telegram</span>
+            </a>
+          </div>
         </div>
       </div>
 
-      {/* Нижня плашка со значками платежных систем */}
+      {/* Нижняя плашка со значками платежных систем */}
       <div className="shop-payments container">
         <div className="shop-payments-inner">
           <span className="pay-badge mircard">МИР</span>

@@ -7,7 +7,8 @@ import CheckoutSummary from './CheckoutSummary.jsx';
 import './cart.css';
 
 export default function ShopCheckout() {
-  const { cart = [], getCartTotal, clearCart } = useShop();
+  // Добавляем получение userProfile из глобального контекста магазина
+  const { cart = [], getCartTotal, clearCart, userProfile } = useShop();
   const navigate = useNavigate();
 
   const [deliveryType, setDeliveryType] = useState('DELIVERY');
@@ -19,6 +20,18 @@ export default function ShopCheckout() {
     delivery_address: '',
     comment: ''
   });
+
+  // --- ЛОГИКА СБОРА СОХРАНЁННЫХ АДРЕСОВ ДЛЯ БЫСТРОГО ВЫБОРА ---
+  const savedAddresses = [];
+  if (userProfile?.address) {
+    savedAddresses.push(userProfile.address); // Добавляем основной адрес из профиля
+  }
+
+  const extraAddrs = localStorage.getItem('ogulov_additional_addresses');
+  if (extraAddrs) {
+    // Разворачиваем дополнительные адреса, созданные в личном кабинете
+    savedAddresses.push(...JSON.parse(extraAddrs));
+  }
 
   const parsePrice = (priceVal) => {
     if (!priceVal) return 0;
@@ -87,7 +100,21 @@ export default function ShopCheckout() {
       <form onSubmit={handleSubmit} className="row g-4 align-items-start">
         <div className="col-lg-7">
           <CheckoutRecipient formData={formData} handleInputChange={handleInputChange} />
-          <CheckoutDelivery deliveryType={deliveryType} formData={formData} handleTypeTabChange={handleTypeTabChange} handleInputChange={handleInputChange} />
+          
+          {/* ИСПРАВЛЕНО: Передаем новые пропсы для связи с адресами личного кабинета */}
+          <CheckoutDelivery 
+            deliveryType={deliveryType} 
+            formData={formData} 
+            handleTypeTabChange={handleTypeTabChange} 
+            handleInputChange={handleInputChange} 
+            savedAddresses={savedAddresses}
+            onSelectSavedAddress={(selectedAddr) => {
+              // По клику на кнопку адреса реактивно обновляем поле в форме и локальный сейв адреса
+              setFormData(prev => ({ ...prev, delivery_address: selectedAddr }));
+              setSavedUserAddress(selectedAddr);
+            }}
+          />
+          
           <button type="submit" className="btn w-100 fw-bold py-3 mt-4 text-uppercase text-white border-0" style={{ backgroundColor: '#1a1d20' }}>Подтвердить заказ</button>
         </div>
         <CheckoutSummary cart={cart} getCartTotal={getCartTotal} deliveryCost={deliveryCost} finalTotalSum={finalTotalSum} deliveryType={deliveryType} parsePrice={parsePrice} />

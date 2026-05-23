@@ -25,8 +25,10 @@ export function ShopProvider({ children }) {
 
   // --- УМНАЯ ИНИЦИАЛИЗАЦИЯ СЕССИИ И ПРОФИЛЯ (Защита от F5) ---
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    // Если в памяти есть токен от Django — пользователь остается авторизован при F5
-    return !!localStorage.getItem('ogulov_access_token');
+    // Защита от F5: проверяем токен или локальный флаг сессии фронта
+    const hasToken = localStorage.getItem('ogulov_access_token');
+    const hasMockAuth = localStorage.getItem('ogulov_mock_authenticated');
+    return !!(hasToken || hasMockAuth === 'true');
   });
 
   const [userProfile, setUserProfile] = useState(() => {
@@ -39,7 +41,7 @@ export function ShopProvider({ children }) {
       phone: "+996 (555) 12-34-56",
       city: "Бишкек",
       address: "ул. Чуй, д. 114, кв. 42",
-      avatar_url: null // Поле для загруженных фото
+      avatar_url: null
     };
   });
 
@@ -49,7 +51,7 @@ export function ShopProvider({ children }) {
       {
         order_number: "OG-2026-001",
         created_at: "2026-05-20T15:30:00Z",
-        status: "processing", // под бэк: processing, shipped, delivered, canceled
+        status: "processing",
         delivery_method: "bishkek",
         total_price: "2400.00",
         items: [
@@ -86,7 +88,7 @@ export function ShopProvider({ children }) {
     { title: 'Остальные категории', id: 'others', subcategories: [] },
   ];
 
-  // --- СИНХРОНИЗАЦИЯ С ЛОКАЛЬНОЙ ПАМЯТЬЮ ---
+  // --- СИНХРОНИЗАЦИЯ С ЛОКАЛЬНОЙ ПАМЯТЬЮ (localStorage) ---
   useEffect(() => {
     localStorage.setItem('ogulov_shop_cart', JSON.stringify(cart));
   }, [cart]);
@@ -97,6 +99,7 @@ export function ShopProvider({ children }) {
 
   useEffect(() => {
     if (isAuthenticated) {
+      localStorage.setItem('ogulov_mock_authenticated', 'true');
       localStorage.setItem('ogulov_user_profile', JSON.stringify(userProfile));
     }
   }, [userProfile, isAuthenticated]);
@@ -107,56 +110,50 @@ export function ShopProvider({ children }) {
     }
   }, [userOrders, isAuthenticated]);
 
-
-  // УТИЛИТА ПАРСИНГА ЦЕН С ПОДДЕРЖКОЙ ДЕСЯТИЧНЫХ ДРОБЕЙ ОТ DJANGO
+  // --- ТВОИ УТИЛИТЫ И ФУНКЦИИ ---
+  
   const parsePrice = (priceStr) => {
     if (!priceStr) return 0;
-    // Если это уже число — просто возвращаем его
     if (typeof priceStr === 'number') return priceStr;
-    
-    // Безопасно очищаем строку, сохраняя точку для дробной части
     const cleanStr = priceStr.toString().replace(/[^0-9.]/g, '');
     return parseFloat(cleanStr) || 0;
   };
 
-  // Подсчет общего количества единиц товара в корзине
   const getCartCount = () => {
-    return cart.reduce((total, item) => total + item.quantity, 0);
+    return cart.reduce((total, item) => total + (item.quantity || 1), 0);
   };
 
-  // Подсчет итоговой суммы заказа в сомах
   const getCartTotal = () => {
     return cart.reduce((total, item) => {
       const price = parsePrice(item.price);
-      return total + (price * item.quantity);
+      return total + (price * (item.quantity || 1));
     }, 0);
   };
 
-  // Функция добавления товара в корзину
   const addToCart = (product) => {
     setCart((prevCart) => {
       const exists = prevCart.find((item) => item.id === product.id);
       if (exists) {
         return prevCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+          item.id === product.id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
         );
       }
       return [...prevCart, { ...product, quantity: 1 }];
     });
   };
 
-  // Полное удаление товара из корзины
   const removeFromCart = (productId) => {
     setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
   };
 
-  // Изменение количества товара (+1 или -1)
   const updateQuantity = (productId, action) => {
     setCart((prevCart) =>
       prevCart
         .map((item) => {
           if (item.id === productId) {
-            const newQty = action === 'increase' ? item.quantity + 1 : item.quantity - 1;
+            // Поддержка обоих вариантов экшенов: твоего 'increase' и стандартного 'increment'
+            const isPlus = action === 'increase' || action === 'increment';
+            const newQty = isPlus ? (item.quantity || 1) + 1 : (item.quantity || 1) - 1;
             return { ...item, quantity: newQty };
           }
           return item;
@@ -165,12 +162,8 @@ export function ShopProvider({ children }) {
     );
   };
 
-  // Функция полной очистки корзины
-  const clearCart = () => {
-    setCart([]);
-  };
+  const clearCart = () => setCart([]);
 
-  // Функция переключения (добавления/удаления) товара в Избранное
   const toggleFavorite = (product) => {
     setFavorites((prevFavs) => {
       const exists = prevFavs.find((item) => item.id === product.id);
@@ -181,42 +174,27 @@ export function ShopProvider({ children }) {
     });
   };
 
-  // ФУНКЦИЯ БЕЗОПАСНОГО ВЫХОДА (Полная очистка следов сессии)
   const logoutUser = () => {
     setIsAuthenticated(false);
     setUserProfile(null);
     setUserOrders([]);
     localStorage.removeItem('ogulov_access_token');
+    localStorage.removeItem('ogulov_mock_authenticated'); // Чистим флаг эмуляции
     localStorage.removeItem('ogulov_user_profile');
     localStorage.removeItem('ogulov_user_orders');
   };
 
-  // Все данные и функции, к которым мы хотим дать доступ всему сайту
   const value = {
-    activeCategory,
-    setActiveCategory,
-    activeSubcategory,    
-    setActiveSubcategory, 
-    searchQuery,
-    setSearchQuery,
-    cart,
-    addToCart,
-    removeFromCart,
-    updateQuantity, 
-    clearCart,      
-    favorites,
-    setFavorites,
-    toggleFavorite,
-    menuItems,
-    getCartCount, 
-    getCartTotal,
-    isAuthenticated,
-    setIsAuthenticated,
-    userProfile,
-    setUserProfile,
-    userOrders,
-    setUserOrders,
-    logoutUser // Экспортируем метод чистки сессии
+    activeCategory, setActiveCategory,
+    activeSubcategory, setActiveSubcategory, 
+    searchQuery, setSearchQuery,
+    cart, addToCart, removeFromCart, updateQuantity, clearCart,      
+    favorites, setFavorites, toggleFavorite,
+    menuItems, getCartCount, getCartTotal, parsePrice,
+    isAuthenticated, setIsAuthenticated,
+    userProfile, setUserProfile,
+    userOrders, setUserOrders,
+    logoutUser
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
