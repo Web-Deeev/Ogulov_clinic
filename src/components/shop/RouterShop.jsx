@@ -37,26 +37,31 @@ export default function RouterShop() {
   return (
     <ShopProvider>
       <Routes>
-        {/* ВОЗВРАЩАЕМ СТАНДАРТНЫЙ КОРЕНЬ, чтобы убрать конфликт с App.jsx и белый экран */}
+        {/* КОРЕНЬ МАГАЗИНА */}
         <Route path="/" element={<ShopPage />}>
           
-          {/* Витрина каталога */}
+          {/* Витрина общего каталога */}
           <Route index element={<ShopProductsTab />} />
           <Route path="catalog" element={<ShopProductsTab />} />
           
-          {/* Детальная страница товара */}
+          <Route path="catalog/:categorySlug" element={<ShopProductsTab />} />
+          
+          {/* 
+            СТРОГИЙ МАРШРУТ ДЕТАЛЬНОЙ СТРАНИЦЫ ТОВАРА:
+            При переходе на /product/pvvk роутер однозначно вызовет ShopProductPage.
+          */}
           <Route path="product/:id" element={<ShopProductPage />} />
           
-          {/* Корзина, Избранное (глобальное) и Оформление заказа */}
+          {/* Корзина, Избранное и Оформление заказа */}
           <Route path="cart" element={<ShopCart />} />
           <Route path="checkout" element={<ShopCheckout />} />
           <Route path="order-success" element={<ShopOrderSuccess />} />
           <Route path="wishlist" element={<ProfileFavorites />} />
 
-          {/* ВЛОЖЕННЫЙ РОУТИНГ ДЛЯ ЛИЧНОГО КАБИНЕТА — ДОБАВЛЯЕМ ЗВЕЗДОЧКУ СЮДА */}
+          {/* ВЛОЖЕННЫЙ РОУТИНГ ДЛЯ ЛИЧНОГО КАБИНЕТА */}
           <Route 
             path="profile/*" 
-            element={
+            element = {
               <ProtectedRoute>
                 <ShopProfile />
               </ProtectedRoute>

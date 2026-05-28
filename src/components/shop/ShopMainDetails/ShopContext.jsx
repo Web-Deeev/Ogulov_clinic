@@ -1,13 +1,17 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import shopService from '@/api/shopService';
 
 // 1. Создаем сам контекст
 export const ShopContext = createContext();
 
 // 2. Создаем Провайдер, который будет хранить все стейты
 export function ShopProvider({ children }) {
+  // Асинхронные состояния для данных из Django REST Framework
+  const [productsData, setProductsData] = useState([]);
+  const [isProductsLoading, setIsProductsLoading] = useState(false);
+  const [productsError, setProductsError] = useState(null);
+
   const [activeCategory, setActiveCategory] = useState('all');
-  
-  // Передаем сквозные стейты для подкатегорий и окошек сайдбара
   const [activeSubcategory, setActiveSubcategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   
@@ -25,7 +29,6 @@ export function ShopProvider({ children }) {
 
   // --- УМНАЯ ИНИЦИАЛИЗАЦИЯ СЕССИИ И ПРОФИЛЯ (Защита от F5) ---
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    // Защита от F5: проверяем токен или локальный флаг сессии фронта
     const hasToken = localStorage.getItem('ogulov_access_token');
     const hasMockAuth = localStorage.getItem('ogulov_mock_authenticated');
     return !!(hasToken || hasMockAuth === 'true');
@@ -69,7 +72,7 @@ export function ShopProvider({ children }) {
   const menuItems = [
     { title: 'Книги', id: 'books', subcategories: [] }, 
     { title: 'Плакаты Огулова А.Т.', id: 'posters', subcategories: [] },
-    { title: 'Устройство очистки ПВВК', id: 'equipment', subcategories: [] },
+    { title: 'Устройство очистки ПВВК', id: 'pvvk', subcategories: [] },
     { 
       title: 'Пищевые добавки/БАД', 
       id: 'bad', 
@@ -88,6 +91,27 @@ export function ShopProvider({ children }) {
     { title: 'Остальные категории', id: 'others', subcategories: [] },
   ];
 
+  // --- АСИНХРОННЫЙ КОНВЕЙЕР ПОЛУЧЕНИЯ ДАННЫХ ИЗ DJANGO REST FRAMEWORK ---
+  const fetchProductsFromBackend = useCallback(async () => {
+    setIsProductsLoading(true);
+    setProductsError(null);
+    try {
+      // Запрашиваем полный адаптированный массив через наш API-сервис
+      const data = await shopService.getProducts();
+      setProductsData(data);
+    } catch (err) {
+      setProductsError('Ошибка подключения к серверу Django. Выведены локальные данные.');
+      console.error('Критическая ошибка инициализации каталога:', err);
+    } finally {
+      setIsProductsLoading(false);
+    }
+  }, []);
+
+  // Первичный вызов триггера при монтировании компонента ядра
+  useEffect(() => {
+    fetchProductsFromBackend();
+  }, [fetchProductsFromBackend]);
+
   // --- СИНХРОНИЗАЦИЯ С ЛОКАЛЬНОЙ ПАМЯТЬЮ (localStorage) ---
   useEffect(() => {
     localStorage.setItem('ogulov_shop_cart', JSON.stringify(cart));
@@ -98,19 +122,19 @@ export function ShopProvider({ children }) {
   }, [favorites]);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && userProfile) {
       localStorage.setItem('ogulov_mock_authenticated', 'true');
       localStorage.setItem('ogulov_user_profile', JSON.stringify(userProfile));
     }
   }, [userProfile, isAuthenticated]);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (isAuthenticated && userOrders) {
       localStorage.setItem('ogulov_user_orders', JSON.stringify(userOrders));
     }
   }, [userOrders, isAuthenticated]);
 
-  // --- ТВОИ УТИЛИТЫ И ФУНКЦИИ ---
+  // --- БЕЗОПАСНЫЕ УТИЛИТЫ И ФУНКЦИИ (Защита принудительным кастом типов к String) ---
   
   const parsePrice = (priceStr) => {
     if (!priceStr) return 0;
@@ -131,11 +155,13 @@ export function ShopProvider({ children }) {
   };
 
   const addToCart = (product) => {
+    if (!product) return;
     setCart((prevCart) => {
-      const exists = prevCart.find((item) => item.id === product.id);
+      // Безопасное сравнение через явное приведение ID к строке
+      const exists = prevCart.find((item) => String(item.id) === String(product.id));
       if (exists) {
         return prevCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: (item.quantity || 1) + 1 } : item
+          String(item.id) === String(product.id) ? { ...item, quantity: (item.quantity || 1) + 1 } : item
         );
       }
       return [...prevCart, { ...product, quantity: 1 }];
@@ -143,15 +169,14 @@ export function ShopProvider({ children }) {
   };
 
   const removeFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+    setCart((prevCart) => prevCart.filter((item) => String(item.id) !== String(productId)));
   };
 
   const updateQuantity = (productId, action) => {
     setCart((prevCart) =>
       prevCart
         .map((item) => {
-          if (item.id === productId) {
-            // Поддержка обоих вариантов экшенов: твоего 'increase' и стандартного 'increment'
+          if (String(item.id) === String(productId)) {
             const isPlus = action === 'increase' || action === 'increment';
             const newQty = isPlus ? (item.quantity || 1) + 1 : (item.quantity || 1) - 1;
             return { ...item, quantity: newQty };
@@ -165,10 +190,11 @@ export function ShopProvider({ children }) {
   const clearCart = () => setCart([]);
 
   const toggleFavorite = (product) => {
+    if (!product) return;
     setFavorites((prevFavs) => {
-      const exists = prevFavs.find((item) => item.id === product.id);
+      const exists = prevFavs.find((item) => String(item.id) === String(product.id));
       if (exists) {
-        return prevFavs.filter((item) => item.id !== product.id);
+        return prevFavs.filter((item) => String(item.id) !== String(product.id));
       }
       return [...prevFavs, product];
     });
@@ -179,12 +205,18 @@ export function ShopProvider({ children }) {
     setUserProfile(null);
     setUserOrders([]);
     localStorage.removeItem('ogulov_access_token');
-    localStorage.removeItem('ogulov_mock_authenticated'); // Чистим флаг эмуляции
+    localStorage.removeItem('ogulov_mock_authenticated');
     localStorage.removeItem('ogulov_user_profile');
     localStorage.removeItem('ogulov_user_orders');
   };
 
   const value = {
+    // Новый реактивный динамический массив товаров из Django DRF
+    productsData,
+    isProductsLoading,
+    productsError,
+    refreshProducts: fetchProductsFromBackend,
+
     activeCategory, setActiveCategory,
     activeSubcategory, setActiveSubcategory, 
     searchQuery, setSearchQuery,

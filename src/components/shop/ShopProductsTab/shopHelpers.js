@@ -4,7 +4,7 @@ export const parsePrice = (priceStr) => {
 };
 
 /**
- * Универсальный конвейер фильтрации и сортировки товаров
+ * Универсальный продакшн-конвейер фильтрации и сортировки товаров клиники Огулова
  */
 export const filterAndSortProducts = ({
   products,
@@ -17,46 +17,65 @@ export const filterAndSortProducts = ({
   sortOrder,
   isSearchMode
 }) => {
-  // Защита от пустых данных, если массив товаров ещё не загрузился
+  // Защита от пустых данных на этапе асинхронного ответа Django DRF
   if (!products || !Array.isArray(products)) return [];
 
   let result = [];
 
-  // 1. Разделение на главную и категории
+  // 1. Разделение на главную (витрину) и страницы категорий/поиска
   if (activeCategory === 'all' || isSearchMode) {
     if (isSearchMode) {
       result = [...products];
     } else {
-      // Логика табов на главной
-      if (activeTab === 'news') result = products.filter(p => p.is_new === true);
-      else if (activeTab === 'sales') result = products.filter(p => p.oldPrice !== null && p.oldPrice !== undefined);
-      else result = products.filter(p => p.is_hit === true);
+      // Логика табов на главной странице
+      if (activeTab === 'news') {
+        result = products.filter(p => p.is_new === true);
+      } else if (activeTab === 'sales') {
+        // КРИТИЧЕСКИЙ ФИКС: подстраиваемся под snake_case ключ 'old_price' из Django
+        result = products.filter(p => p.old_price !== null && p.old_price !== undefined);
+      } else {
+        result = products.filter(p => p.is_hit === true);
+      }
     }
   } else {
-    // ИСПРАВЛЕНО: Умная фильтрация родительских категорий (решает баг пустых БАДов)
+    // 2. СТРОГАЯ ФИЛЬТРАЦИЯ СТРАНИЦ КАТЕГОРИЙ (С учетом архитектуры Django)
     result = products.filter(product => {
-      // Если кликнули на БАДы (id: 'bad'), пропускаем все товары, категория которых начинается на 'bady-'
-      if (activeCategory === 'bad' && product.category?.startsWith('bady-')) {
-        return true;
+      const prodCat = product.category ? product.category.toLowerCase() : '';
+      const actCat = activeCategory.toLowerCase();
+
+      // ЖЕЛЕЗОБЕТОННЫЙ ФИКС БАДОВ: 
+      // Если мы в основном разделе БАД (id: 'bad'), пропускаем товары, чьи категории 
+      // либо равны 'bad', либо содержат 'bad', либо это их дочерние элементы (из твоего JSON)
+      if (actCat === 'bad') {
+        return prodCat === 'bad' || prodCat.includes('bad') || ['vitauct', 'fulvo', 'tea', 'herbs-honey', 'bee-power', 'health'].includes(prodCat);
       }
-      // Для всех остальных категорий (books, posters, scrapers, banks, microspheres) оставляем твое строгое совпадение
-      return product.category === activeCategory;
+
+      // ЖЕЛЕЗОБЕТОННЫЙ ФИКС ДЛЯ ОСТАЛЬНЫХ КАТЕГОРИЙ (Учитываем дочерние слаги Django):
+      // Товар подходит, если его категория напрямую совпадает с сайдбаром (например, 'books')
+      // ИЛИ если дочерний слаг Django включает в себя имя родителя (например, 'pvvk' в разделе 'equipment')
+      return prodCat === actCat || prodCat.startsWith(actCat) || actCat.startsWith(prodCat);
     });
 
-    // ИСПРАВЛЕНО: Фильтрация по кликам на плитки-окошки (сверяем с конечным полем category)
+    // 3. ФИЛЬТРАЦИЯ ПО КЛИКАМ НА ПЛИТКИ-ОКОШКИ БАДОВ
     if (activeSubcategory && !activeSubcategory.startsWith('all')) {
-      result = result.filter(product => product.category === activeSubcategory);
+      result = result.filter(product => {
+        const prodCat = product.category ? product.category.toLowerCase() : '';
+        const activeSub = activeSubcategory.toLowerCase();
+
+        // Синхронизируем фронтенд-префиксы 'bady-' с чистыми слагами Django на лету (Паттерн Адаптер)
+        return prodCat === activeSub || prodCat === activeSub.replace('bady-', '');
+      });
     }
   }
 
-  // 2. Фильтр поиска
+  // 4. Фильтр глобального поиска по каталогу
   if (searchQuery) {
     result = result.filter(product => 
       product.title?.toLowerCase().includes(searchQuery.toLowerCase())
     );
   }
 
-  // 3. Фильтр цен от/до
+  // 5. Фильтр ценового диапазона от/до
   if (minPrice) {
     result = result.filter(product => parsePrice(product.price) >= parseInt(minPrice, 10));
   }
@@ -64,7 +83,7 @@ export const filterAndSortProducts = ({
     result = result.filter(product => parsePrice(product.price) <= parseInt(maxPrice, 10));
   }
 
-  // 4. Сортировка
+  // 6. Сортировка по стоимости
   if (sortOrder === 'low-to-high') {
     return [...result].sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
   }

@@ -1,26 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom'; 
 import { useShop } from '../ShopMainDetails/ShopContext'; 
-import { productsData } from '../ShopMainDetails/shopData.js'; // ОСТАЛСЯ ТОЛЬКО ОДИН ЧИСТЫЙ ИМПОРТ
 import { filterAndSortProducts } from './shopHelpers.js'; 
 import ShopSidebar from './ShopSidebar'; 
-
-/* Модульные CSS-файлы */
-import './shopProduct.css';            /* Стили для сайдбара и таборов фильтров */
-import '../ShopMainDetails/shopMainDetails.css'; /* Стили для отображения самих карточек товаров */
-
-import ShopProductCards from '../ShopMainDetails/ShopProductCards'; 
 import ShopBanner from "../ShopHeader/ShopBanner"; 
 
+// ЖЕЛЕЗОБЕТОННЫЙ ФИКС ИМПОРТА: Импортируем файл по его реальному имени на диске (ShopProductCards.jsx)
+// и используем это же имя в разметке внизу, чтобы убрать ReferenceError!
+import ProductCard from '../ShopMainDetails/ShopProductCards'; 
+
+/* Модульные CSS-файлы */
+import './shopProduct.css';            
+import '../ShopMainDetails/shopMainDetails.css'; 
+
 export default function ShopProductsTab() {
+  const { categorySlug } = useParams(); // Извлекаем динамический slug категории из URL-строки браузера
+  
   const [activeTab, setActiveTab] = useState('hits');
   const [sortOrder, setSortOrder] = useState('default');
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
 
+  // Вытаскиваем динамический массив товаров с бэкенда Django и статусы загрузки сети из ядра
   const { 
-    addToCart, 
-    favorites = [], 
-    setFavorites, 
+    productsData = [],
+    isProductsLoading,
+    productsError,
     activeCategory, 
     setActiveCategory,
     activeSubcategory,
@@ -36,16 +41,16 @@ export default function ShopProductsTab() {
   const currentParentCategory = menuItems?.find(item => item.id === activeCategory);
   const hasSubcategories = currentParentCategory && currentParentCategory.subcategories?.length > 0;
 
-  // Избранное
-  const toggleFavorite = (product) => {
-    setFavorites((prev) => {
-      const exists = prev.some((fav) => fav.id === product.id);
-      if (exists) return prev.filter((fav) => fav.id !== product.id);
-      return [...prev, product];
-    });
-  };
+  // СИНХРОНИЗАЦИЯ URL С КОНТЕКСТОМ
+  useEffect(() => {
+    if (categorySlug) {
+      setActiveCategory(categorySlug);
+    } else {
+      setActiveCategory('all'); 
+    }
+  }, [categorySlug, setActiveCategory]);
 
-  // Переключение категории
+  // Переключение категории ручным кликом
   const handleCategoryClick = (categoryId) => {
     setActiveCategory(categoryId);
     if (setActiveSubcategory) {
@@ -53,9 +58,9 @@ export default function ShopProductsTab() {
     }
   };
 
-  // Вызываем функцию конвейера фильтров
+  // Вызываем функцию конвейера фильтров, подставляя живой массив продуктов с Django
   const currentProducts = filterAndSortProducts({
-    products: productsData,
+    products: productsData || [],
     activeCategory,
     activeSubcategory,
     activeTab,
@@ -66,11 +71,36 @@ export default function ShopProductsTab() {
     isSearchMode
   });
 
+  // --- ОБРАБОТКА СЕТЕВЫХ СОСТОЯНИЙ ЗАГРУЗКИ ---
+  if (isProductsLoading) {
+    return (
+      <div className="container my-5 py-5 text-center">
+        <div className="spinner-border text-primary" role="status" style={{ width: '3rem', height: '3rem' }}>
+          <span className="visually-hidden">Загрузка...</span>
+        </div>
+        <h5 className="mt-3 text-secondary fw-semibold">Загрузка каталога Огулова...</h5>
+        <p className="text-muted small">Получаем данные из Django REST Framework</p>
+      </div>
+    );
+  }
+
+  // Если сервер Django выключен или CORS заблокирован
+  if (productsError) {
+    return (
+      <div className="container my-5">
+        <div className="alert alert-danger text-center shadow-sm rounded-4 py-4" role="alert">
+          <h5 className="fw-bold">Ошибка синхронизации данных</h5>
+          <p className="mb-0 text-secondary small">{productsError}</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container my-4">
       {isMainLanding && <ShopBanner />} 
 
-      {/* ХЕДЕР ГЛАВНОЙ СТРАНИЦЫ */}
+      {/* ХЕДЕР ГЛАВНОЙ СТРАНИЦЫ (ТАБЫ) */}
       {isMainLanding && (
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 mb-4 border-bottom pb-3 mt-4">
           <ul className="nav nav-tabs border-bottom-0 mb-0">
@@ -78,9 +108,7 @@ export default function ShopProductsTab() {
               <li className="nav-item" key={tab}>
                 <button
                   className={`nav-link fs-5 fw-bold px-3 py-2 border-0 bg-transparent ${
-                    activeTab === tab 
-                      ? 'border-bottom border-3' 
-                      : 'text-secondary'
+                    activeTab === tab ? 'border-bottom border-3' : 'text-secondary'
                   }`}
                   style={activeTab === tab ? { color: '#d9a74a', borderColor: '#d9a74a' } : {}}
                   onClick={() => setActiveTab(tab)}
@@ -122,7 +150,7 @@ export default function ShopProductsTab() {
       )}
 
       <div className="row">
-        {/* ИСПОЛЬЗУЕМ ВЫНЕСЕННЫЙ КОМПОНЕНТ САЙДБАРА */}
+        {/* ВЫВОД БОКОВОГО САЙДБАРА */}
         {!isMainLanding && !isSearchMode && (
           <ShopSidebar 
             menuItems={menuItems}
@@ -140,7 +168,7 @@ export default function ShopProductsTab() {
         {/* СЕТКА С КАРТОЧКАМИ ТОВАРОВ И ПЛИТКАМИ-ОКОШКАМИ */}
         <div className={(isMainLanding || isSearchMode) ? "col-12" : "col-lg-9 col-md-8"}>
           
-          {/* Динамические окошки подкатегорий (выводятся только в БАДах) */}
+          {/* Динамические окошки подкатегорий (только в БАДах) */}
           {!isMainLanding && !isSearchMode && hasSubcategories && (
             <div className="row row-cols-2 row-cols-sm-3 row-cols-lg-4 g-2 mb-4">
               <div className="col">
@@ -165,9 +193,7 @@ export default function ShopProductsTab() {
                 <div className="col" key={sub.id}>
                   <div 
                     className={`card text-center p-3 h-100 border transition-all ${
-                      activeSubcategory === sub.id 
-                        ? 'border-primary bg-primary bg-opacity-10 shadow-sm fw-bold' 
-                        : 'bg-white border-light-subtle'
+                      activeSubcategory === sub.id ? 'border-primary bg-primary bg-opacity-10 shadow-sm fw-bold' : 'bg-white border-light-subtle'
                     }`}
                     style={{ cursor: 'pointer' }}
                     onClick={() => setActiveSubcategory(sub.id)}
@@ -183,25 +209,26 @@ export default function ShopProductsTab() {
             </div>
           )}
 
-          {/* ВЫВОД КАРТОЧЕК */}
+          {/* ВЫВОД КАРТОЧЕК ИЗ ДЖАНГО */}
           {currentProducts.length === 0 ? (
             <div className="text-center my-5 py-5 text-muted bg-white rounded border shadow-sm">
               <h5>Товары не найдены</h5>
-              <p className="small text-secondary mb-0">Попробуйте изменить фильтры или текст поиска.</p>
+              <p className="small text-secondary mb-0">Попробуйте переключить вкладку или изменить параметры фильтров.</p>
             </div>
           ) : (
-            <div className={`row row-cols-1 row-cols-sm-2 ${(isMainLanding || isSearchMode) ? 'row-cols-md-3 row-cols-lg-4' : 'row-cols-md-2 row-cols-lg-3'} g-4`}>
-              {currentProducts.map((product) => {
+            // ФИНАЛЬНЫЙ СЕНЬОРСКИЙ ВЫВОД: Вызываем строго импортированный выше компонент
+            <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+              {currentProducts.map((item) => {
+                if (!item) return null;
                 return (
-                  <div key={product.id} className="col">
-                    <ShopProductCards product={product} />
+                  <div className="col d-flex align-items-stretch" key={item.id || item.slug_id}>
+                    <ProductCard product={item} />
                   </div>
                 );
               })}
             </div>
           )}
         </div>
-
       </div>
     </div>
   );

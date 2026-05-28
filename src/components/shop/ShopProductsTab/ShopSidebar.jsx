@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Импортируем Link для управления URL
 import './shopProduct.css'; 
 
 export default function ShopSidebar({
@@ -22,23 +23,31 @@ export default function ShopSidebar({
         </div>
 
         <div className="modern-menu-list">
-          <button className="btn-modern-back" onClick={() => onCategoryClick('all')}>
-            <i className="bi bi-arrow-left-short"></i>
+          {/* Возврат на главную через абсолютную ссылку роутера */}
+          <Link to="/shop" className="btn-modern-back d-flex align-items-center text-decoration-none text-secondary py-2" onClick={() => onCategoryClick && onCategoryClick('all')}>
+            <i className="bi bi-arrow-left-short fs-4"></i>
             <span>Главная магазина</span>
-          </button>
+          </Link>
 
-          {menuItems.map((item) => {
+          {menuItems && menuItems.map((item) => {
             const isCurrentActive = activeCategory === item.id;
             return (
               <div key={item.id} className="modern-menu-wrapper">
-                <button
-                  className={`btn-modern-menu-item ${isCurrentActive ? 'active' : ''}`}
-                  onClick={() => onCategoryClick(item.id)}
+                {/* 
+                  ЖЕЛЕЗОБЕТОННЫЙ ФИКС: Переводим категорию на Link. 
+                  Теперь URL строго меняется на /shop/catalog/books, 
+                  роутер понимает этот путь и ложный вызов деталки прекратится!
+                */}
+                <Link
+                  to={`/shop/catalog/${item.id}`}
+                  className={`btn-modern-menu-item d-flex justify-content-between align-items-center text-decoration-none ${isCurrentActive ? 'active' : ''}`}
+                  onClick={() => onCategoryClick && onCategoryClick(item.id)}
                 >
                   <span>{item.title}</span>
                   <i className={`bi bi-chevron-right arrow-indicator ${isCurrentActive ? 'rotated' : ''}`}></i>
-                </button>
+                </Link>
 
+                {/* Подкатегории (Плитки-окошки) оставляем на кнопках, так как они фильтруют внутри компонента */}
                 {isCurrentActive && item.subcategories && item.subcategories.length > 0 && (
                   <div className="modern-sub-list">
                     <div className="modern-sub-line"></div>
@@ -47,6 +56,7 @@ export default function ShopSidebar({
                       return (
                         <button
                           key={sub.id}
+                          type="button"
                           className={`btn-modern-sub-item ${isSubActive ? 'active' : ''}`}
                           onClick={() => setActiveSubcategory && setActiveSubcategory(sub.id)}
                         >
@@ -62,7 +72,7 @@ export default function ShopSidebar({
         </div>
       </div>
 
-      {/* Блок фильтра цен (Чистый интерфейс без полей ввода) */}
+      {/* Блок фильтра цен */}
       <div className="modern-sidebar-card card-filter-price">
         <div className="modern-sidebar-header mb-3">
           <i className="bi bi-sliders icon-green"></i>
@@ -78,13 +88,11 @@ export default function ShopSidebar({
             value={maxPrice === '' ? 20000 : Math.max(0, Number(maxPrice))} 
             onChange={(e) => {
               const val = Number(e.target.value);
-              // Защита от минуса на всякий случай и сохранение логики 20 000+
               const safeVal = Math.max(0, val);
               setMaxPrice(safeVal === 20000 ? '' : safeVal.toString());
             }} 
             className="form-range modern-single-range"
           />
-          {/* Информативный нижний счётчик */}
           <div className="d-flex justify-content-between text-muted mt-2" style={{ fontSize: '0.85rem' }}>
             <span>0 сом</span>
             <span className="fw-bold text-success">
@@ -95,6 +103,7 @@ export default function ShopSidebar({
         
         {(minPrice || maxPrice) && (
           <button 
+            type="button"
             className="btn btn-sm btn-light btn-modern-clear mt-3 w-100" 
             onClick={() => { setMinPrice(''); setMaxPrice(''); }}
           >

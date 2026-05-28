@@ -1,223 +1,80 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useShop } from './ShopContext'; 
-
-/* Подключаем правильный модульный файл стилей маленькими буквами */
+// 🎯 Импортируем нашу чистую изолированную модалку
+import { QuickOrderModal } from './QuickOrder'; 
+import api from '@/api/shopService';
 import './shopMainDetails.css';
 
 export default function ProductCard({ product }) {
-  const { id, title, price, oldPrice, image, label } = product;
-  
-  // Достаем методы корзины и избранного из твоего глобального контекста
+  if (!product) return null;
+
+  const { id, slug_id, title, price, old_price, image, label, formatted_price, formatted_old_price } = product;
   const { addToCart, cart = [], favorites = [], toggleFavorite, updateQuantity } = useShop();
 
-  // Состояния для модального окна покупки в 1 клик
+  // В карточке остается ОДИН ЕДИНСТВЕННЫЙ стейт — просто флаг: открыто окно или закрыто
   const [showFastModal, setShowFastModal] = useState(false);
-  const [fastName, setFastName] = useState('');
-  const [fastPhone, setFastPhone] = useState('+996 ');
 
-  // Находим, добавлен ли этот товар в корзину и в каком количестве
-  const cartItem = cart.find((item) => item.id === id);
+  const cartItem = cart.find((item) => String(item.id) === String(id));
   const quantityInCart = cartItem ? cartItem.quantity : 0;
+  const isProductFavorite = favorites.some((item) => String(item.id) === String(id));
 
-  // Проверяем, добавлен ли этот конкретный товар в список избранного
-  const isProductFavorite = favorites.some((item) => item.id === id);
-
-  // Обработчик ввода телефона с защитой префикса Киргизии
-  const handlePhoneChange = (e) => {
-    const value = e.target.value;
-    if (!value.startsWith('+996 ')) return;
-    setFastPhone(value);
-  };
-
-  // Сабмит формы быстрой покупки в 1 клик под Django DRF
-  const handleFastSubmit = (e) => {
-    e.preventDefault();
-
-    const cleanPhone = fastPhone.replace(/\s+/g, '');
-    if (cleanPhone.length < 13) {
-      alert("Пожалуйста, введите корректный номер телефона Кыргызстана!");
-      return;
-    }
-
-    // Идеальный плоский JSON пакет для быстрого заказа в Django
-    const fastOrderPayload = {
-      customer_name: fastName,
-      phone: cleanPhone,
-      product_id: id,
-      quantity: 1,
-      price_at_order: price,
-      currency: "KGS"
-    };
-
-    console.log("=== API PAYLOAD: БЫСТРЫЙ ЗАКАЗ В 1 КЛИК ДЛЯ DJANGO ===");
-    console.log(JSON.stringify(fastOrderPayload, null, 2));
-
-    alert(`Спасибо за заявку, ${fastName}!\nМенеджер свяжется с вами по номеру ${fastPhone} для подтверждения заказа товара:\n"${title}"`);
-    
-    setFastName('');
-    setFastPhone('+996 ');
-    setShowFastModal(false);
-  };
+  const displayPrice = formatted_price || `${price} сом`;
+  const displayOldPrice = formatted_old_price || (old_price ? `${old_price} сом` : null);
 
   return (
-    <div className="shop-product-card-container" style={{ position: 'relative' }}>
+    <div className="shop-product-card-container d-flex flex-column h-100 card border-light-subtle shadow-sm rounded-4 p-3" style={{ position: 'relative' }}>
       
-      {/* КНОПКА СЕРДЕЧКА поверх фото */}
-      <button
-        type="button"
-        className="shop-card-favorite-btn"
-        onClick={(e) => {
-          e.preventDefault(); 
-          if (toggleFavorite) toggleFavorite(product);
-        }}
-        title={isProductFavorite ? "Удалить из избранного" : "Добавить в избранное"}
-      >
-        <span style={{ fontSize: '1.3rem' }}>
-          {isProductFavorite ? '❤️' : '🤍'}
-        </span>
+      <button type="button" className="shop-card-favorite-btn position-absolute border-0 bg-transparent" style={{ top: '15px', right: '15px', zIndex: 3, outline: 'none' }} onClick={(e) => { e.preventDefault(); if (toggleFavorite) toggleFavorite(product); }}>
+        <span style={{ fontSize: '1.3rem', cursor: 'pointer' }}>{isProductFavorite ? '❤️' : '🤍'}</span>
       </button>
 
-      {/* Динамический бейдж скидки */}
-      {label && (
-        <span className="shop-card-badge">{label}</span>
-      )}
+      {label && <span className="shop-card-badge position-absolute badge bg-danger text-white px-2 py-1 rounded-2" style={{ top: '15px', left: '15px', zIndex: 3, fontSize: '0.75rem', fontWeight: 'bold' }}>{label}</span>}
 
-      {/* КЛИКАБЕЛЬНАЯ ЗОНА КАРТИНКИ */}
-      <Link to={`/shop/product/${id}`} className="shop-card-image-link">
-        <img src={image || 'https://placeholder.com'} alt={title} />
+      <Link to={`/shop/product/${slug_id || id}`} className="shop-card-image-link d-block text-center mb-3 overflow-hidden rounded-3" style={{ height: '200px' }}>
+        <img src={image || 'https://placeholder.com'} alt={title} className="w-100 h-100 object-fit-cover transition-all img-fluid" />
       </Link>
 
-      {/* НАЗВАНИЕ ТОВАРА */}
-      <Link to={`/shop/product/${id}`} className="shop-card-title-link">
+      <Link to={`/shop/product/${slug_id || id}`} className="shop-card-title-link text-decoration-none text-dark fw-bold mb-3 fs-6 d-block" style={{ minHeight: '44px', lineClamp: 2, WebkitLineClamp: 2, display: '-webkit-box', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
         {title}
       </Link>
 
-      {/* ==========================================================================
-         НИЖНИЙ БЛОК: Цены, кнопки корзины и Быстрого заказа
-         ========================================================================== */}
       <div className="shop-bottom-wrapper d-flex flex-column gap-2 mt-auto">
-        
-        {/* Блок стоимостей и кнопка Купить на одной линии */}
         <div className="shop-price-block d-flex align-items-center justify-content-between w-100">
           <div className="d-flex flex-column">
-            <div className="shop-product-current-price fw-bold text-success">{price}</div>
-            {oldPrice && <span className="shop-product-old-price text-decoration-line-through text-muted small">{oldPrice}</span>}
+            <div className="shop-product-current-price fw-bold text-success fs-5">{displayPrice}</div>
+            {old_price && <span className="shop-product-old-price text-decoration-line-through text-muted small">{displayOldPrice}</span>}
           </div>
 
-          {/* Зона управления корзиной (Синяя кнопка "Купить" или счётчик) */}
           <div className="shop-action-zone">
             {quantityInCart > 0 ? (
               <div className="shop-card-counter-wrapper d-flex align-items-center border rounded bg-white">
-                <button 
-                  type="button" 
-                  className="btn btn-sm px-2 py-1 fw-bold text-secondary"
-                  onClick={() => updateQuantity(id, 'decrease')}
-                >
-                  −
-                </button>
+                <button type="button" className="btn btn-sm px-2 py-1 fw-bold text-secondary border-0 bg-transparent" onClick={() => updateQuantity(id, 'decrease')}>−</button>
                 <span className="px-2 fw-bold text-dark" style={{ fontSize: '0.9rem' }}>{quantityInCart}</span>
-                <button 
-                  type="button" 
-                  className="btn btn-sm px-2 py-1 fw-bold text-secondary"
-                  onClick={() => updateQuantity(id, 'increase')}
-                >
-                  +
-                </button>
+                <button type="button" className="btn btn-sm px-2 py-1 fw-bold text-secondary border-0 bg-transparent" onClick={() => updateQuantity(id, 'increase')}>+</button>
               </div>
             ) : (
-              <button 
-                type="button" 
-                className="btn shop-card-buy-btn-blue d-flex align-items-center gap-2 px-3 py-1.5 rounded-3 text-white fw-semibold"
-                onClick={() => addToCart(product)}
-                title="Добавить в корзину"
-              >
-                <span>🛒</span>
-                <span style={{ fontSize: '0.88rem' }}>Купить</span>
+              <button type="button" className="btn btn-primary d-flex align-items-center gap-2 px-3 py-1.5 rounded-3 text-white fw-semibold" style={{ fontSize: '0.88rem' }} onClick={() => addToCart(product)} title="Добавить в корзину">
+                <span>🛒</span><span>Купить</span>
               </button>
             )}
           </div>
         </div>
 
-        {/* Ссылка на покупку в 1 клик */}
         <div className="w-100 text-center mt-1 border-top pt-2">
-          <button 
-            type="button"
-            className="btn btn-link p-0 text-decoration-none small fw-bold"
-            style={{ color: '#d9a74a', fontSize: '0.82rem' }}
-            onClick={() => setShowFastModal(true)}
-          >
+          <button type="button" className="btn btn-link p-0 text-decoration-none small fw-bold" style={{ color: '#d9a74a', fontSize: '0.82rem' }} onClick={() => setShowFastModal(true)}>
             ⚡ Купить в 1 клик
           </button>
         </div>
-
       </div>
 
-      {/* ⚡ ВСПЛЫВАЮЩЕЕ ОКНО: БЫСТРЫЙ ЗАКАЗ (MODAL) */}
+      {/* 🎯 ПОДКЛЮЧАЕМ НАШ ВЫНЕСЕННЫЙ КОМПОНЕНТ МОДАЛКИ (Чистота и DRY) */}
       {showFastModal && (
-        <div 
-          className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
-          style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1060 }}
-          onClick={() => setShowFastModal(false)}
-        >
-          <div 
-            className="bg-white p-4 rounded shadow-lg border" 
-            style={{ width: '100%', maxWidth: '360px', position: 'relative' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button 
-              type="button"
-              className="position-absolute border-0 bg-transparent fs-4 text-muted" 
-              style={{ top: '10px', right: '15px', cursor: 'pointer' }}
-              onClick={() => setShowFastModal(false)}
-            >
-              &times;
-            </button>
-
-            <div className="text-center mb-3">
-              <h5 className="fw-bold text-dark mb-1">Быстрый заказ</h5>
-              <p className="text-muted small">Оставьте контактные данные, менеджер клиники перезвонит вам для оформления</p>
-            </div>
-
-            <div className="p-2 bg-light rounded text-center small mb-3 text-truncate fw-semibold border text-secondary">
-              📦 {title}
-            </div>
-
-            <form onSubmit={handleFastSubmit}>
-              <div className="mb-2">
-                <label className="form-label small fw-semibold text-secondary mb-1">Ваше имя *</label>
-                <input 
-                  type="text" 
-                  className="form-control form-control-sm" 
-                  placeholder="Имя" 
-                  required
-                  value={fastName}
-                  onChange={(e) => setFastName(e.target.value)}
-                />
-              </div>
-
-              <div className="mb-3">
-                <label className="form-label small fw-semibold text-secondary mb-1">Телефон в Киргизии *</label>
-                <input 
-                  type="tel" 
-                  className="form-control form-control-sm" 
-                  placeholder="+996 555 123 456" 
-                  required
-                  value={fastPhone}
-                  onChange={handlePhoneChange}
-                />
-              </div>
-
-              <button 
-                type="submit" 
-                className="btn btn-sm w-100 fw-bold py-2 text-white border-0"
-                style={{ backgroundColor: '#1a1d20' }}
-              >
-                ОТПРАВИТЬ ЗАЯВКУ
-              </button>
-            </form>
-          </div>
-        </div>
+        <QuickOrderModal 
+          id={id} 
+          title={title} 
+          onClose={() => setShowFastModal(false)} 
+        />
       )}
 
     </div>
