@@ -7,11 +7,24 @@ import './clinic.css';
 
 export default function ClinicAbout() {
   return (
-    <>
+    <div className="clinic-spa-page">
+      {/* Шапка зафиксирована сверху */}
       <Header />
-      <ClinicBanner />
-      <MethodsSlider />
-      <AboutClinic />
-    </>
+      
+      {/* Ссылка "Главная" (#hero) ведет сюда */}
+      <div id="hero">
+        <ClinicBanner />
+      </div>
+      
+      {/* Ссылка "Методики" (#methods) ведет сюда */}
+      <div id="methods">
+        <MethodsSlider />
+      </div>
+      
+      {/* Ссылка "О клинике" (#about) ведет сюда */}
+      <div id="about">
+        <AboutClinic />
+      </div>
+    </div>
   );
 }

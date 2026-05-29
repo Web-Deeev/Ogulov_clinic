@@ -1,25 +1,44 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './clinic.css';
+import DoctorCard from '../../components/clinic/Doctors/DoctorCard';
 
-
-const doctors = [
-  { 
-    id: "ogulov-aleksandr", // Поменяли на строковый ID для роутинга /clinic/doctors/ogulov-aleksandr
-    name: "Огулов Александр Тимофеевич", 
-    role: "Генеральный директор Учебно-оздоровительного Огулов Центра. Президент Профессиональной ассоциации специалистов висцеральных практик, профессор народной медицины, действительный член международной Европейской Академии Естественных наук (Ганновер. Германия). Основоположник и исследователь направления 'Висцеральная практика' - массаж внутренних органов через переднюю стенку живота. Профессиональное начало деятельности в области висцеральной практики с 1985 года.", 
-    image: "/images/Ogulov.jpg",
-    methods: ["visceralnaya-praktika"]
+const doctorsData = [
+  {
+    id: 1,
+    name: 'Огулов Александр Тимофеевич',
+    role: 'Основатель центра, профессор',
+    desc: 'Доктор народной медицины, основоположник направления висцеральной практики в России.',
+    exp: 'Более 40 лет опыта',
+    image: '/images/doctors/ogulov.jpg',
   },
   {
-    id: "smirnov-konstantin",
-    name: "Смирнов Константин Анатольевич",
-    role: "Специалист висцеральных практик высшей категории, специалист по оздоровлению пчелами, натуропат.",
-    image: "/images/smirnov.jpg",
-    methods: ["visceralnaya-praktika"]
+    id: 2,
+    name: 'Хазова Ольга Петровна',
+    role: 'Ведущий специалист центра',
+    desc: 'Специалист по висцеральной практике, гирудотерапии, юмейхо-терапии и фитотерапии.',
+    exp: 'Более 20 лет опыта',
+    image: '/images/doctors/hazova.jpg',
   }
 ];
 
 export default function ClinicDoctors() {
-  return <h1>Специалисты</h1>;
+  const handleBooking = (id) => {
+    alert(`Открытие модалки записи к доктору с ID: ${id}`);
+  };
+
+  return (
+    <div className="container clinic-doctors-page">
+      <h1 className="page-title">Специалисты клиники</h1>
+      <p className="page-subtitle">Наши эксперты — сертифицированные специалисты.</p>
+
+      <div className="doctors-grid">
+        {doctorsData.map((doctor) => (
+          <DoctorCard 
+            key={doctor.id} 
+            doctor={doctor} 
+            onBook={handleBooking} 
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
