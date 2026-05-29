@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useShop } from '../ShopMainDetails/ShopContext';
-// ИСПРАВЛЕНО: Указан абсолютно точный путь к базе товаров в ShopMainDetails
-import { productsData } from '../ShopMainDetails/shopData.js';
 
 export default function ShopSearchDropdown() {
   const navigate = useNavigate();
-  const { searchQuery, setSearchQuery, setActiveCategory } = useShop();
+  
+  // 🟢 ИСПРАВЛЕНО: Достаем реальный массив товаров productsData напрямую из Django через контекст!
+  // ❌ УДАЛЕН битый импорт файла shopData.js, который вызывал рассинхронизацию и мерцание модалки
+  const { searchQuery, setSearchQuery, setActiveCategory, productsData = [] } = useShop();
   
   const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef(null);
@@ -22,11 +23,11 @@ export default function ShopSearchDropdown() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Фильтрация товаров для выпадающего списка быстрого превью
+  // 🟢 ИСПРАВЛЕНО: Фильтруем боевые товары из Джанги по названию или артикулу
   const liveSearchResults = !searchQuery || searchQuery.trim() === ''
     ? []
     : productsData.filter(product => 
-        product.title?.toLowerCase().includes(searchQuery.toLowerCase())
+        product && product.title?.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
   const handleInputSubmit = () => {
@@ -42,7 +43,6 @@ export default function ShopSearchDropdown() {
       handleInputSubmit();
     }
   };
-
   return (
     <div className="shop-search position-relative" ref={searchRef} style={{ zIndex: 1050 }}>
       <input 
@@ -76,25 +76,33 @@ export default function ShopSearchDropdown() {
           <div className="overflow-y-auto flex-grow-1" style={{ maxHeight: '280px' }}>
             {liveSearchResults.length > 0 ? (
               <div className="d-flex flex-column">
-                {liveSearchResults.map(product => (
-                  <Link
-                    key={product.id}
-                    to={`/shop/product/${product.id}`}
-                    onClick={() => setIsFocused(false)}
-                    className="d-flex align-items-center gap-3 p-2 text-decoration-none text-dark border-bottom border-light-subtle search-item-hover"
-                    style={{ transition: 'background-color 0.2s' }}
-                  >
-                    <img 
-                      src={product.image || 'https://placeholder.com'} 
-                      alt={product.title} 
-                      style={{ width: '40px', height: '40px', objectFit: 'contain', flexShrink: 0 }} 
-                    />
-                    <div className="overflow-hidden">
-                      <div className="fw-medium small text-truncate text-dark">{product.title}</div>
-                      <div className="text-success small fw-bold">{product.price}</div>
-                    </div>
-                  </Link>
-                ))}
+                {liveSearchResults.map(product => {
+                  if (!product) return null;
+                  
+                  // Безопасно вытаскиваем цены и slug_id из боевой DRF-структуры
+                  const prodId = product.slug_id || product.id;
+                  const displayPrice = product.formatted_price || `${Math.floor(parseFloat(product.price) || 0).toLocaleString('ru-RU')} сом`;
+
+                  return (
+                    <Link
+                      key={product.id}
+                      to={`/shop/product/${prodId}`}
+                      onClick={() => setIsFocused(false)}
+                      className="d-flex align-items-center gap-3 p-2 text-decoration-none text-dark border-bottom border-light-subtle search-item-hover"
+                      style={{ transition: 'background-color 0.2s' }}
+                    >
+                      <img 
+                        src={product.image || 'https://placeholder.com'} 
+                        alt={product.title} 
+                        style={{ width: '40px', height: '40px', objectFit: 'contain', flexShrink: 0 }} 
+                      />
+                      <div className="overflow-hidden">
+                        <div className="fw-medium small text-truncate text-dark">{product.title}</div>
+                        <div className="text-success small fw-bold">{displayPrice}</div>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             ) : (
               <div className="p-4 text-center text-muted small">

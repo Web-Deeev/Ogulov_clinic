@@ -11,9 +11,22 @@ export default function ShopProfile() {
     return <Navigate to="/shop/auth" replace />;
   }
 
-  const userFirstName = userProfile?.first_name || 'Google';
-  const userLastName = userProfile?.last_name || 'Пользователь';
-  const userEmail = userProfile?.email || 'ogulov.fan@gmail.com';
+  // ВВОДНЫЕ ДАННЫЕ ПОД СТАНДАРТЫ КЛИНИКИ: 
+  // Если имя/фамилия не заполнены в профиле, выводим username (номер телефона) как логин
+  const userFirstName = userProfile?.first_name || '';
+  const userLastName = userProfile?.last_name || '';
+  const userPhoneLogin = userProfile?.username || 'Номер не указан';
+  const userEmail = userProfile?.email || 'Email не указан';
+
+  // Формируем красивую строку для отображения в шапке ЛК
+  const displayName = userFirstName || userLastName 
+    ? `${userFirstName} ${userLastName}`.trim() 
+    : userPhoneLogin;
+
+  // Буква для аватара: первая буква имени, фамилии или первая цифра телефона
+  const avatarLetter = userFirstName 
+    ? userFirstName.toUpperCase().charAt(0) 
+    : (userLastName ? userLastName.toUpperCase().charAt(0) : userPhoneLogin.charAt(0));
 
   return (
     <div className="container my-5 text-dark">
@@ -37,14 +50,16 @@ export default function ShopProfile() {
                 {userProfile?.avatar_url ? (
                   <img src={userProfile.avatar_url} alt="Avatar" className="w-100 h-100 object-fit-cover" />
                 ) : (
-                  <span>{userFirstName ? userFirstName.toUpperCase().charAt(0) : 'U'}</span>
+                  <span>{avatarLetter}</span>
                 )}
               </div>
               <div className="text-truncate">
                 <h6 className="fw-bold mb-0 text-truncate text-dark">
-                  {userFirstName} {userLastName}
+                  {displayName}
                 </h6>
-                <small className="text-muted text-truncate d-block">{userEmail}</small>
+                <small className="text-muted text-truncate d-block">
+                  {userFirstName || userLastName ? userPhoneLogin : userEmail}
+                </small>
               </div>
             </div>
             

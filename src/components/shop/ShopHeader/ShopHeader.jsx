@@ -12,6 +12,7 @@ export function ShopHeader() {
   const navigate = useNavigate();
   const { activeCategory, setActiveCategory, setActiveSubcategory, setSearchQuery, cart = [], menuItems = [] } = useShop();
 
+  // Чистый KISS-расчёт количества товаров без лишних зависимостей
   const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 
   return (
@@ -31,17 +32,17 @@ export function ShopHeader() {
             <NavLink to="/shop/contacts" className={({ isActive }) => isActive ? 'shop-active' : ''}>Контакты</NavLink>
           </nav>
           
+          {/* 🔍 ИСТОЧНИК БАГА: Внутри этого выпадающего списка сидит скрытый hover-вызов! */}
           <ShopSearchDropdown />
         </div>
 
         {/* Правая часть: Корзина */}
         <div className="shop-actions">
-          <button className="shop-cart" onClick={() => navigate('/shop/cart')}>
+          <button className="shop-cart btn btn-dark px-3 py-2 rounded-3 text-white fw-medium border-0" onClick={() => navigate('/shop/cart')}>
             🛒 Корзина: {totalItems > 0 ? `${totalItems} шт.` : 'пусто'}
           </button>
         </div>
       </div>
-
       {/* Тёмная строка категорий ровно по ширине баннера */}
       <div className="shop-menu-container">
         <nav className="shop-menu-row shadow-sm">

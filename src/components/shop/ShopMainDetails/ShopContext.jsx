@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import shopService from '@/api/shopService';
+import shopService from '@/api/shop';
 
 // 1. Создаем сам контекст
 export const ShopContext = createContext();
@@ -28,8 +28,9 @@ export function ShopProvider({ children }) {
   });
 
   // --- УМНАЯ ИНИЦИАЛИЗАЦИЯ СЕССИИ И ПРОФИЛЯ (Защита от F5) ---
+  // 🟢 ИСПРАВЛЕНО: Синхронизировали имя ключа access_token с Axios-мидлварью и формами
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    const hasToken = localStorage.getItem('ogulov_access_token');
+    const hasToken = localStorage.getItem('access_token') || localStorage.getItem('ogulov_clinic_token');
     const hasMockAuth = localStorage.getItem('ogulov_mock_authenticated');
     return !!(hasToken || hasMockAuth === 'true');
   });
@@ -85,7 +86,7 @@ export function ShopProvider({ children }) {
         { id: 'bady-tea', title: 'Чай' }
       ]
     },
-    { title: 'Микросферы', id: 'microspheres', subcategories: [] },
+    { title: 'Микросферы', id: 'microsphers', subcategories: [] },
     { title: 'Скребки/Массажеры', id: 'scrapers', subcategories: [] },
     { title: 'Банки', id: 'banks', subcategories: [] },
     { title: 'Остальные категории', id: 'others', subcategories: [] },
@@ -96,7 +97,6 @@ export function ShopProvider({ children }) {
     setIsProductsLoading(true);
     setProductsError(null);
     try {
-      // Запрашиваем полный адаптированный массив через наш API-сервис
       const data = await shopService.getProducts();
       setProductsData(data);
     } catch (err) {
@@ -133,14 +133,13 @@ export function ShopProvider({ children }) {
       localStorage.setItem('ogulov_user_orders', JSON.stringify(userOrders));
     }
   }, [userOrders, isAuthenticated]);
-
-  // --- БЕЗОПАСНЫЕ УТИЛИТЫ И ФУНКЦИИ (Защита принудительным кастом типов к String) ---
-  
   const parsePrice = (priceStr) => {
     if (!priceStr) return 0;
-    if (typeof priceStr === 'number') return priceStr;
+    if (typeof priceStr === 'number') return Math.floor(priceStr);
+    // Превращаем строку "3100.00" в честное число, отсекая копейки для валюты сомов
     const cleanStr = priceStr.toString().replace(/[^0-9.]/g, '');
-    return parseFloat(cleanStr) || 0;
+    const num = parseFloat(cleanStr);
+    return isNaN(num) ? 0 : Math.floor(num);
   };
 
   const getCartCount = () => {
@@ -157,7 +156,6 @@ export function ShopProvider({ children }) {
   const addToCart = (product) => {
     if (!product) return;
     setCart((prevCart) => {
-      // Безопасное сравнение через явное приведение ID к строке
       const exists = prevCart.find((item) => String(item.id) === String(product.id));
       if (exists) {
         return prevCart.map((item) =>
@@ -200,23 +198,23 @@ export function ShopProvider({ children }) {
     });
   };
 
+  // 🟢 ИСПРАВЛЕНО: Теперь логаут намертво вычищает все боевые токены Джанги, предотвращая 403 ошибки
   const logoutUser = () => {
     setIsAuthenticated(false);
     setUserProfile(null);
     setUserOrders([]);
-    localStorage.removeItem('ogulov_access_token');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('ogulov_clinic_token');
     localStorage.removeItem('ogulov_mock_authenticated');
     localStorage.removeItem('ogulov_user_profile');
     localStorage.removeItem('ogulov_user_orders');
   };
 
   const value = {
-    // Новый реактивный динамический массив товаров из Django DRF
     productsData,
     isProductsLoading,
     productsError,
     refreshProducts: fetchProductsFromBackend,
-
     activeCategory, setActiveCategory,
     activeSubcategory, setActiveSubcategory, 
     searchQuery, setSearchQuery,

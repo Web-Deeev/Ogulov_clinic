@@ -6,7 +6,7 @@ import './cart.css';
 
 const ShopCart = () => {
   // Забираем строго твои названия стейтов и функций из контекста
-  const { cart = [], updateQuantity, removeFromCart, getCartTotal } = useShop();
+  const { cart = [], updateQuantity, removeFromCart } = useShop();
   const navigate = useNavigate();
 
   // Утилита очистки строки цены (чтобы 16 000 сом правильно умножались на количество)
@@ -16,6 +16,11 @@ const ShopCart = () => {
     const clean = priceVal.toString().replace(/[^0-9]/g, '');
     return parseInt(clean, 10) || 0;
   };
+
+  // Железный расчет суммы на основе твоей утилиты parsePrice для защиты сайдбара
+  const localCartTotal = cart.reduce((sum, item) => {
+    return sum + (parsePrice(item.price) * item.quantity);
+  }, 0);
 
   // Проверяем твой родной массив cart
   if (cart.length === 0) {
@@ -72,6 +77,7 @@ const ShopCart = () => {
                           className="btn btn-outline-secondary" 
                           type="button"
                           onClick={() => updateQuantity(item.id, 'decrease')}
+                          disabled={item.quantity <= 1} // Защита от ухода в 0
                         >
                           -
                         </button>
@@ -136,7 +142,7 @@ const ShopCart = () => {
             
             <div className="d-flex justify-content-between align-items-center mb-4">
               <span className="fw-bold fs-5">Итого к оплате:</span>
-              <span className="fw-bold fs-4 text-dark">{getCartTotal().toLocaleString()} сом</span>
+              <span className="fw-bold fs-4 text-dark">{localCartTotal.toLocaleString()} сом</span>
             </div>
             
             {/* ЧИСТЫЙ ВАРИАНТ 1: Прямой бесшовный переход на страницу оформления */}
