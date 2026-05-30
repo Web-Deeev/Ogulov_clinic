@@ -18,11 +18,6 @@ export default function ClinicAbout() {
         <ClinicBanner />
       </div>
       
-      {/* Ссылка "Методики" (#methods) ведет сюда */}
-      <div id="methods">
-        <MethodsSlider />
-      </div>
-      
       {/* Ссылка "О клинике" (#about) ведет сюда */}
       <div id="about">
         <AboutClinic />

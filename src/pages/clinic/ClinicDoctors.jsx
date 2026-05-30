@@ -1,22 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/common/Header/Header';
 import DoctorCard from '../../components/clinic/Doctors/DoctorCard'; 
-import { mockDoctors } from '../../components/clinic/Doctors/DoctorsData'; 
 import '../../components/clinic/Doctors/DoctorCard.css'; 
+// ИСПРАВЛЕНО: Точный относительный путь к ядру Axios (src/api/axios.js)
+import api from '../../api/axios'; 
 
 export default function ClinicDoctors() {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Живой запрос к Django REST Framework вместо mockDoctors
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setDoctors(mockDoctors);
-      setLoading(false);
-    }, 300); 
-    return () => clearTimeout(timer);
+    setLoading(true);
+    api.get('clinic/doctors/')
+      .then(response => {
+        setDoctors(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error("Ошибка загрузки врачей с бэкенда:", error);
+        setDoctors([]);
+        setLoading(false);
+      });
   }, []);
 
+  // Вытаскиваем строго первый ОБЪЕКТ по индексу [0] для Огулова
   const leaderDoctor = doctors.length > 0 ? doctors[0] : null;
+  // Рядовые врачи — все остальные объекты массива
   const staffDoctors = doctors.length > 1 ? doctors.slice(1) : []; 
 
   return (
@@ -33,10 +43,8 @@ export default function ClinicDoctors() {
 
             {loading ? (
               <>
-                {/* Скелетон для премиум-баннера руководителя, защищающий от сдвига контента (CLS) */}
+                {/* Скелетоны во время ожидания ответа от Django */}
                 <div className="doctor-card-skeleton doctor-card-skeleton--fullwidth" style={{ width: '100%', marginBottom: '40px' }}></div>
-                
-                {/* Скелетоны для рядовых сотрудников в сетке */}
                 <div className="clinic-doctors-grid">
                   {Array(3).fill(0).map((_, idx) => (
                     <div key={idx} className="doctor-card-skeleton">
@@ -47,7 +55,7 @@ export default function ClinicDoctors() {
               </>
             ) : (
               <>
-                {/* 1. БАННЕР ОГУЛОВА: Рендерится отдельно ВНЕ грид-сетки */}
+                {/* 1. БАННЕР ОГУЛОВА: Получает чистый объект */}
                 {leaderDoctor && (
                   <div className="clinic-doctors-leader" style={{ width: '100%', marginBottom: '40px' }}>
                     <DoctorCard doctor={leaderDoctor} isFullWidth={true} />
@@ -59,11 +67,19 @@ export default function ClinicDoctors() {
                   <h2 className="clinic-doctors__section-title">Специалисты центра</h2>
                 )}
 
-                {/* 2. ГРИД-СЕТКА: Открывается ТОЛЬКО для рядовых врачей */}
+                {/* 2. ГРИД-СЕТКА: Рядовые сотрудники (Колбина, Корчма) */}
                 <div className="clinic-doctors-grid">
-                  {staffDoctors.map(doctor => (
-                    <DoctorCard key={doctor.id} doctor={doctor} />
-                  ))}
+                  {staffDoctors.length > 0 ? (
+                    staffDoctors.map(doctor => (
+                      <DoctorCard key={doctor.id} doctor={doctor} />
+                    ))
+                  ) : (
+                    !leaderDoctor && (
+                      <div className="clinic-empty" style={{ textAlign: 'center', width: '100%' }}>
+                        Список специалистов обновляется.
+                      </div>
+                    )
+                  )}
                 </div>
               </>
             )}

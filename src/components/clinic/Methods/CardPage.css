@@ -1,0 +1,289 @@
+/* Контейнер страницы */
+.method-detail-page {
+  padding: 40px 0;
+}
+
+.method-detail__back-btn {
+  display: inline-block;
+  padding: 10px 24px;
+  background-color: #e3bc72;
+  color: #2c2520;
+  font-weight: 700;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 24px;
+}
+
+.method-detail__back-btn:hover {
+  background-color: #2c2520;
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   1. СВЕРХУ: ВЕРХНИЙ ШИРОКОФОРМАТНЫЙ БЛОК ФОТО
+   ========================================================================== */
+.method-detail__top-hero {
+  position: relative;
+  width: 100%;
+  height: 320px; /* Фиксированная высота баннера на мобилках */
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 25px rgba(44, 37, 32, 0.05);
+}
+
+@media (min-width: 768px) {
+  .method-detail__top-hero {
+    height: 450px !important; /* Увеличиваем высоту для десктопов */
+  }
+}
+
+.method-detail__hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+/* Затемняющий оверлей поверх картинки, чтобы белый текст читался идеально */
+.method-detail__hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(44, 37, 32, 0.2) 0%, rgba(44, 37, 32, 0.75) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .method-detail__hero-overlay {
+    padding: 48px !important;
+  }
+}
+
+.method-detail__badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #e3bc72; /* Золотистый акцент клиники */
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.method-detail__title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff !important; /* Белый контрастный текст на темном фоне фото */
+  margin: 0;
+  line-height: 1.25;
+}
+
+@media (min-width: 768px) {
+  .method-detail__title {
+    font-size: 42px !important;
+  }
+}
+
+/* ==========================================================================
+   2. ПО ЦЕНТРУ: БЛОК С ТЕКСТОМ И БИОГРАФИЕЙ МЕТОДА
+   ========================================================================== */
+.method-detail__content-block {
+  background-color: #ffffff;
+  border: 1px solid #e8e4dc;
+  border-radius: 16px;
+  padding: 30px;
+  margin-bottom: 40px;
+  box-shadow: 0 4px 20px rgba(44, 37, 32, 0.02);
+}
+
+.method-detail__section-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #2c2520;
+  margin: 0 0 20px 0;
+  border-bottom: 2px solid #e8e4dc;
+  padding-bottom: 8px;
+}
+
+.method-detail__fullbio-text {
+  white-space: pre-line !important; /* Бережное сохранение абзацев и точек • */
+  font-size: 16px;
+  line-height: 1.7;
+  color: #333333;
+  margin: 0;
+}
+
+.method-detail__cta-box {
+  margin-top: 32px;
+  border-top: 1px solid #e8e4dc;
+  padding-top: 24px;
+}
+
+.method-detail__cta-btn {
+  background-color: #2c2520;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.method-detail__cta-btn:hover {
+  background-color: #e3bc72;
+  color: #2c2520;
+}
+
+/* ==========================================================================
+   3. СНИЗУ: ВИДЕО-БЛОК (YOUTUBE IFRAME)
+   ========================================================================== */
+.method-detail__media-section {
+  margin-top: 40px;
+}
+
+.method-detail__block-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #2c2520;
+  margin-bottom: 20px;
+}
+
+.method-detail__video-box {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* Пропорции 16:9 */
+  background-color: #000000;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.method-detail__video-box iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+/* Блок нижней галереи */
+.method-detail__gallery-section {
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+/* Сетка для оставшихся 4-х картинок процедуры */
+.method-detail__gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* На мобилках 2 в ряд */
+  gap: 16px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .method-detail__gallery-grid {
+    grid-template-columns: repeat(4, 1fr) !important; /* На десктопе строго 4 картинки в линию */
+  }
+}
+
+.method-detail__gallery-item {
+  width: 100%;
+  height: 180px; /* Жестко фиксированная компактная высота картинок снизу */
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(44, 37, 32, 0.03);
+  border: 1px solid #e8e4dc;
+}
+
+.method-detail__gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  transition: transform 0.3s ease;
+}
+
+.method-detail__gallery-item:hover img {
+  transform: scale(1.05); /* Легкий интерактивный зум при наведении */
+}
+
+
+/* ИСПРАВЛЕНО: Сетка флексбокса для деления экрана 50 на 50 */
+.method-detail__two-columns {
+  display: flex;
+  gap: 50px;
+  margin-top: 40px;
+  align-items: flex-start;
+}
+
+.method-detail__text-column {
+  flex: 1;
+  width: 50%;
+}
+
+.method-detail__visual-column {
+  flex: 1;
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: sticky;
+  top: 20px; /* При прокрутке правый блок будет изящно залипать */
+}
+
+.method-detail__side-photo-wrapper {
+  width: 100%;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.method-detail__side-photo {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.method-detail__cta-box {
+  width: 100%;
+}
+
+.method-detail__cta-btn {
+  width: 100%;
+  padding: 16px;
+  background-color: #e3bc72;
+  color: #ffffff;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.method-detail__cta-btn:hover {
+  background-color: #2c2520;
+}
+
+/* Адаптивность под планшеты и мобилки: колонки падают друг под друга */
+@media (max-width: 768px) {
+  .method-detail__two-columns {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .method-detail__text-column,
+  .method-detail__visual-column {
+    width: 100%;
+  }
+  .method-detail__visual-column {
+    position: static;
+  }
+}
