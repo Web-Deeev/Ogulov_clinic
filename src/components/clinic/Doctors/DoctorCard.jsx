@@ -1,14 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Импортируем Link для динамического роутинга
+import { Link } from 'react-router-dom';
 import './DoctorCard.css';
 
-export default function DoctorCard({ doctor, onBook, isFullWidth = false }) {
-  const handleImageError = (e) => {
-    e.currentTarget.onerror = null;
-    // Безопасный размер заглушки для защиты от зацикливания 404 ошибок
-    e.currentTarget.src = 'https://placehold.co';
-  };
-
+export default function DoctorCard({ doctor, isFullWidth = false }) {
   if (!doctor) return null;
 
   const doctorPhoto = doctor.image || doctor.photo || 'https://placehold.co';
@@ -26,12 +20,13 @@ export default function DoctorCard({ doctor, onBook, isFullWidth = false }) {
         
         <div className="doctor-card__info">
           <span className="doctor-card__role">
-            {doctor.role || doctor.position || 'Основоположник центра'}
+            {doctor.role || 'Основоположник центра'}
           </span>
           
-          <h3 className="doctor-card__name">
-            {doctor.name}
-          </h3>
+          <h3 
+            className="doctor-card__name"
+            dangerouslySetInnerHTML={{ __html: doctor.name }}
+          />
           
           {doctor.exp && (
             <span className="doctor-card__exp">
@@ -46,9 +41,8 @@ export default function DoctorCard({ doctor, onBook, isFullWidth = false }) {
           </div>
           
           <div className="doctor-card__actions">
-            {/* Кнопка "Подробнее" переведена на честную навигацию роутера */}
             <Link 
-              to={`/clinic/doctors/${doctor.slug }`} 
+              to={`/clinic/doctors/${doctor.slug}`} 
               className="doctor-card__more-btn"
             >
               Подробнее
@@ -60,61 +54,47 @@ export default function DoctorCard({ doctor, onBook, isFullWidth = false }) {
   }
 
   // ==========================================================================
-  // ВАРИАНТ 2: СТАНДАРТНАЯ ВЕРТИКАЛЬНАЯ КАРТОЧКА (Остальные специалисты)
+  // ВАРИАНТ 2: СТАНДАРТНАЯ КАРТОЧКА (Текст 50% слева, Фото 50% справа)
   // ==========================================================================
   return (
-    <div className="doctor-card">
-      <div className="doctor-card__image">
-        <img 
-          src={doctorPhoto} 
-          alt={doctor.name} 
-          onError={handleImageError}
-          loading="lazy"
-        />
-      </div>
-      <div className="doctor-card__info">
-        <span className="doctor-card__role">
-          {doctor.role || 'Специалист'}
-        </span>
-        
-        <h3 className="doctor-card__name">
-          {doctor.name}
-        </h3>
-        
-        {doctor.exp && (
-          <span className="doctor-card__exp">
-            {doctor.exp}
+    <div className="doctor-card doctor-card--standard">
+      {/* ЛЕВЫЙ БЛОК: Текст занимает ровно 50% ширины */}
+      <div className="doctor-card__content-block">
+        <div className="doctor-card__text-group">
+          <span className="doctor-card__role">
+            {doctor.role || 'Специалист'}
           </span>
-        )}
-        
-        <p className="doctor-card__desc">
-          {doctor.desc}
-        </p>
-        
-        {/* Две функциональные кнопки для рядовых врачей */}
-        <div className="doctor-card__item-actions" style={{ display: 'flex', flexDirection: 'column', gap: '10px', width: '100%' }}>
-          <button 
-            className="doctor-card__btn" 
-            onClick={() => onBook?.(doctor.id)}
-          >
-            Записаться на прием
-          </button>
           
+          <h3 className="doctor-card__name">
+            {doctor.name}
+          </h3>
+          
+          {doctor.exp && (
+            <span className="doctor-card__exp">
+              {doctor.exp}
+            </span>
+          )}
+          
+          <p className="doctor-card__desc">
+            {doctor.desc}
+          </p>
+        </div>
+        
+        <div className="doctor-card__item-actions">
           <Link 
-            to={`/clinic/doctors/${doctor.slug }`} 
-            className="doctor-card__btn" 
-            style={{ 
-              backgroundColor: '#ffffff', 
-              borderColor: '#d0c8b8', 
-              textDecoration: 'none', 
-              textAlign: 'center', 
-              display: 'block' 
-            }}
+            to={`/clinic/doctors/${doctor.slug}`} 
+            className="doctor-card__btn doctor-card__btn--more"
           >
             Подробнее
           </Link>
         </div>
       </div>
+
+      {/* ПРАВЫЙ БЛОК: Фотография занимает ровно 50% ширины справа */}
+      <div 
+        className="doctor-card__bg-image"
+        style={{ backgroundImage: `url(${doctorPhoto})` }}
+      />
     </div>
   );
 }

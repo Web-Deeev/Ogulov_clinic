@@ -1,26 +1,24 @@
 import React, { useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Подключаем хуки роутера
-import Header from '../../common/Header/Header'; // Личной странице тоже нужна шапка!
+import { useParams, useNavigate } from 'react-router-dom';
+import Header from '../../common/Header/Header';
 import { mockDoctors } from './DoctorsData';
 import './PersonalPage.css';
 
 export default function DoctorPersonalPage() {
-  const { id } = useParams(); // Получаем ID из URL (например, "1")
-  const navigate = useNavigate(); // Инструмент для программного шага назад
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  // Находим данные доктора по ID, приведенному к числу
   const doctor = mockDoctors.find(doc => doc.slug === id);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [id]);
 
-  // Защита: если пациент вбил в ручную кривой ID (например, /clinic/doctors/999)
   if (!doctor) {
     return (
       <div className="clinic-page-wrapper">
         <Header />
-        <div className="container" style={{ padding: '100px 0', textIn: 'center' }}>
+        <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
           <h2>Специалист не найден</h2>
           <button className="doctor-personal__back" onClick={() => navigate('/clinic/doctors')}>
             Вернуться к списку
@@ -30,31 +28,27 @@ export default function DoctorPersonalPage() {
     );
   }
 
+  // ОПРЕДЕЛЯЕМ ФОТО: Если у Огулова прописано personalImage, берем его. Если у других нет — берем обычное image.
+  const displayPhoto = doctor.personalImage || doctor.image || 'https://placehold.co';
+
   return (
     <div className="clinic-page-wrapper">
-      {/* Шапка зафиксирована сверху на личной странице */}
       <Header />
 
       <main className="clinic-main-content">
         <section className="doctor-personal-page">
           <div className="container">
             
-            {/* Кнопка "Назад" теперь красиво возвращает по истории роутера */}
             <button className="doctor-personal__back" onClick={() => navigate('/clinic/doctors')}>
               <span className="doctor-personal__back-arrow">&larr;</span> Назад к списку специалистов
             </button>
 
             <div className="doctor-personal__main-card">
-              <div className="doctor-personal__photo-block">
-                <div className="doctor-personal__avatar-wrapper">
-                  <img src={doctor.image} alt={doctor.name} className="doctor-personal__avatar" />
-                </div>
-                <button className="doctor-personal__cta-btn">Записаться на прием</button>
-              </div>
-
+              
+              {/* ЛЕВЫЙ БЛОК: Текст, регалии и биография */}
               <div className="doctor-personal__info-block">
                 <span className="doctor-personal__badge-role">{doctor.role}</span>
-                <h1 className="doctor-personal__fullname">{doctor.name}</h1>
+                <h1 className="doctor-personal__fullname" dangerouslySetInnerHTML={{ __html: doctor.name }} />
                 <span className="doctor-personal__badge-exp">{doctor.exp}</span>
                 <div className="doctor-personal__divider"></div>
                 <div className="doctor-personal__bio">
@@ -62,13 +56,28 @@ export default function DoctorPersonalPage() {
                   <p className="doctor-personal__fullbio-text">{doctor.fullBio || doctor.desc}</p>
                 </div>
               </div>
+
+              {/* ПРАВЫЙ БЛОК: Сюда встает именно персональное статичное фото */}
+              <div className="doctor-personal__photo-block">
+                <div className="doctor-personal__avatar-wrapper">
+                  <img src={displayPhoto} alt={doctor.name} className="doctor-personal__avatar" />
+                </div>
+                <button className="doctor-personal__cta-btn">Записаться на прием</button>
+              </div>
+
             </div>
 
-            {doctor.videoUrl && (
+            {/* Видео-блок и методы остаются ниже без изменений */}
+            {doctor.videoUrl && doctor.videoUrl.trim() !== "" && (
               <div className="doctor-personal__media-section">
-                <h2 className="doctor-personal__block-title">Video со специалистом</h2>
+                <h2 className="doctor-personal__block-title">Видео со специалистом</h2>
                 <div className="doctor-personal__video-box">
-                  <iframe src={`https://youtube.com{doctor.videoUrl}`} title={doctor.name} frameBorder="0" allowFullScreen></iframe>
+                  <iframe 
+                    src={`https://youtube.com{doctor.videoUrl}`} 
+                    title={doctor.name} 
+                    frameBorder="0" 
+                    allowFullScreen
+                  ></iframe>
                 </div>
               </div>
             )}

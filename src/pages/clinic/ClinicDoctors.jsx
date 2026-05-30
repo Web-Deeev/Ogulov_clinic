@@ -16,7 +16,7 @@ export default function ClinicDoctors() {
     return () => clearTimeout(timer);
   }, []);
 
-  const leaderDoctor = doctors.length > 0 ? doctors[0] : null; // ИСПРАВЛЕНО: берем строго первый элемент doctors[0]
+  const leaderDoctor = doctors.length > 0 ? doctors[0] : null;
   const staffDoctors = doctors.length > 1 ? doctors.slice(1) : []; 
 
   return (
@@ -32,11 +32,19 @@ export default function ClinicDoctors() {
             </div>
 
             {loading ? (
-              <div className="clinic-doctors-grid">
-                {Array(2).fill(0).map((_, idx) => (
-                  <div key={idx} className="doctor-card-skeleton"><div className="doctor-card-skeleton__img"></div></div>
-                ))}
-              </div>
+              <>
+                {/* Скелетон для премиум-баннера руководителя, защищающий от сдвига контента (CLS) */}
+                <div className="doctor-card-skeleton doctor-card-skeleton--fullwidth" style={{ width: '100%', marginBottom: '40px' }}></div>
+                
+                {/* Скелетоны для рядовых сотрудников в сетке */}
+                <div className="clinic-doctors-grid">
+                  {Array(3).fill(0).map((_, idx) => (
+                    <div key={idx} className="doctor-card-skeleton">
+                      <div className="doctor-card-skeleton__img"></div>
+                    </div>
+                  ))}
+                </div>
+              </>
             ) : (
               <>
                 {/* 1. БАННЕР ОГУЛОВА: Рендерится отдельно ВНЕ грид-сетки */}
