@@ -1,59 +1,56 @@
-import { NavLink, useLocation } from 'react-router-dom'
-import { HashLink } from 'react-router-hash-link' // Импортируем HashLink для сквозного SPA-скролла
-import './Header.css'
+import { NavLink, useLocation } from 'react-router-dom';
+import { HashLink } from 'react-router-hash-link'; 
+import './Header.css';
 
-// ВАЖНО: Добавляем слеш перед хэшем, чтобы ссылки работали из любой точки сайта (даже из магазина)
+// ВАЖНО: Переводим меню клиники на честные многостраничные роуты из App.jsx
 const clinicMenu = [
-  { title: 'Главная', href: '/#hero' },
-  { title: 'Методики', href: '/#methods' },
-  { title: 'О клинике', href: '/#about' },
-  { title: 'Специалисты', href: '/#doctors' },
-  { title: 'Награды', href: '/#awards' },
-  { title: 'Вопросы-ответы', href: '/#faq' },
-  { title: 'Контакты', href: '/#contacts' },
-]
+  { title: 'Главная', href: '/clinic/about' }, // Или '/', смотря что считать главной
+  { title: 'О клинике', href: '/clinic/about#about' }, // Плавный скролл к секции "О нас" на странице About
+  { title: 'Специалисты', href: '/clinic/doctors' }, // Честный переход на изолированную страницу врачей
+  { title: 'Методики', href: '/clinic/methods' }, // Переход на страницу методик
+  { title: 'Награды', href: '/clinic/awards' },
+  { title: 'Вопросы-ответы', href: '/clinic/faq' },
+  { title: 'Контакты', href: '/clinic/contacts' },
+];
 
 const shopMenu = [
   { title: 'О магазине', href: '/shop/about' },
   { title: 'Оплата', href: '/shop/payment' },
   { title: 'Доставка', href: '/shop/delivery' },
   { title: 'Контакты', href: '/shop/contacts' },
-]
+];
 
 export default function Header() {
-  const { pathname } = useLocation()
-  const isShop = pathname.startsWith('/shop')
+  const { pathname } = useLocation();
+  const isShop = pathname.startsWith('/shop');
 
-  const menu = isShop ? shopMenu : clinicMenu
+  const menu = isShop ? shopMenu : clinicMenu;
 
   return (
     <header className="site-header">
+      {/* Верхние табы переключения Клиника / Магазин */}
       <div className="site-tabs">
         <div className="container site-tabs__inner">
           <NavLink
-            to="/"
-            className={({ isActive }) =>
-              !isShop ? 'site-tab site-tab--active' : 'site-tab'
-            }
+            to="/clinic/about" // Переводим на базовую страницу клиники
+            className={() => !isShop ? 'site-tab site-tab--active' : 'site-tab'}
           >
             Клиника
           </NavLink>
 
           <NavLink
             to="/shop"
-            className={() =>
-              isShop ? 'site-tab site-tab--active' : 'site-tab'
-            }
+            className={() => isShop ? 'site-tab site-tab--active' : 'site-tab'}
           >
             Интернет магазин
           </NavLink>
         </div>
       </div>
 
+      {/* Центральная часть шапки (Логотип, Контакты) */}
       <div className="site-main-header">
         <div className="container site-main-header__inner">
-          {/* Логотип использует HashLink для возврата наверх главной страницы */}
-          <HashLink smooth to={isShop ? '/shop' : '/#hero'} className={isShop ? 'site-logo2' : 'site-logo'}>
+          <NavLink to={isShop ? '/shop' : '/clinic/about'} className={isShop ? 'site-logo2' : 'site-logo'}>
             <img
               src={isShop ? '/images/shop-logo.png' : '/images/logo.svg'}
               alt={isShop ? 'Интернет магазин' : 'Клиника Огулова'}
@@ -61,13 +58,13 @@ export default function Header() {
             <div className="site-logo__text">
               {isShop ? '' : 'Клиника Огулова'}
             </div>
-          </HashLink>
+          </NavLink>
 
           <div className="site-header-info">
             <div className="site-address">
               <span>Адрес и режим работы</span>
               <div className="site-address__popup">
-                <p>Москва,<br />проспект Маршала Жукова, д. 78<br />корп. 4 и корп. 2</p>
+                <p>Москва,<br />проспект Маршала Жукова, д. 78<br />корп. 4 и korп. 2</p>
                 <p>Пн-Пт, 10:00-21:00<br />Сб, 10:00-18:00<br />Вс, выходной</p>
               </div>
             </div>
@@ -86,13 +83,26 @@ export default function Header() {
         </div>
       </div>
 
+      {/* Нижняя навигационная панель */}
       <nav className="site-nav">
         <div className="container">
           <ul className="site-nav__list">
             {menu.map((item) => (
               <li key={item.title}>
-                {isShop ? (
-                  /* Обычные роуты для страниц магазина */
+                {/* 
+                  Если ссылка содержит хэш (например, /clinic/about#about), 
+                  используем HashLink для мягкого скролла. 
+                  В остальных случаях — честный NavLink с подсветкой active-класса.
+                */}
+                {item.href.includes('#') ? (
+                  <HashLink
+                    smooth
+                    to={item.href}
+                    className="site-nav__link"
+                  >
+                    {item.title}
+                  </HashLink>
+                ) : (
                   <NavLink
                     to={item.href}
                     className={({ isActive }) =>
@@ -101,15 +111,6 @@ export default function Header() {
                   >
                     {item.title}
                   </NavLink>
-                ) : (
-                  /* Умный SPA-скролл для клиники, работающий из любой точки сайта */
-                  <HashLink
-                    smooth
-                    to={item.href}
-                    className="site-nav__link"
-                  >
-                    {item.title}
-                  </HashLink>
                 )}
               </li>
             ))}
@@ -117,5 +118,5 @@ export default function Header() {
         </div>
       </nav>
     </header>
-  )
+  );
 }

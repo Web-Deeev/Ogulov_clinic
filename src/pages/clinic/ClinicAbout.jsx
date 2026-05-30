@@ -3,6 +3,8 @@ import ClinicBanner from '../../components/clinic/ClinicBanner/ClinicBanner'
 import MethodsSlider from '../../components/clinic/MethodsSlider/MethodsSlider'
 import AboutClinic from '../../components/clinic/AboutClinic/AboutClinic'
 
+
+
 import './clinic.css';
 
 export default function ClinicAbout() {
@@ -25,6 +27,9 @@ export default function ClinicAbout() {
       <div id="about">
         <AboutClinic />
       </div>
+
+    
+
     </div>
   );
 }

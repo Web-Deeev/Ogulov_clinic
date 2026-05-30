@@ -1,0 +1,232 @@
+.doctor-personal-page {
+  padding: 40px 0 100px 0;
+  background-color: #faf9f6;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Кнопка "Назад" */
+.doctor-personal__back {
+  background: transparent;
+  border: none;
+  color: #8c7a6b;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 40px;
+  padding: 0;
+  transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.doctor-personal__back:hover {
+  color: #2c2520;
+}
+
+.doctor-personal__back-arrow {
+  font-size: 18px;
+  line-height: 1;
+}
+
+/* Главная карточка-сетка */
+.doctor-personal__main-card {
+  display: flex;
+  gap: 50px;
+  margin-bottom: 60px;
+  background: #ffffff;
+  border: 1px solid #f0ede6;
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.02);
+}
+
+.doctor-personal__photo-block {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.doctor-personal__avatar-wrapper {
+  width: 100%;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #e2ded5;
+}
+
+.doctor-personal__avatar {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+/* Фирменная желтая закругленная CTA-кнопка */
+.doctor-personal__cta-btn {
+  width: 100%;
+  background-color: #e3bc72;
+  border: 1px solid #e3bc72;
+  color: #2c2520;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 50px; /* Круглые бока */
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(227, 188, 114, 0.2);
+  transition: all 0.25s ease;
+}
+
+.doctor-personal__cta-btn:hover {
+  background-color: #2c2520;
+  border-color: #2c2520;
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(44, 37, 32, 0.25);
+}
+
+/* Правый блок информации */
+.doctor-personal__info-block {
+  width: 70%;
+}
+
+.doctor-personal__fullname {
+  font-size: 36px;
+  color: #2c2520;
+  margin: 10px 0 14px 0;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.doctor-personal__badge-role {
+  font-size: 12px;
+  color: #aa9787;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.doctor-personal__badge-exp {
+  font-size: 13px;
+  color: #ffffff;
+  background-color: #8c7a6b;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.doctor-personal__divider {
+  height: 1px;
+  background-color: #eaddca;
+  margin: 25px 0;
+}
+
+.doctor-personal__section-title {
+  font-size: 22px;
+  color: #2c2520;
+  margin: 0 0 20px 0;
+  font-weight: 600;
+}
+
+/* 
+  КРИТИЧЕСКИ ВАЖНОЕ СВОЙСТВО:
+  white-space: pre-line сохраняет все твои абзацы, пустые строки и списки с точками •
+*/
+.doctor-personal__fullbio-text {
+  font-size: 15px;
+  color: #5c524a;
+  line-height: 1.7;
+  white-space: pre-line !important; 
+  margin: 0;
+}
+
+/* Общие заголовки нижних блоков */
+.doctor-personal__block-title {
+  font-size: 24px;
+  color: #2c2520;
+  margin: 60px 0 25px 0;
+  font-weight: 600;
+  border-bottom: 1px solid #eaddca;
+  padding-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+/* Адаптивный YouTube видео-бокс */
+.doctor-personal__video-box {
+  position: relative;
+  width: 100%;
+  max-width: 850px;
+  padding-top: 48%; /* Пропорции 16:9 под десктопный экран */
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  border: 1px solid #f0ede6;
+}
+
+.doctor-personal__video-box iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Сетка практикуемых методик доктора */
+.doctor-personal__methods-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 25px;
+}
+
+.doctor-personal__method-card {
+  background: #ffffff;
+  border: 1px solid #f0ede6;
+  border-radius: 8px;
+  padding: 24px;
+  display: flex;
+  gap: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.doctor-personal__method-card:hover {
+  transform: translateY(-3px);
+  border-color: #e3bc72;
+  box-shadow: 0 6px 20px rgba(227, 188, 114, 0.1);
+}
+
+.doctor-personal__method-icon {
+  color: #e3bc72;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.doctor-personal__method-content h3 {
+  font-size: 18px;
+  color: #2c2520;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.doctor-personal__method-content p {
+  font-size: 14px;
+  color: #70655d;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Мобильный адаптив */
+@media (max-width: 992px) {
+  .doctor-personal__main-card { padding: 30px; gap: 30px; }
+  .doctor-personal__fullname { font-size: 30px; }
+}
+
+@media (max-width: 768px) {
+  .doctor-personal__main-card { flex-direction: column; gap: 30px; padding: 25px; }
+  .doctor-personal__photo-block { width: 100%; align-items: center; }
+  .doctor-personal__avatar-wrapper { max-width: 280px; }
+  .doctor-personal__info-block { width: 100%; }
+  .doctor-personal__methods-grid { grid-template-columns: 1fr; }
+  .doctor-personal__video-box { padding-top: 56.25%; /* Честный 16:9 на мобилках */ }
+}

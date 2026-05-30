@@ -1,44 +1,68 @@
-import React from 'react';
-import DoctorCard from '../../components/clinic/Doctors/DoctorCard';
-
-const doctorsData = [
-  {
-    id: 1,
-    name: 'Огулов Александр Тимофеевич',
-    role: 'Основатель центра, профессор',
-    desc: 'Доктор народной медицины, основоположник направления висцеральной практики в России.',
-    exp: 'Более 40 лет опыта',
-    image: '/images/doctors/ogulov.jpg',
-  },
-  {
-    id: 2,
-    name: 'Хазова Ольга Петровна',
-    role: 'Ведущий специалист центра',
-    desc: 'Специалист по висцеральной практике, гирудотерапии, юмейхо-терапии и фитотерапии.',
-    exp: 'Более 20 лет опыта',
-    image: '/images/doctors/hazova.jpg',
-  }
-];
+import React, { useState, useEffect } from 'react';
+import Header from '../../components/common/Header/Header';
+import DoctorCard from '../../components/clinic/Doctors/DoctorCard'; 
+import { mockDoctors } from '../../components/clinic/Doctors/DoctorsData'; 
+import '../../components/clinic/Doctors/DoctorCard.css'; 
 
 export default function ClinicDoctors() {
-  const handleBooking = (id) => {
-    alert(`Открытие модалки записи к доктору с ID: ${id}`);
-  };
+  const [doctors, setDoctors] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDoctors(mockDoctors);
+      setLoading(false);
+    }, 300); 
+    return () => clearTimeout(timer);
+  }, []);
+
+  const leaderDoctor = doctors.length > 0 ? doctors[0] : null; // ИСПРАВЛЕНО: берем строго первый элемент doctors[0]
+  const staffDoctors = doctors.length > 1 ? doctors.slice(1) : []; 
 
   return (
-    <div className="container clinic-doctors-page">
-      <h1 className="page-title">Специалисты клиники</h1>
-      <p className="page-subtitle">Наши эксперты — сертифицированные специалисты.</p>
+    <div className="clinic-page-wrapper">
+      <Header />
+      <main className="clinic-main-content">
+        <section className="clinic-doctors-page">
+          <div className="container">
+            <div className="clinic-doctors-page__header">
+              <span className="clinic-subtitle">Команда профессионалов</span>
+              <h1 className="clinic-title">Наши Специалисты</h1>
+              <div className="clinic-divider"></div>
+            </div>
 
-      <div className="doctors-grid">
-        {doctorsData.map((doctor) => (
-          <DoctorCard 
-            key={doctor.id} 
-            doctor={doctor} 
-            onBook={handleBooking} 
-          />
-        ))}
-      </div>
+            {loading ? (
+              <div className="clinic-doctors-grid">
+                {Array(2).fill(0).map((_, idx) => (
+                  <div key={idx} className="doctor-card-skeleton"><div className="doctor-card-skeleton__img"></div></div>
+                ))}
+              </div>
+            ) : (
+              <>
+                {/* 1. БАННЕР ОГУЛОВА: Рендерится отдельно ВНЕ грид-сетки */}
+                {leaderDoctor && (
+                  <div className="clinic-doctors-leader" style={{ width: '100%', marginBottom: '40px' }}>
+                    <DoctorCard doctor={leaderDoctor} isFullWidth={true} />
+                  </div>
+                )}
+
+                {/* Аккуратный заголовок-разделитель для остальных сотрудников */}
+                {staffDoctors.length > 0 && (
+                  <h2 className="clinic-doctors__section-title">Специалисты центра</h2>
+                )}
+
+                {/* 2. ГРИД-СЕТКА: Открывается ТОЛЬКО для рядовых врачей */}
+                <div className="clinic-doctors-grid">
+                  {staffDoctors.map(doctor => (
+                    <DoctorCard key={doctor.id} doctor={doctor} />
+                  ))}
+                </div>
+              </>
+            )}
+
+          </div>
+        </section>
+      </main>
     </div>
   );
 }

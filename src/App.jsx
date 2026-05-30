@@ -7,6 +7,10 @@ import ClinicPrices from './pages/clinic/ClinicPrices';
 import ClinicAwards from './pages/clinic/ClinicAwards';
 import ClinicFAQ from './pages/clinic/ClinicFAQ';
 import ClinicContacts from './pages/clinic/ClinicContacts';
+import PersonalPage from './components/clinic/Doctors/PersonalPage';
+
+
+
 import './style.css';
 import './pages/clinic/clinic.css';
 
@@ -22,6 +26,9 @@ function App() {
         <Route path="/clinic">
           <Route path="about" element={<ClinicAbout />} />
           <Route path="doctors" element={<ClinicDoctors />} />
+          
+           <Route path="doctors/:id" element={<PersonalPage />} />
+          
           <Route path="methods" element={<ClinicMethods />} />
           <Route path="awards" element={<ClinicAwards />} />
           <Route path="faq" element={<ClinicFAQ />} />
