@@ -1,0 +1,148 @@
+/* Базовая геометрия страницы */
+.clinic-faq-page {
+  padding-bottom: 100px;
+  background-color: #fcfbf7; /* Фирменный светлый фон Огулов Центра */
+}
+
+.clinic-banner {
+  padding: 70px 0;
+  text-align: center;
+  background-color: #f4f1ea;
+  border-bottom: 1px solid #e8e4dc;
+}
+
+.clinic-banner__title {
+  font-size: 38px;
+  font-weight: 700;
+  color: #2c2520;
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+
+.clinic-banner__subtitle {
+  font-size: 16px;
+  color: #70655c;
+  margin: 0;
+}
+
+.faq-container {
+  max-width: 880px;
+  margin-top: 50px;
+}
+
+.faq-modern-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px; /* Зазор между карточками */
+}
+
+/* ==========================================================================
+   СОВРЕМЕННЫЕ ЗАКРУГЛЕННЫЕ КАРТОЧКИ (MODERN ACCORDION)
+   ========================================================================== */
+.faq-modern-card {
+  background: #ffffff;
+  border: 1px solid rgba(232, 228, 220, 0.7);
+  border-radius: 16px; /* Современное глубокое закругление углов */
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(44, 37, 32, 0.02); /* Мягкая парящая тень */
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* Эффект ховера: карточка плавно приподнимается при наведении */
+.faq-modern-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(227, 188, 114, 0.4); /* Мягкое золотое свечение границ */
+  box-shadow: 0 8px 25px rgba(227, 188, 114, 0.08);
+}
+
+/* Состояние, когда карточка раскрыта пользователем */
+.faq-modern-card--open {
+  border-color: #e3bc72; /* Фирменное благородное золото клиники */
+  box-shadow: 0 10px 30px rgba(227, 188, 114, 0.12);
+  background-color: #ffffff;
+}
+
+/* Шапка карточки */
+.faq-modern-card__header {
+  padding: 24px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.faq-modern-card__question {
+  font-size: 17px;
+  font-weight: 600;
+  color: #2c2520;
+  line-height: 1.4;
+  margin: 0;
+  padding-right: 24px;
+  transition: color 0.2s ease;
+}
+
+.faq-modern-card:hover .faq-modern-card__question {
+  color: #e3bc72; /* Текст вопроса слегка золотеет при наведении кусора */
+}
+
+.faq-modern-card--open .faq-modern-card__question {
+  color: #2c2520; /* Возвращаем глубокий темный цвет при открытии */
+}
+
+/* Круглая капсула-подложка для стрелочки */
+.faq-modern-card__arrow-wrapper {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #f4f1ea;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.faq-modern-card__arrow {
+  font-size: 22px;
+  line-height: 1;
+  color: #70655c;
+  transform: rotate(-90deg) translateY(1px); /* Смотрит строго вниз по умолчанию */
+  display: inline-block;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s ease;
+}
+
+/* Анимация стрелки и кружка при открытии карточки */
+.faq-modern-card--open .faq-modern-card__arrow-wrapper {
+  background-color: #2c2520; /* Кружок становится стильным темным */
+}
+
+.faq-modern-card--open .faq-modern-card__arrow {
+  transform: rotate(90deg) translateY(1px); /* Стрелка плавно разворачивается вверх */
+  color: #ffffff; /* Сама стрелочка белеет */
+}
+
+/* ВЫСОКОПРОИЗВОДИТЕЛЬНОЕ CSS-РАСКРЫТИЕ ПАНЕЛИ НА GRID БЕЗ ЛАГОВ И JS */
+.faq-modern-card__body-wrapper {
+  display: grid;
+  grid-template-rows: 0fr; /* Изначально высота скрыта */
+  transition: grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-modern-card--open .faq-modern-card__body-wrapper {
+  grid-template-rows: 1fr; /* Разворачивается ровно под высоту текста */
+}
+
+.faq-modern-card__body-content {
+  overflow: hidden; /* Обрезает контент в момент анимации */
+}
+
+.faq-modern-card__answer {
+  padding: 0 28px 24px 28px;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #554d46;
+  margin: 0;
+  border-top: 1px solid rgba(232, 228, 220, 0.3); /* Тонкая разделительная черта */
+  padding-top: 16px;
+}

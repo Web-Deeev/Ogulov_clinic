@@ -3,9 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { clinicApi } from '../../../api/clinic/clinic'; 
 import GridMethods from './GridMethods.jsx';
 
-
 import './PersonalPage.css';
-
 import '../Methods/CardPage.css'; 
 
 export default function DoctorPersonalPage() {
@@ -30,7 +28,23 @@ export default function DoctorPersonalPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // 1. Кнопка в состоянии загрузки
+  // JS-предохранитель для парсинга YouTube ссылок (KISS / Defensive Design)
+  const getYouTubeEmbedUrl = (url) => {
+    if (!url) return '';
+    // Если в базе лежит только ID (например, "dQw4w9WgXcQ")
+    if (!url.includes('http') && !url.includes('youtube')) {
+      return `https://youtube.com{url.trim()}`;
+    }
+    // Если пришла полная ссылка, вырезаем ID через регулярку
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    if (match && match[2].length === 11) {
+      return `https://youtube.com{match[2]}`;
+    }
+    return url; // Фолбэк, если ссылка уже идеально сформирована бэкендом
+  };
+
+  // 1. Состояние загрузки
   if (loading) {
     return (
       <div className="container" style={{ padding: '60px 0', textAlign: 'center' }}>
@@ -39,12 +53,12 @@ export default function DoctorPersonalPage() {
             <span className="method-detail__back-arrow">&larr;</span> Назад к списку
           </button>
         </div>
-        <div className="animate-pulse bg-gray-200 h-[400px] w-full rounded-xl" style={{ backgroundColor: '#e5e7eb', height: '400px', borderRadius: '12px' }} />
+        <div className="animate-pulse" style={{ backgroundColor: '#e5e7eb', height: '400px', borderRadius: '12px' }} />
       </div>
     );
   }
 
-  // 2. Кнопка в состоянии ошибки 404
+  // 2. Состояние ошибки 404 (Специалист не найден)
   if (!doctor) {
     return (
       <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
@@ -62,7 +76,7 @@ export default function DoctorPersonalPage() {
     <section className="doctor-personal-page">
       <div className="container">
         
-        {/* 3. Кнопка в основном контенте страницы */}
+        {/* 3. Кнопка возврата в основном контенте страницы */}
         <button className="method-detail__back-btn" onClick={() => navigate('/clinic/doctors')}>
           <span className="method-detail__back-arrow">&larr;</span> Назад к списку специалистов
         </button>
@@ -75,26 +89,26 @@ export default function DoctorPersonalPage() {
             <span className="doctor-personal__badge-role">
               {doctor.role ? doctor.role : 'Специалист центра'}
             </span>
-            <h1 className="doctor-personal__fullname" dangerouslySetInnerHTML={{ __html: doctor.name }} />
-            <span className="doctor-personal__badge-exp">{doctor.exp}</span>
+            <h1 className="doctor-personal__fullname" dangerouslySetInnerHTML={{ __html: doctor.name || 'Специалист центра' }} />
+            {doctor.exp && <span className="doctor-personal__badge-exp">{doctor.exp}</span>}
             <div className="doctor-personal__divider"></div>
+            
             <div className="doctor-personal__bio">
               <h2 className="doctor-personal__section-title">Биография и достижения</h2>
               <p className="doctor-personal__fullbio-text" style={{ whiteSpace: 'pre-line' }}>
-                {doctor.full_bio || doctor.desc}
+                {doctor.full_bio || doctor.desc || 'Информация обновляется...'}
               </p>
             </div>
           </div>
 
-          {/* ПРАВАЯ КОЛОНКА: Фото и кнопка (Будет плавать благодаря CSS position: sticky) */}
+          {/* ПРАВАЯ КОЛОНКА: Фото (Будет плавать благодаря CSS position: sticky) */}
           <div className="doctor-personal__photo-block">
             <div className="doctor-personal__avatar-wrapper">
               <img src={displayPhoto} alt={doctor.name} className="doctor-personal__avatar" />
             </div>
 
-
-            {/*  🛡️ Временно скрываем кнопку *}
-            {/*}
+            {/* ИСПРАВЛЕНО: Безопасный JSX-комментарий, сборка Vite больше не упадет */}
+            {/* 
             <button className="doctor-personal__cta-btn" onClick={() => alert(`Запись к специалисту: ${doctor.name}`)}>
               Записаться на прием
             </button>
@@ -103,13 +117,13 @@ export default function DoctorPersonalPage() {
           
         </div>
 
-        {/* Блок видео (ИСПРАВЛЕН синтаксис ссылки YouTube эмбеда) */}
+        {/* Блок видео (ИСПРАВЛЕН синтаксис шаблона строки и добавлен эмбед-парсер) */}
         {doctor.video_url && doctor.video_url.trim() !== "" && (
           <div className="doctor-personal__media-section">
             <h2 className="doctor-personal__block-title">Видео со специалистом</h2>
             <div className="doctor-personal__video-box">
               <iframe 
-                src={`https://youtube.com{doctor.video_url}`} 
+                src={getYouTubeEmbedUrl(doctor.video_url)} 
                 title={doctor.name} 
                 frameBorder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -119,6 +133,7 @@ export default function DoctorPersonalPage() {
           </div>
         )}
 
+        {/* Наш интерактивный слайдер со стрелками принимает массив методик */}
         <GridMethods methods={doctor.methods} />
 
       </div>

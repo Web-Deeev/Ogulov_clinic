@@ -215,63 +215,72 @@
 
 
 /* ИСПРАВЛЕНО: Сетка флексбокса для деления экрана 50 на 50 */
+
+/* Родной контейнер двух колонок */
 .method-detail__two-columns {
-  display: flex;
-  gap: 50px;
-  margin-top: 40px;
-  align-items: flex-start;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 48px !important;
+  align-items: flex-start !important; /* Критично для работы sticky */
+  margin-bottom: 60px;
 }
 
+/* ЛЕВАЯ КОЛОНКА — ТЕКСТ */
 .method-detail__text-column {
-  flex: 1;
-  width: 50%;
+  width: 100% !important;
 }
 
+/* 🔥 ПРАВАЯ КОЛОНКА — ПЛАВАЕТ ПРИ СКРОЛЛЕ */
 .method-detail__visual-column {
-  flex: 1;
-  width: 50%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  position: sticky;
-  top: 20px; /* При прокрутке правый блок будет изящно залипать */
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 40px !important; /* Отступ сверху экрана при плавании */
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
 }
 
+/* Ограничиваем большую боковую фотку от раздувания */
 .method-detail__side-photo-wrapper {
-  width: 100%;
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
 }
 
 .method-detail__side-photo {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
 
-.method-detail__cta-box {
-  width: 100%;
+/* СЕТКА ГАЛЕРЕИ (ФИКС ГИГАНТСКИХ ФОТО) */
+.method-gallery-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)) !important;
+  gap: 16px !important;
+  width: 100% !important;
+  margin-top: 20px;
 }
 
-.method-detail__cta-btn {
-  width: 100%;
-  padding: 16px;
-  background-color: #e3bc72;
-  color: #ffffff;
-  border: none;
-  border-radius: 30px;
-  font-size: 16px;
-  font-weight: 600;
+.method-gallery-thumb-wrapper {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 4 / 3 !important;
+  border-radius: 8px;
+  overflow: hidden;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  border: 1px solid #e8e4dc;
 }
 
-.method-detail__cta-btn:hover {
-  background-color: #2c2520;
+.method-gallery-thumb {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
 }
+
 
 /* Адаптивность под планшеты и мобилки: колонки падают друг под друга */
 @media (max-width: 768px) {

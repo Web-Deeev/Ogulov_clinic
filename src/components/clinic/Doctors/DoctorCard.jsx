@@ -36,22 +36,12 @@ export default function DoctorCard({ doctor, isFullWidth = false }) {
             </span>
           )}
           
+          {/* СТАНДАРТНОЕ ПОЛЕ: Краткое описание с защитой от переполнения */}
           <div className="doctor-card__desc-wrapper">
             <p className="doctor-card__desc">
               {doctor.desc || 'Описание обновляется...'}
             </p>
           </div>
-
-          {/* ИСПРАВЛЕНО: Безопасный вывод методик с проверкой на массив */}
-          {Array.isArray(doctor.methods) && doctor.methods.length > 0 && (
-            <div className="doctor-card__methods-list-inline">
-              {doctor.methods.map(method => (
-                <span key={`method-badge-${method.id}`} className="doctor-card__method-badge">
-                  {method.title}
-                </span>
-              ))}
-            </div>
-          )}
           
           <div className="doctor-card__actions">
             <Link 
@@ -87,25 +77,10 @@ export default function DoctorCard({ doctor, isFullWidth = false }) {
             </span>
           )}
           
+          {/* СТАНДАРТНОЕ ПОЛЕ: Краткое описание */}
           <p className="doctor-card__desc">
             {doctor.desc || 'Описание обновляется...'}
           </p>
-
-          {/* ИСПРАВЛЕНО: Безопасный вывод методик с проверкой на массив */}
-          {Array.isArray(doctor.methods) && doctor.methods.length > 0 && (
-            <div className="doctor-card__methods-section">
-              <span className="doctor-card__methods-title">Методики:</span>
-              <ul className="doctor-card__methods-list">
-                {doctor.methods.map((method) => (
-                  <li key={`method-item-${method.id}`} className="doctor-card__method-item">
-                    <Link to={`/clinic/methods/${method.slug}`}>
-                      {method.title}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </div>
         
         <div className="doctor-card__item-actions">

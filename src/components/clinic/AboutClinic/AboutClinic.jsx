@@ -1,11 +1,31 @@
-// src/components/home/AboutClinic/AboutClinic.jsx
-
+import React, { useState, useEffect } from 'react'
+import { clinicApi } from '@/api/clinic/clinic' // Твой официальный слой API-запросов
+import DoctorCard from '../../clinic/Doctors/DoctorCard' // Твой готовый компонент карточки
 import './AboutClinic.css'
 
+
 export default function AboutClinic() {
+  const [ogulovData, setOgulovData] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Делаем асинхронный запрос к DRF бэкенду, чтобы забрать профиль Огулова по слагу
+    clinicApi.getDoctorBySlug('ogulov')
+      .then(response => {
+        setOgulovData(response.data)
+      })
+      .catch(error => {
+        console.error("Ошибка при подгрузке баннера Огулова на главной:", error)
+        setOgulovData(null)
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
   return (
     <section className="about-clinic">
       <div className="container">
+        
+        {/* ТВОЯ ОРИГИНАЛЬНАЯ ВЕРХНЯЯ СЕТКА ГРИДОВ (БЕЗ ИЗМЕНЕНИЙ) */}
         <div className="about-clinic__grid">
           <div className="about-clinic__content">
             <h2>О клинике</h2>
@@ -56,7 +76,7 @@ export default function AboutClinic() {
               className="about-clinic__video"
               onClick={() =>
                 window.open(
-                  'https://www.youtube.com/watch?v=7as4C9QcJa4',
+                  'https://youtube.com',
                   '_blank'
                 )
               }
@@ -87,6 +107,14 @@ export default function AboutClinic() {
             </div>
           </div>
         </div>
+
+        {/* 🔥 ДИНАМИЧЕСКИЙ БАННЕР ИЗ БАЗЫ ДАННЫХ DJANGO С УСЛОВИЕМ И КЛАССАМИ */}
+        {!loading && ogulovData && (
+          <div style={{ marginTop: '60px' }} className="animate-fadeIn-eff">
+            <DoctorCard doctor={ogulovData} isFullWidth={true} />
+          </div>
+        )}
+
       </div>
     </section>
   )
