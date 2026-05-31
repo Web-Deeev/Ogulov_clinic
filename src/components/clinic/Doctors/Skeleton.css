@@ -1,0 +1,72 @@
+/* Базовая карточка (для грид-сетки) */
+.doc-skeleton-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #f3f4f6; /* Светло-серый подложка */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.doc-skeleton-card .doc-skeleton-media {
+  width: 100%;
+  height: 260px;
+  background-color: #e5e7eb;
+}
+
+/* Модификация для ЛИДЕРА (isFullWidth={true}) */
+.doc-skeleton-leader {
+  flex-direction: row;
+  min-height: 380px;
+  margin-bottom: 40px;
+}
+
+.doc-skeleton-leader .doc-skeleton-media {
+  width: 35%;
+  height: auto;
+  min-height: 380px;
+}
+
+/* Контентная текстовая область */
+.doc-skeleton-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+/* Серые полоски текста */
+.doc-skeleton-line {
+  height: 16px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+}
+
+/* Атомарные утилиты ширины (KISS) */
+.doc-w-30 { width: 30%; }
+.doc-w-50 { width: 50%; }
+.doc-w-75 { width: 75%; }
+
+/* Эффект мерцания (Pulse) */
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-pulse-eff {
+  animation: skeletonPulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+  .doc-skeleton-leader {
+    flex-direction: column;
+  }
+  .doc-skeleton-leader .doc-skeleton-media {
+    width: 100%;
+    height: 240px;
+    min-height: auto;
+  }
+}

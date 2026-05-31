@@ -39,13 +39,29 @@
   border-radius: 8px;
   padding: 40px;
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.02);
+  
+  /* ИСПРАВЛЕНО: Сжимает правую колонку до её реальной высоты контента, 
+     освобождая пространство для плавания */
+  align-items: flex-start; 
 }
 
+/* ЛЕВАЯ КОЛОНКА: На всякий случай явно укажем, что она занимает всё оставшееся место */
+.doctor-personal__info-block {
+  flex: 1;
+}
+
+/* ПРАВАЯ КОЛОНКА: Теперь она официально плавает (Липкая) */
 .doctor-personal__photo-block {
   width: 30%;
   display: flex;
   flex-direction: column;
   gap: 25px;
+  
+  /* ИСПРАВЛЕНО: Включаем Sticky-эффект */
+  position: -webkit-sticky; /* Поддержка для Safari */
+  position: sticky;
+  top: 120px;               /* Отступ сверху от экрана при скролле (с учетом высоты хедера) */
+  z-index: 10;              /* Защита от перекрытия другими элементами страницы */
 }
 
 .doctor-personal__avatar-wrapper {
@@ -61,6 +77,21 @@
   display: block;
   object-fit: cover;
 }
+
+/* Адаптивность (KISS): На мобильных экранах отключаем sticky, чтобы верстка не сминалась */
+@media (max-width: 992px) {
+  .doctor-personal__main-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+  }
+  
+  .doctor-personal__photo-block {
+    width: 100%;
+    position: static; /* Отключаем липкость, фото встанет под текстом */
+  }
+}
+
 
 /* Фирменная желтая закругленная CTA-кнопка */
 .doctor-personal__cta-btn {
@@ -229,4 +260,30 @@
   .doctor-personal__info-block { width: 100%; }
   .doctor-personal__methods-grid { grid-template-columns: 1fr; }
   .doctor-personal__video-box { padding-top: 56.25%; /* Честный 16:9 на мобилках */ }
+}
+
+
+/* Глобальный стиль для кнопок возврата клиники Огулова */
+.method-detail__back-btn {
+  display: inline-block;
+  padding: 10px 24px;
+  background-color: #e3bc72; /* Фирменный золотистый */
+  color: #2c2520; /* Темно-коричневый */
+  font-weight: 700;
+  border: none;
+  border-radius: 50px; /* Идеальный овал */
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 24px;
+  text-decoration: none;
+}
+
+.method-detail__back-btn:hover {
+  background-color: #2c2520;
+  color: #ffffff;
+}
+
+/* Небольшой бонус: сделаем красивый отступ для стрелочки */
+.method-detail__back-arrow {
+  margin-right: 6px;
 }

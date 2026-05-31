@@ -1,0 +1,121 @@
+.site-footer {
+  background-color: #111827; /* Премиальный темно-серый цвет */
+  color: #9ca3af;
+  padding: 60px 20px 30px 20px;
+  font-family: system-ui, -apple-system, sans-serif;
+  border-top: 1px solid #1f2937;
+}
+
+/* Сетка на 3 колонки */
+.footer-grid-container {
+  max-w: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Ровно 3 равные колонки */
+  gap: 40px;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-title {
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.footer-subtitle {
+  color: #f3f4f6;
+  margin: 0 0 20px 0;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 600;
+}
+
+.footer-text {
+  font-size: 0.9rem;
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+}
+
+.footer-copyright {
+  color: #6b7280;
+  margin-bottom: 20px;
+}
+
+.footer-legal-box p {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 4px 0;
+}
+
+/* Стилизация интерактивных ссылок */
+.footer-contact-link {
+  color: #10b981; /* Акцентный изумрудный цвет */
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-contact-link:hover {
+  color: #34d399;
+}
+
+.footer-docs-links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-doc-link {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+  line-height: 1.4;
+}
+
+.footer-doc-link:hover {
+  color: #ffffff;
+}
+
+/* Медицинское предупреждение */
+.footer-disclaimer-wrapper {
+  max-w: 1200px;
+  margin: 40px auto 0 auto;
+  padding-top: 25px;
+  border-top: 1px solid #1f2937;
+}
+
+.footer-medical-disclaimer {
+  text-align: center;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: #4b5563;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* Адаптивность для планшетов и мобилок (KISS / DRY) */
+@media (max-width: 900px) {
+  .footer-grid-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 колонки на средних экранах */
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-grid-container {
+    grid-template-columns: 1fr; /* 1 колонка на мобилках */
+    gap: 30px;
+  }
+  .footer-medical-disclaimer {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+  }
+}

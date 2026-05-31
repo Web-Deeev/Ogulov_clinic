@@ -1,0 +1,38 @@
+/* Контейнер карусели */
+.doctor-methods-native-slider {
+  display: flex;
+  gap: 24px;
+  overflow-x: auto;          /* Включаем горизонтальный скролл */
+  scroll-snap-type: x mandatory; /* Включаем магнитную фиксацию карточек при скролле */
+  padding: 10px 4px 25px 4px;
+  scrollbar-width: thin;     /* Тонкий скроллбар для Firefox */
+}
+
+/* Кастомизируем полосу прокрутки для Chrome/Safari/Edge, чтобы она выглядела аккуратно */
+.doctor-methods-native-slider::-webkit-scrollbar {
+  height: 6px;
+}
+
+.doctor-methods-native-slider::-webkit-scrollbar-track {
+  background: #fcfaf6;
+  border-radius: 10px;
+}
+
+.doctor-methods-native-slider::-webkit-scrollbar-thumb {
+  background: #e3bc72; /* Наш фирменный золотистый цвет */
+  border-radius: 10px;
+}
+
+/* Слайд-обертка для карточки методики */
+.doctor-methods-native-slide {
+  flex: 0 0 calc(50% - 12px); /* На десктопе показываем ровно 2 карточки в ряд */
+  min-width: 300px;
+  scroll-snap-align: start;   /* Точка привязки магнита при прокрутке */
+}
+
+/* Адаптивность под мобилки: показываем 1 полную карточку и кусочек следующей */
+@media (max-width: 768px) {
+  .doctor-methods-native-slide {
+    flex: 0 0 85%; /* 85% ширины экрана, чтобы справа был виден край следующего слайда */
+  }
+}
