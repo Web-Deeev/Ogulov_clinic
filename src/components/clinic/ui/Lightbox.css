@@ -1,0 +1,131 @@
+.premium-lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  /* Глубокий пастельно-темный премиум фон с размытием заднего контента клиники */
+  background-color: rgba(22, 18, 15, 0.88); 
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  animation: lightboxFadeIn 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.premium-lightbox-content {
+  position: relative;
+  max-width: 85vw;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: lightboxScaleUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.premium-lightbox-image {
+  max-width: 100%;
+  max-height: 82vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Элегантный минималистичный счетчик */
+.premium-lightbox-counter {
+  margin-top: 16px;
+  color: #e6dfd9;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: monospace;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(4px);
+  padding: 6px 16px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  gap: 4px;
+}
+.premium-lightbox-counter-current { color: #f5f2ee; }
+.premium-lightbox-counter-divider { color: rgba(255, 255, 255, 0.3); }
+
+/* Кнопка закрытия */
+.premium-lightbox-close {
+  position: absolute;
+  top: 28px;
+  right: 32px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e6dfd9;
+  font-size: 36px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  line-height: 0;
+  padding-bottom: 4px;
+}
+.premium-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+/* Премиальные стрелки навигации */
+.premium-lightbox-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #e6dfd9;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.premium-lightbox-arrow:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.premium-lightbox-arrow--left { left: 40px; }
+.premium-lightbox-arrow--left:hover { transform: translateY(-50%) translateX(-4px); }
+.premium-lightbox-arrow--right { right: 40px; }
+.premium-lightbox-arrow--right:hover { transform: translateY(-50%) translateX(4px); }
+
+/* Плавные анимации появления */
+@keyframes lightboxFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes lightboxScaleUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Полная адаптивность под смартфоны */
+@media (max-width: 768px) {
+  .premium-lightbox-arrow {
+    width: 46px;
+    height: 46px;
+    background: rgba(0, 0, 0, 0.5); /* На мобилках делаем контрастнее */
+  }
+  .premium-lightbox-arrow--left { left: 16px; }
+  .premium-lightbox-arrow--left:hover { transform: translateY(-50%); }
+  .premium-lightbox-arrow--right { right: 16px; }
+  .premium-lightbox-arrow--right:hover { transform: translateY(-50%); }
+  .premium-lightbox-close { top: 16px; right: 16px; width: 40px; height: 40px; font-size: 28px; }
+  .premium-lightbox-content { max-width: 92vw; }
+}

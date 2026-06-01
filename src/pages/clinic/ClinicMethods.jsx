@@ -22,7 +22,7 @@ export default function ClinicMethods() {
   }, []);
 
   return (
-    // Убрали clinic-page-wrapper, Header и main — они уже есть в Layout!
+   
     <section className="clinic-methods-page">
       <div className="container">
         
@@ -37,8 +37,7 @@ export default function ClinicMethods() {
         <div className="clinic-methods-grid">
           {loading ? (
             <>
-              {/* DRY: Просто рендерим 3 красивых изолированных скелетона */}
-              <MethodCardSkeleton />
+              
               <MethodCardSkeleton />
               <MethodCardSkeleton />
             </>

@@ -17,7 +17,7 @@ function MethodCard({ item }) {
         <p>{item.text}</p>
       </div>
     </a>
-  )git 
+  )
 }
 
 export default function MethodsSlider() {

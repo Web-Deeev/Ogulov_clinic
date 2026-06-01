@@ -1,6 +1,5 @@
 import React from 'react';
 import ClinicBanner from '../../components/clinic/ClinicBanner/ClinicBanner';
-import MethodsSlider from '../../components/clinic/MethodsSlider/MethodsSlider';
 import AboutClinic from '../../components/clinic/AboutClinic/AboutClinic';
 
 import './clinic.css';
@@ -8,20 +7,17 @@ import './clinic.css';
 export default function ClinicAbout() {
   return (
     <div className="clinic-spa-page">
-     
       
-      {/* Ссылка "Главная" (#hero) ведет сюда */}
+      {/* Ссылка "Главная" (#hero) ведет на первый экран баннера */}
       <div id="hero">
         <ClinicBanner />
       </div>
       
-      {/* Ссылка "О клинике" (#about) ведет сюда */}
+      {/* Ссылка "О клинике" (#about) ведет на наш глубокий лонгрид */}
       <div id="about">
         <AboutClinic />
       </div>
       
-      {/* Если здесь нужен слайдер методик, можешь раскомментировать: */}
-      {/* <MethodsSlider /> */}
     </div>
   );
 }

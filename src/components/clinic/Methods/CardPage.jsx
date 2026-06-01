@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { createPortal } from 'react-dom';
 import { clinicApi } from '../../../api/clinic/clinic'; 
+import Lightbox from '../ui/Lightbox.jsx';
+import BookingModal from '../ui/BookingModal.jsx';
 import './CardPage.css';
 import './MethodCard.css';
 import './MethodGallery.css';
 
+// Изолированная утилита парсинга ссылок YouTube по SOLID (SRP)
+const getYouTubeEmbedUrl = (url) => {
+  if (!url || typeof url !== 'string') return '';
+  const cleanUrl = url.trim();
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|shorts\/|&v=)([^#&?]*).*/;
+  const match = cleanUrl.match(regExp);
+  return match && match[2].length === 11 ? `https://youtube.com{match[2]}` : cleanUrl;
+};
 
 export default function MethodDetailPage() {
   const { id } = useParams(); 
@@ -15,46 +24,59 @@ export default function MethodDetailPage() {
   const [loading, setLoading] = useState(true);
   const [activeImageIndex, setActiveImageIndex] = useState(null);
 
+  // Исцеление Race Condition: гарантируем актуальность данных при медленной сети
   useEffect(() => {
+    let isCurrentRequest = true;
     setLoading(true);
+
     clinicApi.getMethodBySlug(id)
       .then(response => {
-        setMethod(response.data);
+        if (isCurrentRequest) {
+          setMethod(response.data);
+        }
       })
       .catch(error => {
         console.error("Ошибка загрузки данных методики:", error);
-        setMethod(null);
+        if (isCurrentRequest) {
+          setMethod(null);
+        }
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (isCurrentRequest) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isCurrentRequest = false; // Отменяем старый запрос при размонтировании/смене id
+    };
   }, [id]);
 
-  const getYouTubeEmbedUrl = (url) => {
-    if (!url) return '';
-    const cleanUrl = url.trim();
-    const regExp = /^.*(?:youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|shorts\/|&v=)([^#&?]*).*/;
-    const match = cleanUrl.match(regExp);
-    
-    if (match && match.length === 11) {
-      return `https://youtube.com{match[1]}`;
-    }
-    return cleanUrl;
-  };
-
+  // Вычисляемые свойства (Защита данных / Defensive Coding)
   const additionalPhotos = method?.gallery || [];
+  const pageTitle = method?.title || method?.name || 'Методика оздоровления';
+  const mainPhoto = method?.image || 'https://placehold.co';
+  const fullText = method?.full_desc || method?.description || method?.short_desc || 'Описание находится в процессе наполнения.';
 
-  const showPrev = (e) => {
-    e.stopPropagation(); 
+  // Навигация по галерее (Чистые функции без побочных эффектов)
+  const showPrev = () => {
+    if (additionalPhotos.length <= 1) return;
     setActiveImageIndex((prev) => (prev === 0 ? additionalPhotos.length - 1 : prev - 1));
   };
 
-  const showNext = (e) => {
-    e.stopPropagation();
+  const showNext = () => {
+    if (additionalPhotos.length <= 1) return;
     setActiveImageIndex((prev) => (prev === additionalPhotos.length - 1 ? 0 : prev + 1));
+  };
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
+  
+  const handleBooking = () => {
+    setIsBookingOpen(true);
   };
 
   if (loading) {
     return (
-      <div className="container" style={{ padding: '100px 0', textAlign: 'center', color: '#70655c' }}>
+      <div className="method-detail-status-container" style={{ padding: '100px 0', textAlign: 'center', color: '#70655c' }} aria-busy="true">
         Загрузка данных методики...
       </div>
     );
@@ -62,126 +84,130 @@ export default function MethodDetailPage() {
 
   if (!method) {
     return (
-      <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
+      <div className="method-detail-status-container" style={{ padding: '100px 0', textAlign: 'center' }}>
         <h2 style={{ color: '#2c2520', marginBottom: '20px' }}>Методика не найдена</h2>
-        <button className="method-detail__back-btn" onClick={() => navigate('/clinic/methods')}>
+        <button 
+          type="button" 
+          className="method-detail__back-btn" 
+          onClick={() => navigate('/clinic/methods')}
+        >
           Вернуться к списку методик
         </button>
       </div>
     );
   }
 
-  const pageTitle = method.title || method.name || 'Методика оздоровления';
-  const mainPhoto = method.image || 'https://placehold.co';
-  const fullText = method.full_desc || method.description || method.short_desc || 'Описание находится в процессе наполнения.';
-
   return (
     <section className="method-detail-page">
       <div className="container">
         
-        <button className="method-detail__back-btn" onClick={() => navigate('/clinic/methods')}>
-          <span className="method-detail__back-arrow">&larr;</span> Назад к списку методик
+        <button 
+          type="button" 
+          className="method-detail__back-btn" 
+          onClick={() => navigate('/clinic/methods')}
+        >
+          <span className="method-detail__back-arrow" aria-hidden="true">&larr;</span> Назад к списку методик
         </button>
 
         {/* 1. СВЕРХУ: Баннер */}
-        <div className="method-detail__top-hero">
-          <img src={mainPhoto} alt={pageTitle} className="method-detail__hero-img" />
+        <header className="method-detail__top-hero">
+          <img src={mainPhoto} alt="" className="method-detail__hero-img" />
           <div className="method-detail__hero-overlay">
             <span className="method-detail__badge">Методика оздоровления</span>
             <h1 className="method-detail__title">{pageTitle}</h1>
           </div>
-        </div>
+        </header>
 
-        {/* 2. ПО ЦЕНТРУ: Твоя оригинальная двухколоночная структура */}
+        {/* 2. ПО ЦЕНТРУ: Двухколоночная структура */}
         <div className="method-detail__two-columns">
           
           {/* ЛЕВАЯ КОЛОНКА: Текст */}
-          <div className="method-detail__text-column">
+          <article className="method-detail__text-column">
             <h2 className="method-detail__section-title">Суть и медицинские показания</h2>
             <p className="method-detail__fullbio-text" style={{ whiteSpace: 'pre-line' }}>
               {fullText}
             </p>
-          </div>
+          </article>
           
-          {/* ПРАВАЯ КОЛОНКА: Сюда добавили плавающий эффект через CSS sticky */}
-          <div className="method-detail__visual-column">
+          {/* ПРАВАЯ КОЛОНКА: Sticky-эффект */}
+          <aside className="method-detail__visual-column">
             <div className="method-detail__side-photo-wrapper">
               <img src={mainPhoto} alt={pageTitle} className="method-detail__side-photo" />
             </div>
             <div className="method-detail__cta-box">
-              <button className="method-detail__cta-btn" onClick={() => alert(`Заявка по методике: ${pageTitle}`)}>
+              <button 
+                type="button" 
+                className="method-detail__cta-btn" 
+                onClick={handleBooking}
+              >
                 Записаться на консультацию
               </button>
             </div>
-          </div>
+          </aside>
 
         </div>
 
-        {/* 3. ГАЛЕРЕЯ ПРЕВЬЮ */}
+        {/* 3. ГАЛЕРЕЯ ПРЕВЬЮ: Статичная сетка на странице, запускающая лайтбокс */}
         {additionalPhotos.length > 0 && (
-          <div className="method-gallery-section">
+          <section className="method-gallery-section" aria-label="Галерея процесса">
             <h2 className="method-gallery-title">Процесс проведения практики</h2>
-            <div className="method-gallery-title-line"></div>
-            <div className="method-gallery-grid">
+            <div className="method-gallery-title-line" aria-hidden="true"></div>
+            <div className="method-gallery-grid" role="list">
               {additionalPhotos.map((item, index) => {
                 const imgSource = item?.image || item; 
                 return (
-                  <div 
+                  <button 
                     key={`gallery-item-${item?.id || index}`} 
+                    type="button"
                     className="method-gallery-thumb-wrapper"
                     onClick={() => setActiveImageIndex(index)}
+                    aria-label={`Открыть изображение ${index + 1} в полноэкранном режиме`}
+                    role="listitem"
                   >
-                    <img src={imgSource} alt="Превью" className="method-gallery-thumb" loading="lazy" />
+                    <img src={imgSource} alt="" className="method-gallery-thumb" loading="lazy" />
                     <div className="method-gallery-thumb-overlay">
-                      <span className="method-gallery-zoom-icon">🔍</span>
+                      <span className="method-gallery-zoom-icon" aria-hidden="true">🔍</span>
                     </div>
-                  </div>
+                  </button>
                 );
               })}
             </div>
-          </div>
+          </section>
         )}
 
-        {/* 4. ЛАЙТБОКС (ПОРТАЛ В BODY) */}
-     {activeImageIndex !== null && additionalPhotos[activeImageIndex] && (
-          <div className="method-lightbox-overlay" onClick={() => setActiveImageIndex(null)}>
-            <button className="method-lightbox-close" onClick={() => setActiveImageIndex(null)}>&times;</button>
 
-            {additionalPhotos.length > 1 && (
-              <button className="method-lightbox-arrow method-lightbox-arrow--left" onClick={showPrev}>‹</button>
-            )}
+        <BookingModal 
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+          targetName={pageTitle} 
+          targetId={method?.id}  
+          apiEndpoint={clinicApi.createLead}
+        />
 
-            <div className="method-lightbox-content" onClick={(e) => e.stopPropagation()}>
-              <img 
-                src={additionalPhotos[activeImageIndex]?.image || additionalPhotos[activeImageIndex]} 
-                alt="Увеличенное фото процесса" 
-                className="method-lightbox-image" 
-              />
-              <div className="method-lightbox-counter">
-                {activeImageIndex + 1} / {additionalPhotos.length}
-              </div>
-            </div>
+        {/* 4. ЧИСТЫЙ ИНТЕГРИРОВАННЫЙ ЛАЙТБОКС */}
+        <Lightbox 
+          photos={additionalPhotos}
+          activeIndex={activeImageIndex}
+          onClose={() => setActiveImageIndex(null)}
+          onPrev={showPrev}
+          onNext={showNext}
+        />
 
-            {additionalPhotos.length > 1 && (
-              <button className="method-lightbox-arrow method-lightbox-arrow--right" onClick={showNext}>›</button>
-            )}
-          </div>
-        )}
-
-        {/* 5. YOUTUBE */}
+        {/* 5. YOUTUBE VIDEO */}
         {method.video_url && method.video_url.trim() !== "" && (
-          <div className="method-detail__media-section">
+          <section className="method-detail__media-section" aria-label="Видео-обзор">
             <h2 className="method-detail__block-title">Видео-обзор методики</h2>
             <div className="method-detail__video-box">
               <iframe 
                 src={getYouTubeEmbedUrl(method.video_url)} 
-                title={pageTitle} 
-                frameBorder="0" 
+                title={`Видео-обзор: ${pageTitle}`} 
+                className="method-detail__iframe"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
+                sandbox="allow-scripts allow-same-origin" 
               ></iframe>
             </div>
-          </div>
+          </section>
         )}
 
       </div>

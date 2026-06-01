@@ -25,8 +25,8 @@ export default function ClinicDoctors() {
       <div className="container">
         
         <div className="clinic-doctors-page__header">
-          <span className="clinic-subtitle">Команда профессионалов</span>
-          <h1 className="clinic-title">Наши Специалисты</h1>
+
+          <h1 className="clinic-title">Команда профессионалов</h1>
           <div className="clinic-divider"></div>
         </div>
 

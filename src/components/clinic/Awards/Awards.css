@@ -1,0 +1,23 @@
+.clinic-awards { padding: 60px 0; background-color: #fcfbfa; }
+.clinic-awards__header { text-align: center; margin-bottom: 40px; }
+.clinic-awards__title { font-size: 36px; color: #2c2520; font-weight: 700; margin-bottom: 10px; }
+.clinic-awards__subtitle { color: #7a7065; font-size: 16px; }
+
+/* Табы */
+.clinic-awards__tabs { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
+.clinic-awards__tab-btn { padding: 12px 30px; border-radius: 50px; border: 1px solid #2c2520; background: transparent; color: #2c2520; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+.clinic-awards__tab-btn--active, .clinic-awards__tab-btn:hover { background-color: #e3bc72; border-color: #e3bc72; color: #2c2520; }
+
+/* Сетка */
+.clinic-awards__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+.clinic-awards__card { background: #ffffff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); text-align: center; transition: transform 0.3s ease; }
+.clinic-awards__card:hover { transform: translateY(-5px); }
+.clinic-awards__image-wrapper { aspect-ratio: 3 / 4; background-color: #f4f1ea; border-radius: 8px; overflow: hidden; margin-bottom: 15px; cursor: zoom-in; }
+.clinic-awards__img { width: 100%; height: 100%; object-fit: cover; }
+.clinic-awards__card-title { font-size: 15px; color: #2c2520; font-weight: 600; line-height: 1.4; margin: 0; }
+.clinic-awards__empty { grid-column: 1 / -1; text-align: center; color: #7a7065; padding: 40px 0; }
+
+/* Новые стили для скелетонов */
+.clinic-awards__skeleton-card { background: #ffffff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); display: flex; flex-direction: column; gap: 15px; }
+.clinic-awards__skeleton-thumb { aspect-ratio: 3 / 4; background-color: #e5e7eb; border-radius: 8px; width: 100%; }
+.clinic-awards__skeleton-text { background-color: #e5e7eb; height: 18px; border-radius: 4px; width: 80%; margin: 0 auto; }

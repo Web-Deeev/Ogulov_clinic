@@ -22,7 +22,7 @@ export default function DoctorCard({ doctor, isFullWidth = false }) {
         
         <div className="doctor-card__info">
           <span className="doctor-card__role">
-            {doctor.role ? doctor.role : 'Руководитель центра'}
+            {doctor.role ? doctor.role : 'Основатель центра'}
           </span>
           
           <h3 
@@ -57,14 +57,14 @@ export default function DoctorCard({ doctor, isFullWidth = false }) {
   }
 
   // ==========================================================================
-  // ВАРИАНТ 2: СТАНДАРТНАЯ КАРТОЧКА (Рядовые сотрудники)
+  // ВАРИАНТ 2: СТАНДАРТНАЯ КАРТОЧКА 
   // ==========================================================================
   return (
     <div className="doctor-card doctor-card--standard">
       <div className="doctor-card__content-block">
         <div className="doctor-card__text-group">
           <span className="doctor-card__role">
-            {doctor.role ? doctor.role : 'Специалист центра'}
+            {doctor.role ? doctor.role : 'Специалист'}
           </span>
           
           <h3 className="doctor-card__name">

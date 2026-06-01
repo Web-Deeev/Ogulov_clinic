@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { clinicApi } from '../../../api/clinic/clinic'; 
-import GridMethods from './GridMethods.jsx';
+import Slider from '../ui/Slider.jsx'; 
+import MethodCard from '../Methods/MethodCard.jsx'; 
+import BookingModal from '../ui/BookingModal.jsx'; // ИСПРАВЛЕНО: Добавлен импорт модалки
 
 import './PersonalPage.css';
 import '../Methods/CardPage.css'; 
@@ -12,36 +14,53 @@ export default function DoctorPersonalPage() {
   
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isBookingOpen, setIsBookingOpen] = useState(false); // ИСПРАВЛЕНО: Стейт формы записи
 
   useEffect(() => {
-    // DRY: Автоматический скролл наверх теперь под контролем хука ScrollToTop
+    let isCurrentRequest = true; // Защита от Race Condition
     setLoading(true);
 
     clinicApi.getDoctorBySlug(id)
       .then(response => {
-        setDoctor(response.data);
+        if (isCurrentRequest) {
+          setDoctor(response.data);
+        }
       })
       .catch(error => {
         console.error("Ошибка загрузки профиля врача:", error);
-        setDoctor(null);
+        if (isCurrentRequest) {
+          setDoctor(null);
+        }
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        if (isCurrentRequest) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isCurrentRequest = false;
+    };
   }, [id]);
 
-  // JS-предохранитель для парсинга YouTube ссылок (KISS / Defensive Design)
+  // JS-предохранитель для парсинга YouTube ссылок (ИСПРАВЛЕНО: добавлены $ и /embed/)
   const getYouTubeEmbedUrl = (url) => {
     if (!url) return '';
-    // Если в базе лежит только ID (например, "dQw4w9WgXcQ")
-    if (!url.includes('http') && !url.includes('youtube')) {
-      return `https://youtube.com{url.trim()}`;
+    
+    const trimmedUrl = url.trim();
+
+    if (!trimmedUrl.includes('http') && !trimmedUrl.includes('youtube') && !trimmedUrl.includes('youtu.be')) {
+      return `https://youtube.com{trimmedUrl}`;
     }
-    // Если пришла полная ссылка, вырезаем ID через регулярку
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = url.match(regExp);
-    if (match && match[2].length === 11) {
+
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+    const match = trimmedUrl.match(regExp);
+    
+    if (match && match[2] && match[2].length === 11) {
       return `https://youtube.com{match[2]}`;
     }
-    return url; // Фолбэк, если ссылка уже идеально сформирована бэкендом
+    
+    return trimmedUrl;
   };
 
   // 1. Состояние загрузки
@@ -49,7 +68,7 @@ export default function DoctorPersonalPage() {
     return (
       <div className="container" style={{ padding: '60px 0', textAlign: 'center' }}>
         <div style={{ textAlign: 'left', marginBottom: '20px' }}>
-          <button className="method-detail__back-btn" onClick={() => navigate('/clinic/doctors')}>
+          <button type="button" className="method-detail__back-btn" onClick={() => navigate('/clinic/doctors')}>
             <span className="method-detail__back-arrow">&larr;</span> Назад к списку
           </button>
         </div>
@@ -58,40 +77,51 @@ export default function DoctorPersonalPage() {
     );
   }
 
-  // 2. Состояние ошибки 404 (Специалист не найден)
+  // 2. Состояние ошибки 404
   if (!doctor) {
     return (
       <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
         <h2 style={{ color: '#2c2520', marginBottom: '20px' }}>Специалист не найден</h2>
-        <button className="method-detail__back-btn" onClick={() => navigate('/clinic/doctors')}>
+        <button type="button" className="method-detail__back-btn" onClick={() => navigate('/clinic/doctors')}>
           <span className="method-detail__back-arrow">&larr;</span> Вернуться к списку
         </button>
       </div>
     );
   }
 
-  const displayPhoto = doctor.image || 'https://placehold.co';
-
+  // Вычисляемые свойства
+  const hasGalleryPhotos = doctor.gallery && doctor.gallery.length > 0;
+  const displayPhoto = hasGalleryPhotos ? doctor.gallery[0].image : (doctor.image || '');
+  const hasMethods = doctor.methods && doctor.methods.length > 0;
+  const embedVideoUrl = getYouTubeEmbedUrl(doctor.video_url);
   return (
     <section className="doctor-personal-page">
       <div className="container">
         
         {/* 3. Кнопка возврата в основном контенте страницы */}
-        <button className="method-detail__back-btn" onClick={() => navigate('/clinic/doctors')}>
-          <span className="method-detail__back-arrow">&larr;</span> Назад к списку специалистов
+        <button 
+          type="button"
+          className="method-detail__back-btn" 
+          onClick={() => navigate('/clinic/doctors')}
+        >
+          <span className="method-detail__back-arrow" aria-hidden="true">&larr;</span> Назад к списку специалистов
         </button>
 
         {/* Контейнер двух колонок: левая растет, правая — плавает (sticky) */}
         <div className="doctor-personal__main-card">
           
           {/* ЛЕВАЯ КОЛОНКА: Биография */}
-          <div className="doctor-personal__info-block">
+          <article className="doctor-personal__info-block">
             <span className="doctor-personal__badge-role">
-              {doctor.role ? doctor.role : 'Специалист центра'}
+              {doctor.role || 'Специалист центра'}
             </span>
-            <h1 className="doctor-personal__fullname" dangerouslySetInnerHTML={{ __html: doctor.name || 'Специалист центра' }} />
+            
+            <h1 className="doctor-personal__fullname">
+              {doctor.name || 'Специалист центра'}
+            </h1>
+
             {doctor.exp && <span className="doctor-personal__badge-exp">{doctor.exp}</span>}
-            <div className="doctor-personal__divider"></div>
+            <div className="doctor-personal__divider" aria-hidden="true"></div>
             
             <div className="doctor-personal__bio">
               <h2 className="doctor-personal__section-title">Биография и достижения</h2>
@@ -99,42 +129,71 @@ export default function DoctorPersonalPage() {
                 {doctor.full_bio || doctor.desc || 'Информация обновляется...'}
               </p>
             </div>
-          </div>
+          </article>
 
-          {/* ПРАВАЯ КОЛОНКА: Фото (Будет плавать благодаря CSS position: sticky) */}
-          <div className="doctor-personal__photo-block">
-            <div className="doctor-personal__avatar-wrapper">
-              <img src={displayPhoto} alt={doctor.name} className="doctor-personal__avatar" />
+          {/* ПРАВАЯ КОЛОНКА: Фото + Кнопка Записи (Как в методике) */}
+          <aside className="doctor-personal__photo-block">
+            {displayPhoto && (
+              <div className="doctor-personal__avatar-wrapper">
+                <img 
+                  src={displayPhoto} 
+                  alt={doctor.name || 'Доктор'} 
+                  className="doctor-personal__avatar" 
+                  loading="eager" 
+                />
+              </div>
+            )}
+            
+            {/* ИСПРАВЛЕНО: Кнопка добавлена строго под фото в колонку aside */}
+            <div className="doctor-personal__cta-box" style={{ marginTop: '20px' }}>
+              <button 
+                type="button" 
+                className="doctor-personal__cta-btn" 
+                onClick={() => setIsBookingOpen(true)}
+              >
+                Записаться на прием
+              </button>
             </div>
-
-            {/* ИСПРАВЛЕНО: Безопасный JSX-комментарий, сборка Vite больше не упадет */}
-            {/* 
-            <button className="doctor-personal__cta-btn" onClick={() => alert(`Запись к специалисту: ${doctor.name}`)}>
-              Записаться на прием
-            </button>
-            */}
-          </div>
+          </aside>
           
         </div>
 
-        {/* Блок видео (ИСПРАВЛЕН синтаксис шаблона строки и добавлен эмбед-парсер) */}
-        {doctor.video_url && doctor.video_url.trim() !== "" && (
-          <div className="doctor-personal__media-section">
+        {/* УСЛОВНЫЙ РЕНДЕРИНГ: Блок видео отображается только при наличии валидного URL */}
+        {embedVideoUrl && (
+          <section className="doctor-personal__media-section" aria-label="Видео презентация">
             <h2 className="doctor-personal__block-title">Видео со специалистом</h2>
             <div className="doctor-personal__video-box">
               <iframe 
-                src={getYouTubeEmbedUrl(doctor.video_url)} 
-                title={doctor.name} 
-                frameBorder="0" 
+                src={embedVideoUrl} 
+                title={`Видео презентация: ${doctor.name || 'Специалист'}`} 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
+                sandbox="allow-scripts allow-same-origin"
               ></iframe>
             </div>
-          </div>
+          </section>
         )}
 
-        {/* Наш интерактивный слайдер со стрелками принимает массив методик */}
-        <GridMethods methods={doctor.methods} />
+        {/* ИСПРАВЛЕНО / DRY: Чистый вызов универсального бесконечного слайдера */}
+        {hasMethods && (
+          <Slider 
+            items={doctor.methods}
+            title="Практикуемые методики лечения"
+            scrollStep={340}
+            renderItem={(method) => <MethodCard method={method} />}
+          />
+        )}
+
+        {/* ========================================================================= */}
+        {/* ВСТРАИВАЕМ МОДАЛЬНОЕ ОКНО ФОРМЫ (АДАПТИРОВАНО ПОД КЫРГЫЗСТАН)             */}
+        {/* ========================================================================= */}
+        <BookingModal 
+          isOpen={isBookingOpen}
+          onClose={() => setIsBookingOpen(false)}
+          targetName={doctor.name || 'Специалист центра'}
+          targetId={doctor.id}
+          apiEndpoint={clinicApi.createLead}
+        />
 
       </div>
     </section>
