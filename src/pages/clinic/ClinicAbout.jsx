@@ -1,6 +1,11 @@
 import React from 'react';
 import ClinicBanner from '../../components/clinic/ClinicBanner/ClinicBanner';
 import AboutClinic from '../../components/clinic/AboutClinic/AboutClinic';
+// import Header from '../../components/common/Header/Header'
+// import ClinicBanner from '../../components/clinic/ClinicBanner/ClinicBanner'
+// import MethodsSlider from '../../components/clinic/MethodsSlider/MethodsSlider'
+// import AboutClinic from '../../components/clinic/AboutClinic/AboutClinic'
+// import Specialists from '../../components/clinic/Specialists/Specialists'
 
 import './clinic.css';
 
@@ -19,5 +24,12 @@ export default function ClinicAbout() {
       </div>
       
     </div>
+    // <>
+    //   <Header />
+    //   <ClinicBanner />
+    //   <MethodsSlider />
+    //   <AboutClinic />
+    //   <Specialists />
+    // </>
   );
 }
