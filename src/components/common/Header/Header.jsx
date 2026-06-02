@@ -2,15 +2,15 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link'; 
 import './Header.css';
 
-// ВАЖНО: Переводим меню клиники на честные многостраничные роуты из App.jsx
+// Роуты синхронизированы с RouterClinic.jsx
 const clinicMenu = [
-  { title: 'Главная', href: '/clinic/about' }, // Или '/', смотря что считать главной
-  { title: 'О клинике', href: '/clinic/about#about' }, // Плавный скролл к секции "О нас" на странице About
-  { title: 'Специалисты', href: '/clinic/doctors' }, // Честный переход на изолированную страницу врачей
-  { title: 'Методики', href: '/clinic/methods' }, // Переход на страницу методик
-  { title: 'Награды', href: '/clinic/awards' },
-  { title: 'Вопросы-ответы', href: '/clinic/faq' },
-  { title: 'Контакты', href: '/clinic/contacts' },
+  { title: 'Главная', href: '/' }, 
+  { title: 'О клинике', href: '/about' }, 
+  { title: 'Специалисты', href: '/doctors' }, 
+  { title: 'Методики', href: '/methods' }, 
+  { title: 'Награды', href: '/awards' },
+  { title: 'Вопросы-ответы', href: '/faq' },
+  { title: 'Контакты', href: '/contacts' },
 ];
 
 const shopMenu = [
@@ -31,16 +31,20 @@ export default function Header() {
       {/* Верхние табы переключения Клиника / Магазин */}
       <div className="site-tabs">
         <div className="container site-tabs__inner">
+          {/* 
+            ИСПРАВЛЕНО (KISS): Переписали логику классов на чистые строки без деструктуризации ({isActive}).
+            Если мы НЕ в магазине — таб "Клиника" железно активен. Никаких бесконечных рендеров.
+          */}
           <NavLink
-            to="/clinic/about" // Переводим на базовую страницу клиники
-            className={() => !isShop ? 'site-tab site-tab--active' : 'site-tab'}
+            to="/" 
+            className={`site-tab ${!isShop ? 'site-tab--active' : ''}`}
           >
             Клиника
           </NavLink>
 
           <NavLink
             to="/shop"
-            className={() => isShop ? 'site-tab site-tab--active' : 'site-tab'}
+            className={`site-tab ${isShop ? 'site-tab--active' : ''}`}
           >
             Интернет магазин
           </NavLink>
@@ -50,13 +54,13 @@ export default function Header() {
       {/* Центральная часть шапки (Логотип, Контакты) */}
       <div className="site-main-header">
         <div className="container site-main-header__inner">
-          <NavLink to={isShop ? '/shop' : '/clinic/about'} className={isShop ? 'site-logo2' : 'site-logo'}>
+          <NavLink to={isShop ? '/shop' : '/'} className={isShop ? 'site-logo2' : 'site-logo'}>
             <img
               src={isShop ? '/images/shop-logo.png' : '/images/logo.svg'}
               alt={isShop ? 'Интернет магазин' : 'Клиника Огулова'}
             />
             <div className="site-logo__text">
-              {isShop ? '' : 'Клиника Огулова'}
+              {!isShop && 'Клиника Огулова'}
             </div>
           </NavLink>
 
@@ -64,13 +68,13 @@ export default function Header() {
             <div className="site-address">
               <span>Адрес и режим работы</span>
               <div className="site-address__popup">
-                <p>Москва,<br />проспект Маршала Жукова, д. 78<br />корп. 4 и korп. 2</p>
-                <p>Пн-Пт, 10:00-21:00<br />Сб, 10:00-18:00<br />Вс, выходной</p>
+                <p>Бишкек,<br />ул. Исанова, д. 42/1<br />мкр. Джал-23, д. 59</p>
+                <p>Пн-Сб, 09:00-18:00<br />Вс, выходной</p>
               </div>
             </div>
 
-            <a href="tel:+78005504795" className="site-phone">
-              <span>8 800 </span>550-47-95
+            <a href="tel:+996555123456" className="site-phone">
+              <span>+996 </span>(555) 123-456
             </a>
 
             <div className="site-socials">
@@ -83,17 +87,12 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Нижняя навигационная панель */}
+       {/* Нижняя навигационная панель */}
       <nav className="site-nav">
         <div className="container">
           <ul className="site-nav__list">
             {menu.map((item) => (
               <li key={item.title}>
-                {/* 
-                  Если ссылка содержит хэш (например, /clinic/about#about), 
-                  используем HashLink для мягкого скролла. 
-                  В остальных случаях — честный NavLink с подсветкой active-класса.
-                */}
                 {item.href.includes('#') ? (
                   <HashLink
                     smooth
@@ -105,6 +104,7 @@ export default function Header() {
                 ) : (
                   <NavLink
                     to={item.href}
+                    end={item.href === '/'}
                     className={({ isActive }) =>
                       isActive ? 'site-nav__link site-nav__link--active' : 'site-nav__link'
                     }

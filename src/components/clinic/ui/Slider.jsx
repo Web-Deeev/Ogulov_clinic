@@ -1,12 +1,15 @@
 import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
-import './Slider.css'; // Твой файл стилей для ленты и стрелок
+import { Link } from 'react-router-dom'; // КРИТИЧЕСКИ ВАЖНО: Добавили импорт для работы кнопки-ссылки
+import './Slider.css'; 
 
 export default function Slider({ 
   items = [], 
   renderItem, 
   title = "",
-  scrollStep = 340
+  scrollStep = 340,
+  viewAllLink = "", // Пропс ссылки
+  viewAllText = ""  // Пропс текста кнопки
 }) {
   const sliderRef = useRef(null);
 
@@ -19,7 +22,6 @@ export default function Slider({
       const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
       
       if (direction === 'right') {
-        // Защита продакшена: если дошли до правого края (запас < 15px) — плавно прыгаем в начало (0)
         const isEnd = scrollLeft + clientWidth >= scrollWidth - 15;
         
         sliderRef.current.scrollTo({
@@ -27,7 +29,6 @@ export default function Slider({
           behavior: 'smooth'
         });
       } else {
-        // Защита продакшена: если мы у левого края (скролл < 15px) — плавно прыгаем в самый конец
         const isStart = scrollLeft <= 15;
         
         sliderRef.current.scrollTo({
@@ -48,7 +49,7 @@ export default function Slider({
       )}
 
       <div className="universal-slider-wrapper">
-        {/* Левая стрелка: видна всегда, если в массиве больше одного элемента */}
+        {/* Левая стрелка */}
         {items.length > 1 && (
           <button 
             type="button"
@@ -69,7 +70,7 @@ export default function Slider({
           ))}
         </div>
 
-        {/* Правая стрелка: видна всегда, если в массиве больше одного элемента */}
+        {/* Правая стрелка */}
         {items.length > 1 && (
           <button 
             type="button"
@@ -81,13 +82,28 @@ export default function Slider({
           </button>
         )}
       </div>
+
+      {/* 
+        🎯 ИСПРАВЛЕНО (Как на оф. сайте): 
+        Рендерим нижнюю кнопку только если переданы параметры ссылки и текста
+      */}
+      {viewAllLink && viewAllText && (
+        <div className="universal-ribbon-footer" style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+          <Link to={viewAllLink} className="universal-ribbon-view-all-btn">
+            {viewAllText}
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
 
+// ИСПРАВЛЕНО (SOLID/Типизация): Обязательно объявляем новые пропсы в PropTypes
 Slider.propTypes = {
   items: PropTypes.array.isRequired,
   renderItem: PropTypes.func.isRequired,
   title: PropTypes.string,
-  scrollStep: PropTypes.number
+  scrollStep: PropTypes.number,
+  viewAllLink: PropTypes.string,
+  viewAllText: PropTypes.string
 };

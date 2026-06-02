@@ -1,4 +1,5 @@
 import React from 'react';
+<<<<<<< Updated upstream
 // import ClinicBanner from '../../components/clinic/ClinicBanner/ClinicBanner';
 // import AboutClinic from '../../components/clinic/AboutClinic/AboutClinic';
 
@@ -7,11 +8,15 @@ import ClinicBanner from '../../components/clinic/ClinicBanner/ClinicBanner'
 import MethodsSlider from '../../components/clinic/MethodsSlider/MethodsSlider'
 import AboutClinic from '../../components/clinic/AboutClinic/AboutClinic'
 import Specialists from '../../components/clinic/Specialists/Specialists'
+=======
+import AboutClinic from '../../components/clinic/AboutClinic/AboutClinic';
+>>>>>>> Stashed changes
 
 import './clinic.css';
 
 export default function ClinicAbout() {
   return (
+<<<<<<< Updated upstream
     // <div className="clinic-spa-page">
       
     //   {/* Ссылка "Главная" (#hero) ведет на первый экран баннера */}
@@ -32,5 +37,13 @@ export default function ClinicAbout() {
       <AboutClinic />
       <Specialists />
     </>
+=======
+    <div className="clinic-spa-page animate-fade-in">
+      {/* Оставляем только глубокий лонгрид о клинике и методах */}
+      <div id="about">
+        <AboutClinic />
+      </div>
+    </div>
+>>>>>>> Stashed changes
   );
 }

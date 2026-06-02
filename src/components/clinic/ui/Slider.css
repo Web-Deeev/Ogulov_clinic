@@ -252,3 +252,90 @@
     gap: 16px;
   }
 }
+
+
+
+
+/* Шапка секции: жестко центрируем заголовок и линию */
+.universal-ribbon-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-bottom: 35px;
+  width: 100%;
+}
+
+/* Название методики: жирное, крупное и по центру */
+.universal-ribbon-title {
+  font-size: 36px;
+  font-weight: 800; /* Extra Bold жирный шрифт */
+  color: #1a1a1a;
+  margin: 0 0 14px;
+  letter-spacing: -0.5px;
+}
+
+/* Золотая линия под заголовком */
+.universal-ribbon-line {
+  width: 70px;
+  height: 4px;
+  background-color: #ffcd33; /* Фирменный желтый цвет клиники */
+  border-radius: 2px;
+}
+
+/* Контейнер для нижней кнопки */
+.universal-ribbon-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 40px; /* Отступ от карусели до кнопки */
+}
+
+/* Кнопка "Просмотреть все методики" */
+.universal-ribbon-view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 260px;
+  height: 54px;
+  padding: 0 35px;
+  border-radius: 999px; /* Идеально закругленная кнопка капсула */
+  background-color: #ffcd33;
+  color: #151515;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 700; /* Жирный текст */
+  transition: background-color 0.25s, transform 0.25s;
+  box-shadow: 0 4px 10px rgba(255, 205, 51, 0.2);
+}
+
+.universal-ribbon-view-all-btn:hover {
+  background-color: #e6b82e;
+  transform: translateY(-2px); /* Легкий интерактивный подъем */
+  color: #151515;
+}
+
+
+.universal-ribbon-view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 260px;
+  height: 54px;
+  padding: 0 35px;
+  border-radius: 999px; /* Капсульная кнопка */
+  background-color: #ffcd33; /* Желтый фирменный цвет */
+  color: #151515 !important;
+  text-decoration: none !important;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(255, 205, 51, 0.2);
+  transition: background-color 0.25s, transform 0.25s;
+}
+
+.universal-ribbon-view-all-btn:hover {
+  background-color: #e6b82e;
+  transform: translateY(-2px);
+}

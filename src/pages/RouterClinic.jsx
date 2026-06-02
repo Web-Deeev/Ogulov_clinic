@@ -3,10 +3,10 @@ import { Routes, Route } from 'react-router-dom';
 
 // Спускаемся в подпапку clinic
 import ClinicLayout from './clinic/ClinicLayout';
+import ClinicHome from './clinic/ClinicHome';
 import ClinicAbout from './clinic/ClinicAbout';
 import ClinicDoctors from './clinic/ClinicDoctors';
 import ClinicMethods from './clinic/ClinicMethods';
-import ClinicPrices from './clinic/ClinicPrices';
 import ClinicAwards from './clinic/ClinicAwards';
 import ClinicFAQ from './clinic/ClinicFAQ';
 import ClinicContacts from './clinic/ClinicContacts';
@@ -20,7 +20,7 @@ export default function RouterClinic() {
     <Routes>
       <Route element={<ClinicLayout />}>
         {/* Корень раздела клиники */}
-        <Route index element={<ClinicAbout />} />
+        <Route path="/" element={<ClinicHome />} />
         <Route path="about" element={<ClinicAbout />} />
         
         {/* Специалисты */}
@@ -32,7 +32,6 @@ export default function RouterClinic() {
         <Route path="methods/:id" element={<MethodCardPage />} />
      
         {/* Доп. страницы */}
-        <Route path="prices" element={<ClinicPrices />} />
         <Route path="awards" element={<ClinicAwards />} />
         <Route path="faq" element={<ClinicFAQ />} />
         <Route path="contacts" element={<ClinicContacts />} />

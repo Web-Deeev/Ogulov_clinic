@@ -1,0 +1,123 @@
+/* =========================================================================
+   🎯 ГОРИЗОНТАЛЬНЫЙ МИНИ-БАННЕР ВРАЧА (ПРОДАКШН СТИЛЬ)
+   ========================================================================= */
+
+.ogulov-doctor-mini-banner {
+  display: flex;
+  width: 540px; /* Фиксированная ширина мини-баннера в ленте слайдера */
+  height: 260px; /* Жесткая высота, чтобы не ломать Layout-эффекты */
+  background: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.25s ease,
+              border-color 0.25s ease;
+}
+
+/* Мягкий подъем и золотое выделение при наведении */
+.ogulov-doctor-mini-banner:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(26, 26, 26, 0.06);
+  border-color: #ffcd33;
+}
+
+/* Левая текстовая половина (55% ширины) */
+.ogulov-doctor-mini-banner__left {
+  width: 55%;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #ffffff;
+}
+
+/* Категория/Должность */
+.ogulov-doctor-mini-banner__role {
+  font-size: 12px;
+  color: #c99a00;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 6px;
+}
+
+/* ФИО специалиста */
+.ogulov-doctor-mini-banner__name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 10px;
+  line-height: 1.2;
+}
+
+/* Описание строго в 1 предложение */
+.ogulov-doctor-mini-banner__desc {
+  font-size: 14px;
+  color: #555555;
+  line-height: 1.5;
+  margin: 0 0 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Защита от переполнения строки */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Ссылка Подробнее */
+.ogulov-doctor-mini-banner__link {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  color: #1a1a1a;
+  font-weight: 700;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.ogulov-doctor-mini-banner__link span {
+  display: inline-block;
+  margin-left: 4px;
+  transition: transform 0.2s ease;
+}
+
+.ogulov-doctor-mini-banner__link:hover {
+  color: #c99a00;
+}
+
+.ogulov-doctor-mini-banner__link:hover span {
+  transform: translateX(3px);
+}
+
+/* Правая половина с фото (45% ширины) */
+.ogulov-doctor-mini-banner__right {
+  width: 45%;
+  height: 100%;
+  overflow: hidden;
+  background: #f8f9fa;
+}
+
+.ogulov-doctor-mini-banner__right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+/* Мобильный адаптив: превращаем в вертикальную плитку на экранах меньше 600px */
+@media (max-width: 600px) {
+  .ogulov-doctor-mini-banner {
+    width: 290px;
+    height: auto;
+    flex-direction: column-reverse;
+  }
+  .ogulov-doctor-mini-banner__left {
+    width: 100%;
+    padding: 16px;
+  }
+  .ogulov-doctor-mini-banner__right {
+    width: 100%;
+    height: 200px;
+  }
+}
