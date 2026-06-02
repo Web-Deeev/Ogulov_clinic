@@ -43,7 +43,7 @@
   font-size: 17px;
   font-weight: 500;
   color: #2c2520;
-  border-left: 3px solid #e3bc72;
+  border-left: 3px solid #ffcd33;
   padding-left: 15px;
 }
 
@@ -81,7 +81,7 @@
   border-radius: 50px;
   border: 1px solid #2c2520;
   background-color: transparent;
-  color: #2c2520;
+  color: #131312;
   font-weight: 600;
   font-size: 15px;
   text-decoration: none;
@@ -90,7 +90,7 @@
 }
 
 .about-official__method-btn:hover {
-  background-color: #2c2520;
+  background-color: #ffcd33;
   color: #ffffff;
   transform: translateX(4px); /* Интерактивный сдвиг вправо по стрелке */
 }
@@ -189,8 +189,8 @@
   border: none;
   
   /* ИСПРАВЛЕНО: Кнопка изначально фирменного золотисто-желтого цвета */
-  background-color: #e3bc72 !important; /* !important гарантирует применение цвета */
-  color: #2c2520 !important; /* Контрастный темно-кофейный текст */
+  background-color: #ffcd33 !important; /* !important гарантирует применение цвета */
+  color: #ffcd33 !important; /* Контрастный темно-кофейный текст */
   
   /* Типографика и UX */
   font-weight: 600;
@@ -208,7 +208,7 @@
 
 /* ИСПРАВЛЕНО: При наведении плавно перетекает в глубокий черный с белыми буквами */
 .about-official__method-action .about-official__btn-yellow:hover {
-  background-color: #000000 !important; /* Перекрашиваем в черный при ховере */
+  background-color: #ffcd33 !important; /* Перекрашиваем в черный при хovере */
   color: #ffffff !important; /* Буквы загораются белым */
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
   transform: translateY(-2px); /* Благородный микроподъем */
@@ -217,7 +217,7 @@
 /* Активное состояние при физическом клике (нажатии) */
 .about-official__method-action .about-official__btn-yellow:active {
   transform: translateY(0);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 3px 10px rgba(255, 205, 51, 0.1);
 }
 
 

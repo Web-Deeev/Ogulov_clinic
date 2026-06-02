@@ -6,7 +6,7 @@
 /* Табы */
 .clinic-awards__tabs { display: flex; justify-content: center; gap: 20px; margin-bottom: 40px; }
 .clinic-awards__tab-btn { padding: 12px 30px; border-radius: 50px; border: 1px solid #2c2520; background: transparent; color: #2c2520; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
-.clinic-awards__tab-btn--active, .clinic-awards__tab-btn:hover { background-color: #e3bc72; border-color: #e3bc72; color: #2c2520; }
+.clinic-awards__tab-btn--active, .clinic-awards__tab-btn:hover { background-color: #ffcd33; border-color: #e3bc72; color: #2c2520; }
 
 /* Сетка */
 .clinic-awards__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }

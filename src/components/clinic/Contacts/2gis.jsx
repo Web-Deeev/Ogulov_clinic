@@ -10,14 +10,19 @@ const BRANCH_COORDINATES = {
   zapad: [42.841512, 74.564756]
 };
 
-export default function TwoGisMap({ activeBranch }) {
+// 🎯 ДОБАВИЛИ ПРОПС height СО ЗНАЧЕНИЕМ ПО УМОЛЧАНИЮ 450
+export default function TwoGisMap({ activeBranch, height = 450 }) {
   // Извлекаем координаты или берем дефолтный Восток
   const currentCoords = BRANCH_COORDINATES[activeBranch] || BRANCH_COORDINATES.vostok;
 
   return (
-    <div className="w-full h-[450px] rounded-2xl overflow-hidden shadow-md border border-gray-100 bg-gray-50">
+    /* 🎯 ФИКС: Убрали класс h-[450px] и передаем высоту динамически через style */
+    <div 
+      className="w-full rounded-2xl overflow-hidden shadow-md border border-gray-100 bg-gray-50"
+      style={{ height: `${height}px` }} 
+    >
       <Map 
-        height={450} 
+        height={height} // 🎯 Передаем высоту внутрь холста библиотеки pigeon-maps
         center={currentCoords} 
         defaultZoom={16}
         metaWheelZoom={false} // Защита: карта не будет зумиться случайно при скролле страницы

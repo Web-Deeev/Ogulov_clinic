@@ -1,12 +1,15 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import './Slider.css'; // Твой файл стилей для ленты и стрелок
+import './Slider.css'; 
 
 export default function Slider({ 
   items = [], 
   renderItem, 
   title = "",
-  scrollStep = 340
+  scrollStep = 340,
+  viewAllLink = "", 
+  viewAllText = "Посмотреть все"
 }) {
   const sliderRef = useRef(null);
 
@@ -19,17 +22,13 @@ export default function Slider({
       const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
       
       if (direction === 'right') {
-        // Защита продакшена: если дошли до правого края (запас < 15px) — плавно прыгаем в начало (0)
         const isEnd = scrollLeft + clientWidth >= scrollWidth - 15;
-        
         sliderRef.current.scrollTo({
           left: isEnd ? 0 : scrollLeft + scrollStep,
           behavior: 'smooth'
         });
       } else {
-        // Защита продакшена: если мы у левого края (скролл < 15px) — плавно прыгаем в самый конец
         const isStart = scrollLeft <= 15;
-        
         sliderRef.current.scrollTo({
           left: isStart ? scrollWidth : scrollLeft - scrollStep,
           behavior: 'smooth'
@@ -48,7 +47,7 @@ export default function Slider({
       )}
 
       <div className="universal-slider-wrapper">
-        {/* Левая стрелка: видна всегда, если в массиве больше одного элемента */}
+        {/* Левая стрелка */}
         {items.length > 1 && (
           <button 
             type="button"
@@ -69,7 +68,7 @@ export default function Slider({
           ))}
         </div>
 
-        {/* Правая стрелка: видна всегда, если в массиве больше одного элемента */}
+        {/* Правая стрелка */}
         {items.length > 1 && (
           <button 
             type="button"
@@ -81,6 +80,18 @@ export default function Slider({
           </button>
         )}
       </div>
+
+      {/* ЧЕСТНАЯ КНОПКА ПОД СЛАЙДЕРОМ — ЧИСТЫЕ СЕМАНТИЧЕСКИЕ КЛАССЫ */}
+      {viewAllLink && (
+        <div className="universal-slider-action">
+          <Link 
+            to={`/clinic${viewAllLink}`} 
+            className="universal-slider-view-all-btn"
+          >
+            {viewAllText}
+          </Link>
+        </div>
+      )}
     </div>
   );
 }
@@ -89,5 +100,7 @@ Slider.propTypes = {
   items: PropTypes.array.isRequired,
   renderItem: PropTypes.func.isRequired,
   title: PropTypes.string,
-  scrollStep: PropTypes.number
+  scrollStep: PropTypes.number,
+  viewAllLink: PropTypes.string,
+  viewAllText: PropTypes.string
 };

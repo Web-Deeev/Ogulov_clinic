@@ -86,7 +86,7 @@
   font-size: 13px;
   font-weight: 700;
   color: #2c2520;
-  background-color: #e3bc72;
+  background-color: #ffcd33;
   text-decoration: none;
   border-radius: 50px;
   transition: all 0.3s ease;
@@ -103,13 +103,28 @@
 /* ==========================================================================
    БАЗОВЫЙ КОНТЕЙНЕР СТАНДАРТНОЙ КАРТОЧКИ
    ========================================================================== */
-.doctor-card--standard {
+
+section.doctors-section {
+  background-color: #e8e4dc; /* Теплый молочный оттенок клиники Огулова */
+  padding: 60px 0;           /* Отступы сверху и снизу, чтобы контент не прилипал */
+}
+
+/* Сетка-контейнер, которая выстраивает карточки в ряд */
+.doctors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Авто-выравнивание колонок */
+  gap: 24px;                                                    /* Расстояние между карточками */
+}
+
+
+
+   .doctor-card--standard {
   display: flex;
   flex-direction: column-reverse; /* Мобилки: сначала текст, снизу фото */
   border: 1px solid #e8e4dc;
   border-radius: 8px;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: #e8e4dc;
   height: auto;
   transition: box-shadow 0.2s ease;
 }
@@ -235,7 +250,7 @@
   font-size: 13px;
   font-weight: 700;                 
   color: #2c2520 !important;        
-  background-color: #e3bc72;        /* Фирменный золотисто-желтый фон */
+  background-color: #ffcd33;        /* Фирменный золотисто-желтый фон */
   text-align: center;
   text-decoration: none;
   border: none !important;          
@@ -435,7 +450,7 @@
 /* Фирменная золотая плашка стажа */
 .doctor-card--fullwidth .doctor-card__exp {
   color: #000000 !important; /* Контрастный темный текст */
-  background-color: #e3bc72 !important; /* Фирменное золото клиники */
+  background-color: #ffcd33 !important; /* Фирменное золото клиники */
   padding: 6px 14px;
   border-radius: 4px;
   font-size: 13px;
@@ -474,8 +489,8 @@
 
 /* Фирменная золотая капсульная кнопка подробнее */
 .doctor-card--fullwidth .doctor-card__more-btn {
-  background-color: #e3bc72 !important; 
-  border: 1px solid #e3bc72 !important; 
+  background-color: #ffcd33 !important; 
+  border: 1px solid #ffcd33 !important; 
   color: #2c2520 !important; 
   padding: 13px 40px;
   font-size: 14px;

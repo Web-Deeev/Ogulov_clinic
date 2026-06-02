@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { clinicApi } from '../../../api/clinic/clinic'; 
 import Slider from '../ui/Slider.jsx'; 
 import MethodCard from '../Methods/MethodCard.jsx'; 
-import BookingModal from '../ui/BookingModal.jsx'; // ИСПРАВЛЕНО: Добавлен импорт модалки
+import BookingModal from '../ui/BookingModal.jsx';
 
 import './PersonalPage.css';
 import '../Methods/CardPage.css'; 
@@ -14,20 +14,33 @@ export default function DoctorPersonalPage() {
   
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isBookingOpen, setIsBookingOpen] = useState(false); // ИСПРАВЛЕНО: Стейт формы записи
+  const [isBookingOpen, setIsBookingOpen] = useState(false);
 
   useEffect(() => {
     let isCurrentRequest = true; // Защита от Race Condition
     setLoading(true);
 
-    clinicApi.getDoctorBySlug(id)
+    // 🎯 SENIOR-ФИКС: Проверяем, пришли ли в параметре только цифры (переход с главной по ID)
+    const isNumericId = /^\d+$/.test(id);
+
+    // Если пришла цифра, ищем доктора по ID в общем списке (чтобы не переписывать бэк)
+    // Если пришел текст, делаем прямой запрос по слагу
+    const apiCall = isNumericId 
+      ? clinicApi.getDoctors().then(res => {
+          const dataArray = res?.data?.results || res?.data || res;
+          const found = dataArray.find(doc => String(doc.id) === String(id));
+          return found ? { data: found } : Promise.reject("Специалист с таким ID не найден");
+        })
+      : clinicApi.getDoctorBySlug(id);
+
+    apiCall
       .then(response => {
         if (isCurrentRequest) {
           setDoctor(response.data);
         }
       })
       .catch(error => {
-        console.error("Ошибка загрузки профиля врача:", error);
+        console.error("Ошибка загрузки profile врача:", error);
         if (isCurrentRequest) {
           setDoctor(null);
         }
@@ -43,7 +56,7 @@ export default function DoctorPersonalPage() {
     };
   }, [id]);
 
-  // JS-предохранитель для парсинга YouTube ссылок (ИСПРАВЛЕНО: добавлены $ и /embed/)
+  // 🎯 ИСПРАВЛЕНО: Исправлен синтаксис косых кавычек для интерполяции строк в JS
   const getYouTubeEmbedUrl = (url) => {
     if (!url) return '';
     
@@ -94,6 +107,7 @@ export default function DoctorPersonalPage() {
   const displayPhoto = hasGalleryPhotos ? doctor.gallery[0].image : (doctor.image || '');
   const hasMethods = doctor.methods && doctor.methods.length > 0;
   const embedVideoUrl = getYouTubeEmbedUrl(doctor.video_url);
+
   return (
     <section className="doctor-personal-page">
       <div className="container">
@@ -107,7 +121,7 @@ export default function DoctorPersonalPage() {
           <span className="method-detail__back-arrow" aria-hidden="true">&larr;</span> Назад к списку специалистов
         </button>
 
-        {/* Контейнер двух колонок: левая растет, правая — плавает (sticky) */}
+        {/* Контейнер двух колонок */}
         <div className="doctor-personal__main-card">
           
           {/* ЛЕВАЯ КОЛОНКА: Биография */}
@@ -120,7 +134,7 @@ export default function DoctorPersonalPage() {
               {doctor.name || 'Специалист центра'}
             </h1>
 
-            {doctor.exp && <span className="doctor-personal__badge-exp">{doctor.exp}</span>}
+            {doctor.exp && <span className="doctor-personal__badge-exp">{doctor.exp} лет</span>}
             <div className="doctor-personal__divider" aria-hidden="true"></div>
             
             <div className="doctor-personal__bio">
@@ -131,7 +145,7 @@ export default function DoctorPersonalPage() {
             </div>
           </article>
 
-          {/* ПРАВАЯ КОЛОНКА: Фото + Кнопка Записи (Как в методике) */}
+          {/* ПРАВАЯ КОЛОНКА: Фото + Кнопка Записи */}
           <aside className="doctor-personal__photo-block">
             {displayPhoto && (
               <div className="doctor-personal__avatar-wrapper">
@@ -144,7 +158,6 @@ export default function DoctorPersonalPage() {
               </div>
             )}
             
-            {/* ИСПРАВЛЕНО: Кнопка добавлена строго под фото в колонку aside */}
             <div className="doctor-personal__cta-box" style={{ marginTop: '20px' }}>
               <button 
                 type="button" 
@@ -158,7 +171,7 @@ export default function DoctorPersonalPage() {
           
         </div>
 
-        {/* УСЛОВНЫЙ РЕНДЕРИНГ: Блок видео отображается только при наличии валидного URL */}
+        {/* Блок видео */}
         {embedVideoUrl && (
           <section className="doctor-personal__media-section" aria-label="Видео презентация">
             <h2 className="doctor-personal__block-title">Видео со специалистом</h2>
@@ -174,19 +187,18 @@ export default function DoctorPersonalPage() {
           </section>
         )}
 
-        {/* ИСПРАВЛЕНО / DRY: Чистый вызов универсального бесконечного слайдера */}
+        {/* Слайдер методик */}
         {hasMethods && (
-          <Slider 
-            items={doctor.methods}
-            title="Практикуемые методики лечения"
-            scrollStep={340}
-            renderItem={(method) => <MethodCard method={method} />}
-          />
+            <Slider 
+              items={doctor.methods || []} 
+              title="Практикуемые методики лечения"
+              scrollStep={340}
+              viewAllLink="/methods" 
+              renderItem={(method) => <MethodCard method={method} />}
+            />
         )}
 
-        {/* ========================================================================= */}
-        {/* ВСТРАИВАЕМ МОДАЛЬНОЕ ОКНО ФОРМЫ (АДАПТИРОВАНО ПОД КЫРГЫЗСТАН)             */}
-        {/* ========================================================================= */}
+        {/* Модальное окно формы */}
         <BookingModal 
           isOpen={isBookingOpen}
           onClose={() => setIsBookingOpen(false)}

@@ -6,10 +6,10 @@ import ClinicLayout from './clinic/ClinicLayout';
 import ClinicAbout from './clinic/ClinicAbout';
 import ClinicDoctors from './clinic/ClinicDoctors';
 import ClinicMethods from './clinic/ClinicMethods';
-import ClinicPrices from './clinic/ClinicPrices';
 import ClinicAwards from './clinic/ClinicAwards';
 import ClinicFAQ from './clinic/ClinicFAQ';
 import ClinicContacts from './clinic/ClinicContacts';
+import ClinicHome from './clinic/ClinicHome';
 
 // Поднимаемся на уровень выше и идем в components
 import PersonalPage from '../components/clinic/Doctors/PersonalPage';
@@ -19,8 +19,11 @@ export default function RouterClinic() {
   return (
     <Routes>
       <Route element={<ClinicLayout />}>
-        {/* Корень раздела клиники */}
-        <Route index element={<ClinicAbout />} />
+        {/* Главная страница: открывается по корню (/clinic) и по честному роуту (/clinic/home) */}
+        <Route index element={<ClinicHome />} />
+        <Route path="home" element={<ClinicHome />} />
+        
+        {/* Страница "О клинике" */}
         <Route path="about" element={<ClinicAbout />} />
         
         {/* Специалисты */}
@@ -32,7 +35,6 @@ export default function RouterClinic() {
         <Route path="methods/:id" element={<MethodCardPage />} />
      
         {/* Доп. страницы */}
-        <Route path="prices" element={<ClinicPrices />} />
         <Route path="awards" element={<ClinicAwards />} />
         <Route path="faq" element={<ClinicFAQ />} />
         <Route path="contacts" element={<ClinicContacts />} />

@@ -96,7 +96,7 @@
 }
 
 .doctor-methods-native-slider::-webkit-scrollbar-thumb {
-  background: #e3bc72;
+  background: #ffcd33;
   border-radius: 10px;
 }
 
@@ -231,7 +231,7 @@
 }
 
 .universal-native-slider::-webkit-scrollbar-thumb {
-  background: #e3bc72;
+  background: #ffcd33;
   border-radius: 10px;
 }
 
@@ -251,4 +251,73 @@
   .universal-native-slider {
     gap: 16px;
   }
+}
+ 
+
+
+/* Контейнер для центрирования кнопки под слайдером */
+.universal-slider-action {
+  text-align: center;
+  margin-top: 35px;
+}
+
+/* ФИРМЕННАЯ КНОПКА КЛИНИКИ ОГУЛОВА */
+.universal-slider-view-all-btn {
+  display: inline-block;
+  padding: 12px 45px;
+  background-color: transparent;
+  border: 2px solid #2c2520;
+  color: #2c2520;
+  
+  /* ЖЕСТКАЯ КАЛИБРОВКА ПОД ОФИЦИАЛЬНЫЙ САЙТ: */
+  /* Меняем 8px на 30px, чтобы форма стала полностью круглой капсулой (Pill-shaped) */
+  border-radius: 30px; 
+  
+  font-weight: 500;
+  text-transform: uppercase; 
+  font-size: 0.85rem;
+  letter-spacing: 1px; 
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+
+/* ФИРМЕННЫЙ ХОВЕР С ПЛАВНЫМ ПЕРЕХОДОМ В ЗОЛОТО */
+.universal-slider-view-all-btn:hover {
+  background-color: #ffcd33; /* Плавная заливка вашим фирменным золотом */
+  border-color: #ffcd33;
+  color: #2c2520; /* Текст остается читаемым темным */
+  transform: translateY(-2px); /* Легкий микро-интерактив */
+  box-shadow: 0 4px 12px rgba(255, 205, 51, 0.2); /* Мягкое золотое свечение */
+}
+
+/* Активное состояние при клике */
+.universal-slider-view-all-btn:active {
+  transform: translateY(0);
+}
+
+
+/* Центрируем всю шапку слайдера (Заголовок + декоративная линия под ним) */
+.universal-ribbon-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Центрирует элементы по горизонтали внутри флекс-контейнера */
+  text-align: center;  /* Центрирует сам текст заголовка */
+  margin-bottom: 30px; /* Отступ от заголовка до ленты слайдера */
+}
+
+/* Стилизация самого заголовка */
+.universal-ribbon-title {
+  color: #2c2520;      /* Твой фирменный глубокий кофейный цвет */
+  font-size: 1.8rem;   /* Коммерческий десктопный размер */
+  font-weight: 600;
+  margin: 0 0 10px 0;  /* Небольшой отступ вниз до линии */
+}
+
+/* Фирменная линия под заголовком (если используется в верстке оригинала) */
+.universal-ribbon-line {
+  width: 60px;         /* Короткая аккуратная линия по центру */
+  height: 3px;
+  background-color: #ffcd33; /* Твой фирменный золотой цвет */
+  border-radius: 2px;
 }

@@ -8,7 +8,8 @@ export const clinicApi = {
   getMethodBySlug: (slug) => api.get(`clinic/methods/${slug}/`),
   getAwards: () => api.get('clinic/awards/'),
   getClinicGallery: () => api.get('clinic/clinic-gallery/'),
-
+  getBannerSlides: () => api.get('clinic/banner/'),
+  getClinicAbout: () => api.get('clinic/clinic-info/'),
   createLead: (data) => api.post('clinic/leads/', data),
   
 };

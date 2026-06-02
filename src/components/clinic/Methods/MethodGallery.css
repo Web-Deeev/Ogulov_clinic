@@ -30,7 +30,7 @@
 .method-detail__badge {
   display: inline-block;
   align-self: flex-start;
-  background-color: #e3bc72;
+  background-color: #ffcd33;
   color: #1a1512;
   padding: 6px 14px;
   border-radius: 20px;
@@ -93,7 +93,7 @@
 
 .method-detail__cta-btn {
   width: 100%;
-  background-color: #e3bc72;
+  background-color: #ffcd33;
   color: #1a1512;
   border: none;
   padding: 16px 32px;
@@ -102,13 +102,13 @@
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 12px rgba(227, 188, 114, 0.2);
+  box-shadow: 0 4px 12px rgba(255, 205, 51, 0.2);
 }
 
 .method-detail__cta-btn:hover {
-  background-color: #d4ae65;
+  background-color: #ffcd33;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(227, 188, 114, 0.35);
+  box-shadow: 0 6px 20px rgba(255, 205, 51, 0.35);
 }
 
 /* ==========================================================================
@@ -131,7 +131,7 @@
 .method-gallery-title-line {
   width: 60px;
   height: 3px;
-  background-color: #e3bc72;
+  background-color: #ffcd33;
   margin-bottom: 24px;
 }
 
@@ -244,7 +244,7 @@
 }
 
 .method-lightbox-close:hover {
-  color: #e3bc72;
+  color: #ffcd33;
 }
 
 .method-lightbox-arrow {
@@ -264,7 +264,7 @@
 }
 
 .method-lightbox-arrow:hover {
-  color: #e3bc72;
+  color: #ffcd33;
 }
 
 .method-lightbox-arrow:active {
@@ -319,7 +319,7 @@
 }
 
 .method-detail__back-btn:hover {
-  color: #e3bc72;
+  color: #ffcd33;
 }
 
 @keyframes fadeIn {

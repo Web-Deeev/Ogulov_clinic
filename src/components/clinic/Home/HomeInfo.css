@@ -1,0 +1,198 @@
+/* src/components/home/AboutClinic/AboutClinic.css */
+
+.about-clinic {
+  padding: 90px 0;
+  background: #f5f5f5;
+}
+
+.about-clinic__grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 70px;
+  align-items: start;
+}
+
+.about-clinic__content {
+  max-width: 620px;
+  text-align: center;
+}
+
+.about-clinic__content h2 {
+  margin-bottom: 30px;
+  font-size: 48px;
+  line-height: 1;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #1f1f1f;
+}
+
+.about-clinic__content p {
+  margin-bottom: 12px;
+  font-size: 16px;
+  line-height: 25px;
+  font-weight: 500;
+  color: #1f1f1f;
+}
+
+.about-clinic__doctor {
+  margin-top: 36px;
+}
+
+.about-clinic__doctor img {
+  width: 190px;
+  height: 190px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 26px;
+}
+
+.about-clinic__doctor h3 {
+  margin-bottom: 15px;
+  font-size: 21px;
+  font-weight: 900;
+  color: #1f1f1f;
+}
+
+.about-clinic__doctor p {
+  margin-bottom: 45px;
+  font-size: 14px;
+  line-height: 19px;
+  font-weight: 300;
+  color: #707070;
+}
+
+.about-clinic__link {
+  display: inline-block;
+  margin-top: 30px;
+  color: #111;
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-bottom: 2px solid #111;
+  transition: 0.3s;
+}
+
+.about-clinic__link:hover {
+  opacity: 0.7;
+}
+
+.about-clinic__gallery {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-clinic__video {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.about-clinic__video img {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  display: block;
+}
+
+.about-clinic__video-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 240px;
+  height: 240px;
+  transform: translate(-50%, -50%);
+  background: rgba(242, 191, 36, 0.88);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  transition: 0.3s;
+}
+
+.about-clinic__video:hover
+  .about-clinic__video-overlay {
+  background: rgba(242, 191, 36, 0.96);
+}
+
+.about-clinic__play {
+  width: 82px;
+  height: 82px;
+  border: 2px solid #111;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 34px;
+  margin-bottom: 20px;
+}
+
+.about-clinic__video-overlay span {
+  color: #111;
+  font-size: 21px;
+  line-height: 1.5;
+  font-weight: 700;
+}
+
+.about-clinic__photos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+}
+
+.about-clinic__photos img {
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  display: block;
+}
+
+@media (max-width: 1200px) {
+  .about-clinic__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-clinic__content {
+    max-width: 100%;
+  }
+
+  .about-clinic__gallery {
+    max-width: 700px;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-clinic {
+    padding: 60px 0;
+  }
+
+  .about-clinic__content h2 {
+    font-size: 42px;
+  }
+
+  .about-clinic__doctor h3 {
+    font-size: 30px;
+  }
+
+  .about-clinic__content p,
+  .about-clinic__doctor p {
+    font-size: 16px;
+  }
+
+  .about-clinic__video img {
+    height: 420px;
+  }
+
+  .about-clinic__video-overlay {
+    width: 190px;
+    height: 190px;
+  }
+
+  .about-clinic__photos img {
+    height: 140px;
+  }
+}

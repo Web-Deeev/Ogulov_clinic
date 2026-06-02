@@ -4,8 +4,8 @@ import './Header.css';
 
 // ВАЖНО: Переводим меню клиники на честные многостраничные роуты из App.jsx
 const clinicMenu = [
-  { title: 'Главная', href: '/clinic/about' }, // Или '/', смотря что считать главной
-  { title: 'О клинике', href: '/clinic/about#about' }, // Плавный скролл к секции "О нас" на странице About
+  { title: 'Главная', href: '/clinic' },
+  { title: 'О клинике', href: '/clinic/about' }, // Плавный скролл к секции "О нас" на странице About
   { title: 'Специалисты', href: '/clinic/doctors' }, // Честный переход на изолированную страницу врачей
   { title: 'Методики', href: '/clinic/methods' }, // Переход на страницу методик
   { title: 'Награды', href: '/clinic/awards' },
@@ -32,7 +32,7 @@ export default function Header() {
       <div className="site-tabs">
         <div className="container site-tabs__inner">
           <NavLink
-            to="/clinic/about" // Переводим на базовую страницу клиники
+            to="/clinic" // Переводим на базовую страницу клиники
             className={() => !isShop ? 'site-tab site-tab--active' : 'site-tab'}
           >
             Клиника
@@ -50,7 +50,7 @@ export default function Header() {
       {/* Центральная часть шапки (Логотип, Контакты) */}
       <div className="site-main-header">
         <div className="container site-main-header__inner">
-          <NavLink to={isShop ? '/shop' : '/clinic/about'} className={isShop ? 'site-logo2' : 'site-logo'}>
+          <NavLink to={isShop ? '/shop' : '/clinic'} className={isShop ? 'site-logo2' : 'site-logo'}>
             <img
               src={isShop ? '/images/shop-logo.png' : '/images/logo.svg'}
               alt={isShop ? 'Интернет магазин' : 'Клиника Огулова'}

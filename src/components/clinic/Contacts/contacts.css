@@ -43,13 +43,13 @@
 }
 
 .contacts-tab-btn:hover {
-  border-color: #e3bc72;
-  color: #e3bc72;
+  border-color: #ffcd33;
+  color: #ffcd33;
 }
 
 .contacts-tab-btn--active {
-  background-color: #e3bc72 !important;
-  border-color: #e3bc72 !important;
+  background-color: #ffcd33 !important;
+  border-color: #ffcd33 !important;
   color: #2c2520 !important;
 }
 
@@ -69,7 +69,7 @@
 .contacts-label {
   font-size: 12px;
   font-weight: 700;
-  color: #9c846b;
+  color: #070707;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -89,7 +89,7 @@
 }
 
 .contacts-link:hover {
-  color: #e3bc72;
+  color: #ffcd33;
 }
 
 /* Кнопка навигатора 2ГИС */
@@ -101,8 +101,8 @@
   padding: 8px 16px;
   font-size: 14px;
   font-weight: 600;
-  color: #2c2520;
-  background-color: #e8e4dc;
+  color: #0a0a0a;
+  background-color: #ffcd33;
   border-radius: 6px;
   text-decoration: none;
   width: fit-content;
@@ -110,7 +110,7 @@
 }
 
 .contacts-navi-btn:hover {
-  background-color: #e3bc72;
+  background-color: #ffcd33;
 }
 
 /* ==========================================================================
