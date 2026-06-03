@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom'; // Добавили Navigate для редиректа
 
 // Спускаемся в подпапку clinic
 import ClinicLayout from './clinic/ClinicLayout';
@@ -18,8 +18,10 @@ import MethodCardPage from '../components/clinic/Methods/CardPage';
 export default function RouterClinic() {
   return (
     <Routes>
-      {/* 🎯 ФИКС: Оставляем базовый путь пустым (так как App.jsx уже ловит /*),
-          но все дочерние роуты прописываем через честный префикс clinic/ */}
+      {/* 🎯 РЕДИРЕКТ С КОРНЯ: если пользователь зашел просто на сайт, 
+          автоматически перекидываем его на /clinic */}
+      <Route path="/" element={<Navigate to="/clinic" replace />} />
+
       <Route element={<ClinicLayout />}>
         
         {/* Главная страница клиники (откроется по адресу /clinic) */}

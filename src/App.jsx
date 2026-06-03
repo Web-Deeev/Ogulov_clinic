@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom'; // Заменили BrowserRouter на HashRouter
 
 // Импорт роутера из папки pages без лишней вложенности
 import RouterClinic from './pages/RouterClinic';
