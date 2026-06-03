@@ -406,7 +406,7 @@ h1, h2, h3 {
 }
 
 .shop-categories-bar {
-  background: #f0b400;
+  background: #ffcd33;
 }
 
 .shop-categories-inline {
@@ -471,7 +471,7 @@ h1, h2, h3 {
 }
 
 .shop-apply-btn {
-  background: #f0b400;
+  background: #ffcd33;
   color: #fff;
   border: none;
   padding: 10px 16px;
@@ -542,7 +542,7 @@ h1, h2, h3 {
 
 .shop-product-price {
   margin-top: 10px;
-  color: #e0a100;
+  color: #ffcd33;
   font-size: 24px;
   font-weight: 700;
 }
@@ -670,7 +670,7 @@ h1, h2, h3 {
 } */
 
 .shop-menu {
-  background: #f7b900;
+  background: #ffcd33;
 }
 
 .shop-menu-list {
@@ -769,7 +769,7 @@ h1, h2, h3 {
 }
 
 .shop-product-price {
-  color: #f0ad00;
+  color: #ffcd33;
   font-size: 16px;
   font-weight: 700;
 }

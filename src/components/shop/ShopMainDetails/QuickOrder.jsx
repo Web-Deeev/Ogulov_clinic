@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { ShopContext } from '../ShopMainDetails/ShopContext.jsx'; // 🟢 ДОБАВЛЕНО: Подключаем ядро контекста
+import { createPortal } from 'react-dom'; // 🎯 ДОБАВЛЕНО: импортируем портал React
+import { ShopContext } from '../ShopMainDetails/ShopContext.jsx';
 import shopService from '@/api/shop';
 
 export function QuickOrderModal({ id, title, onClose }) {
-  // 🟢 ДОБАВЛЕНО: Извлекаем профиль залогиненного пациента и статус авторизации
   const { userProfile, isAuthenticated } = useContext(ShopContext);
 
   const [fastName, setFastName] = useState('');
@@ -12,16 +12,11 @@ export function QuickOrderModal({ id, title, onClose }) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [apiError, setApiError] = useState(null);
 
-  // =========================================================================
-  // 🎯 АВТОМАТИЧЕСКИЙ ПОДТЯГ ДАННЫХ ПРОФИЛЯ ПРИ ОТКРЫТИИ (KISS-ГИДРАТАЦИЯ)
-  // =========================================================================
   useEffect(() => {
     if (isAuthenticated && userProfile) {
-      // Собираем полное имя, убирая лишние пробелы
       const fullName = `${userProfile.first_name || ''} ${userProfile.last_name || ''}`.trim();
       setFastName(fullName || userProfile.username || '');
       
-      // Форматируем телефон под строгий Kyrgyzstan-мапинг
       let rawPhone = userProfile.phone || '';
       if (rawPhone) {
         const cleanRaw = rawPhone.replace(/\s+/g, '');
@@ -37,8 +32,15 @@ export function QuickOrderModal({ id, title, onClose }) {
   }, [userProfile, isAuthenticated]);
 
   const handlePhoneChange = (e) => {
-    const value = e.target.value;
-    if (!value.startsWith('+996 ')) return;
+    let value = e.target.value;
+    if (!value.startsWith('+996')) {
+      setFastPhone('+996 ');
+      return;
+    }
+    if (value === '+996') {
+      setFastPhone('+996 ');
+      return;
+    }
     setFastPhone(value);
   };
 
@@ -65,25 +67,20 @@ export function QuickOrderModal({ id, title, onClose }) {
       });
 
       setIsSuccess(true);
-      // Очищаем форму только для гостей, для авторизованных оставляем данные на месте
       if (!isAuthenticated) {
         setFastName('');
         setFastPhone('+996 ');
       }
-
       setTimeout(() => {
         onClose();
       }, 3000);
-
     } catch (err) {
       console.error('Ошибка при отправке быстрого заказа:', err);
       const serverErrors = err.response?.data;
-      
       if (serverErrors && typeof serverErrors === 'object') {
         const djangoPhoneError = serverErrors.phone?.[0];
         const djangoNameError = serverErrors.customer_name?.[0] || serverErrors.name?.[0];
         const djangoGeneralError = serverErrors.detail;
-        
         setApiError(djangoPhoneError || djangoNameError || djangoGeneralError || 'Не удалось отправить заявку.');
       } else {
         setApiError('Не удалось связаться с сервером клиники. Проверьте сеть.');
@@ -92,10 +89,12 @@ export function QuickOrderModal({ id, title, onClose }) {
       setIsSubmitting(false);
     }
   };
-  return (
+
+  // 🎯 РЕНДЕР ЧЕРЕЗ ПОРТАЛ: Выносим разметку в корень страницы <body>
+  return createPortal(
     <div 
       className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center" 
-      style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1060 }}
+      style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999 }} // Подняли z-index, чтобы перекрыть всё
       onClick={() => !isSubmitting && onClose()}
     >
       <div 
@@ -103,7 +102,6 @@ export function QuickOrderModal({ id, title, onClose }) {
         style={{ width: '100%', maxWidth: '360px', position: 'relative' }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* КНОПКА КРЕСТИКА Х */}
         <button 
           type="button"
           className="position-absolute border-0 bg-transparent fs-4 text-muted" 
@@ -119,19 +117,16 @@ export function QuickOrderModal({ id, title, onClose }) {
           <p className="text-muted small">Оставьте контактные данные, менеджер клиники перезвонит вам</p>
         </div>
 
-        {/* ПРЕВЬЮ НАЗВАНИЯ ТОВАРА */}
         <div className="p-2 bg-light rounded text-center small mb-3 text-truncate fw-semibold border text-secondary" title={title}>
           📦 {title}
         </div>
 
-        {/* ЭКРАН УСПЕШНОГО СОХРАНЕНИЯ В СУБД */}
         {isSuccess ? (
           <div className="alert alert-success text-center py-4 rounded-3 mb-0" role="alert">
             <h6 className="fw-bold mb-1 fs-6">🎉 Заявка принята!</h6>
             <p className="small mb-0 text-muted">Менеджер клиники Огулова скоро свяжется с вами.</p>
           </div>
         ) : (
-          /* ИНТЕРФЕЙС ФОРМЫ ВВОД ДАННЫХ */
           <form onSubmit={handleFastSubmit}>
             {apiError && <div className="alert alert-danger py-2 small rounded-2 mb-2">⚠️ {apiError}</div>}
 
@@ -161,7 +156,6 @@ export function QuickOrderModal({ id, title, onClose }) {
               />
             </div>
 
-            {/* ДИНАМИЧЕСКАЯ КНОПКА С КРУТИЛКОЙ ЗАГРУЗКИ */}
             <button 
               type="submit" 
               className="btn btn-sm w-100 fw-bold py-2 text-white border-0 rounded-3 d-flex align-items-center justify-content-center shadow-sm" 
@@ -178,6 +172,7 @@ export function QuickOrderModal({ id, title, onClose }) {
           </form>
         )}
       </div>
-    </div>
+    </div>,
+    document.body // Перенаправляем рендер на тег body
   );
 }

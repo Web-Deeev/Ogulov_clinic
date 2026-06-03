@@ -24,6 +24,7 @@ export default function ProductCard({ product }) {
 
   const displayPrice = formatted_price || `${cleanPrice.toLocaleString('ru-RU')} сом`;
   const displayOldPrice = formatted_old_price || (cleanOldPrice ? `${cleanOldPrice.toLocaleString('ru-RU')} сом` : null);
+
   return (
     <div className="shop-product-card-container d-flex flex-column h-100 card border-light-subtle shadow-sm rounded-4 p-3" style={{ position: 'relative' }}>
       
@@ -88,7 +89,11 @@ export default function ProductCard({ product }) {
             type="button" 
             className="btn btn-link p-0 text-decoration-none small fw-bold" 
             style={{ color: '#d9a74a', fontSize: '0.82rem' }} 
-            onClick={() => setShowFastModal(true)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation(); // 🎯 ФИКС: Событие клика изолировано, карточка и её ховер-эффекты больше не дёргаются
+              setShowFastModal(true);
+            }}
           >
             ⚡ Купить в 1 клик
           </button>

@@ -37,8 +37,9 @@ export default function RouterShop() {
   return (
     <ShopProvider>
       <Routes>
-        {/* КОРЕНЬ МАГАЗИНА */}
-        <Route path="/" element={<ShopPage />}>
+        {/* 🎯 СЕНИОР-ФИКС: Меняем path="/" на path="/*", чтобы роутер хэша 
+            корректно прокидывал ссылки из хедера внутрь корневой страницы магазина */}
+        <Route path="/*" element={<ShopPage />}>
           
           {/* Витрина общего каталога */}
           <Route index element={<ShopProductsTab />} />
@@ -46,10 +47,7 @@ export default function RouterShop() {
           
           <Route path="catalog/:categorySlug" element={<ShopProductsTab />} />
           
-          {/* 
-            СТРОГИЙ МАРШРУТ ДЕТАЛЬНОЙ СТРАНИЦЫ ТОВАРА:
-            При переходе на /product/pvvk роутер однозначно вызовет ShopProductPage.
-          */}
+          {/* Страница детального просмотра товара */}
           <Route path="product/:id" element={<ShopProductPage />} />
           
           {/* Корзина, Избранное и Оформление заказа */}
@@ -85,8 +83,9 @@ export default function RouterShop() {
           <Route path="payment" element={<ShopPayment />} />
           <Route path="contacts" element={<ShopContacts />} />
 
-          {/* Редирект на главную витрину для битых URL */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* 🎯 СЕНИОР-ФИКС: Заменяем жесткий редирект на чистый Navigate to=""
+              чтобы не зацикливать роутер на пустом слэше */}
+          <Route path="*" element={<Navigate to="" replace />} />
         </Route>
       </Routes>
     </ShopProvider>

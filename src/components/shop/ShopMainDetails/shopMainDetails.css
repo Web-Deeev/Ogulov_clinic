@@ -219,7 +219,7 @@
 
 /* Ссылка быстрой покупки в 1 клик */
 .shop-fast-buy-link {
-  color: #d9a74a !important; /* Фирменное золото Огулова */
+  color: #ffcd33 !important; /* Фирменное золото Огулова */
   font-size: 0.82rem !important;
   font-weight: 700 !important;
   background: transparent !important;
@@ -300,7 +300,7 @@
 
 /* Маленькие стрелочки карусели снизу */
 .shop-mini-arrow {
-  background-color: #ffffff !important;
+  background-color: #ffcd33 !important;
   border: 1px solid #dee2e6 !important;
   color: #495057 !important;
   width: 28px !important;

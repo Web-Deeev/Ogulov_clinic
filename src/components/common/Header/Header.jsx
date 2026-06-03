@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom'; // Импортируем чистый Link
 import { HashLink } from 'react-router-hash-link'; 
 import './Header.css';
 
@@ -22,7 +22,9 @@ const shopMenu = [
 
 export default function Header() {
   const { pathname } = useLocation();
-  const isShop = pathname.startsWith('/shop');
+  
+  // 🎯 СЕНИОР-ФИКС ДЛЯ HASHROUTER: Проверяем и pathname, и реальный хэш в адресной строке
+  const isShop = pathname.startsWith('/shop') || window.location.hash.startsWith('#/shop');
 
   const menu = isShop ? shopMenu : clinicMenu;
 
@@ -50,7 +52,17 @@ export default function Header() {
       {/* Центральная часть шапки (Логотип, Контакты) */}
       <div className="site-main-header">
         <div className="container site-main-header__inner">
-          <NavLink to={isShop ? '/shop' : '/clinic'} className={isShop ? 'site-logo2' : 'site-logo'}>
+          
+          {/* 🎯 СЕНИОР-ФИКС: Прописываем пути в 'to' строго с учетом хэша через '#' 
+              и добавляем принудительный сброс стейта роутера */}
+          <Link 
+            to={isShop ? '/shop/' : '/clinic'} 
+            className={isShop ? 'site-logo2' : 'site-logo'}
+            onClick={() => {
+              // Явно выставляем хэш для браузера
+              window.location.hash = isShop ? '#/shop/' : '#/clinic';
+            }}
+          >
             <img
               src={isShop ? '/images/shop-logo.png' : '/images/logo.svg'}
               alt={isShop ? 'Интернет магазин' : 'Клиника Огулова'}
@@ -58,7 +70,7 @@ export default function Header() {
             <div className="site-logo__text">
               {isShop ? '' : 'Клиника Огулова'}
             </div>
-          </NavLink>
+          </Link>
 
           <div className="site-header-info">
             <div className="site-address">
@@ -89,11 +101,6 @@ export default function Header() {
           <ul className="site-nav__list">
             {menu.map((item) => (
               <li key={item.title}>
-                {/* 
-                  Если ссылка содержит хэш (например, /clinic/about#about), 
-                  используем HashLink для мягкого скролла. 
-                  В остальных случаях — честный NavLink с подсветкой active-класса.
-                */}
                 {item.href.includes('#') ? (
                   <HashLink
                     smooth

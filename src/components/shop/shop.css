@@ -295,7 +295,7 @@
 
 /* 1. Возвращаем сочный песочно-желтый фон для строки категорий (Строка 2) */
 .shop-menu-row {
-  background-color: #d9a74a !important; /* Тот самый фирменный золотой цвет Огулов Центра */
+  background-color: #ffcd33 !important; /* Тот самый фирменный золотой цвет Огулов Центра */
   padding: 8px 0 !important;            /* Комфортные отступы сверху и снизу */
   margin-top: 10px !important;          /* Отступ от первой строки с логотипом */
   border-top: 1px solid rgba(0, 0, 0, 0.05) !important;
@@ -341,7 +341,7 @@
 
 /* 3. Стиль АКТИВНОЙ (выбранной) категории */
 .shop-menu-btn.active {
-  background-color: #b8852b !important; /* Более глубокий, благородный оттенок золота при нажатии */
+  background-color: #ffcd33 !important; /* Более глубокий, благородный оттенок золота при нажатии */
   color: #ffffff !important;
   font-weight: 600 !important;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15) !important; /* Эффект утопленной кнопки */
@@ -379,8 +379,8 @@
 .shop-cart, 
 .btn-shop-cart-header {
   padding: 10px 20px !important;
-  background-color: #d9a74a !important; /* Базовый цвет — фирменный песочно-желтый */
-  border: 1px solid #d9a74a !important;  /* Желтая рамка */
+  background-color: #ffcd33 !important; /* Базовый цвет — фирменный песочно-желтый */
+  border: 1px solid #ffcd33 !important;  /* Желтая рамка */
   color: #ffffff !important;             /* Контрастный белый текст и счетчик */
   font-weight: 600 !important;
   border-radius: 4px !important;
