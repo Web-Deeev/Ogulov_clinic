@@ -4,15 +4,15 @@ import './MethodsSlider.css'
 
 function MethodCard({ item }) {
   return (
-    <a href={item.link} className="method-card">
+    <a href={item.link} className="method-card2">
       <div
-        className="method-card__image"
+        className="method-card2__image"
         style={{
           backgroundImage: `url(${item.image})`,
         }}
       />
 
-      <div className="method-card__body">
+      <div className="method-card2__body">
         <h3>{item.title}</h3>
         <p>{item.text}</p>
       </div>

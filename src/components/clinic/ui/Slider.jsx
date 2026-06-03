@@ -37,6 +37,17 @@ export default function Slider({
     }
   };
 
+  // 🎯 СМАРТ-ХЕЛПЕР (Фикс дублирования путей):
+  // Проверяем, если ссылка уже абсолютная или содержит префикс /clinic, не трогаем её.
+  // Иначе — мягко подставляем базовый роут клиники.
+  const getCorrectLink = (link) => {
+    if (!link) return "";
+    if (link.startsWith('/clinic') || link.startsWith('/shop') || link.startsWith('http')) {
+      return link;
+    }
+    return `/clinic${link}`;
+  };
+
   return (
     <div className="universal-ribbon-section">
       {title && (
@@ -81,11 +92,11 @@ export default function Slider({
         )}
       </div>
 
-      {/* ЧЕСТНАЯ КНОПКА ПОД СЛАЙДЕРОМ — ЧИСТЫЕ СЕМАНТИЧЕСКИЕ КЛАССЫ */}
+      {/* ЧЕСТНАЯ КНОПКА ПОД СЛАЙДЕРОМ — ТЕПЕРЬ С ПУЛЕНЕПРОБИВАЕМЫМ РОУТИНГОМ */}
       {viewAllLink && (
         <div className="universal-slider-action">
           <Link 
-            to={`/clinic${viewAllLink}`} 
+            to={getCorrectLink(viewAllLink)} // 🎯 Применяем наш смарт-хелпер
             className="universal-slider-view-all-btn"
           >
             {viewAllText}

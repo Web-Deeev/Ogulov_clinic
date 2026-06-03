@@ -16,7 +16,6 @@ function App() {
         
         {/* Все остальные медицинские пути */}
         <Route path="/*" element={<RouterClinic />} />
-        <Route path="/clinic/*" element={<RouterClinic />} />
       </Routes>
     </Router>
   );

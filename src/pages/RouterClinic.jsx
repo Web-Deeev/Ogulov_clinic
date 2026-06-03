@@ -18,26 +18,23 @@ import MethodCardPage from '../components/clinic/Methods/CardPage';
 export default function RouterClinic() {
   return (
     <Routes>
+      {/* 🎯 ФИКС: Оставляем базовый путь пустым (так как App.jsx уже ловит /*),
+          но все дочерние роуты прописываем через честный префикс clinic/ */}
       <Route element={<ClinicLayout />}>
-        {/* Главная страница: открывается по корню (/clinic) и по честному роуту (/clinic/home) */}
-        <Route index element={<ClinicHome />} />
-        <Route path="home" element={<ClinicHome />} />
         
-        {/* Страница "О клинике" */}
-        <Route path="about" element={<ClinicAbout />} />
+        {/* Главная страница клиники (откроется по адресу /clinic) */}
+        <Route path="clinic" element={<ClinicHome />} />
         
-        {/* Специалисты */}
-        <Route path="doctors" element={<ClinicDoctors />} />
-        <Route path="doctors/:id" element={<PersonalPage />} />
-
-        {/* Методики */}
-        <Route path="methods" element={<ClinicMethods />} />
-        <Route path="methods/:id" element={<MethodCardPage />} />
-     
-        {/* Доп. страницы */}
-        <Route path="awards" element={<ClinicAwards />} />
-        <Route path="faq" element={<ClinicFAQ />} />
-        <Route path="contacts" element={<ClinicContacts />} />
+        {/* 🎯 СИНХРОНИЗАЦИЯ С ШАПКОЙ (Фикс белого экрана): символ в символ */}
+        <Route path="clinic/about" element={<ClinicAbout />} />
+        <Route path="clinic/doctors" element={<ClinicDoctors />} />
+        <Route path="clinic/doctors/:id" element={<PersonalPage />} />
+        <Route path="clinic/methods" element={<ClinicMethods />} />
+        <Route path="clinic/methods/:id" element={<MethodCardPage />} />
+        <Route path="clinic/awards" element={<ClinicAwards />} />
+        <Route path="clinic/faq" element={<ClinicFAQ />} />
+        <Route path="clinic/contacts" element={<ClinicContacts />} />
+        
       </Route>
     </Routes>
   );

@@ -81,12 +81,20 @@
   flex-direction: column;
 }
 
+
+
+
+/* ==========================================================================
+   РОДНОЙ СТАБИЛЬНЫЙ CSS ГАЛЕРЕИ КЛИНИКИ (ФОТО БОЛЬШЕ НЕ ГИГАНТСКИЕ)
+   ========================================================================== */
+
 .about-clinic__video {
-  position: relative;
+  position: relative !important; /* Важно для удержания иконки в углу */
   cursor: pointer;
   overflow: hidden;
 }
 
+/* Возвращаем твою родную фиксированную высоту большой фотки */
 .about-clinic__video img {
   width: 100%;
   height: 520px;
@@ -94,56 +102,14 @@
   display: block;
 }
 
-.about-clinic__video-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 240px;
-  height: 240px;
-  transform: translate(-50%, -50%);
-  background: rgba(242, 191, 36, 0.88);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  text-align: center;
-  transition: 0.3s;
-}
-
-.about-clinic__video:hover
-  .about-clinic__video-overlay {
-  background: rgba(242, 191, 36, 0.96);
-}
-
-.about-clinic__play {
-  width: 82px;
-  height: 82px;
-  border: 2px solid #111;
-  border-radius: 50%;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 34px;
-  margin-bottom: 20px;
-}
-
-.about-clinic__video-overlay span {
-  color: #111;
-  font-size: 21px;
-  line-height: 1.5;
-  font-weight: 700;
-}
-
+/* 🟢 ТВОЯ РОДНАЯ СЕТКА 4-Х НИЖНИХ ФОТОГРАФИЙ (ВСТАЛИ НА МЕСТО) */
 .about-clinic__photos {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0;
 }
 
+/* Возвращаем твою родную высоту маленьких фоток */
 .about-clinic__photos img {
   width: 100%;
   height: 190px;
@@ -151,48 +117,163 @@
   display: block;
 }
 
+/* ==========================================================================
+   АККУРАТНАЯ СМАРТ-КНОПКА YOUTUBE В ЛЕВОМ НИЖНЕМ УГЛУ
+   ========================================================================== */
+.about-clinic__youtube-float-btn {
+  position: absolute !important;
+  bottom: 24px !important;  /* Отступ от нижнего края большой фотки */
+  left: 24px !important;    /* Отступ от левого края большой фотки */
+  
+  top: auto !important;
+  transform: none !important;
+
+  /* Компактный аккуратный размер кружка */
+  width: 54px !important;
+  height: 54px !important;
+  
+  /* Эффект матового премиум-золота (Glassmorphism) */
+  background: rgba(242, 191, 36, 0.85) !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  
+  border-radius: 50% !important;
+  
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  z-index: 10;
+}
+
+/* Темная SVG-иконка Ютуба внутри кружка */
+.about-clinic__youtube-float-btn svg {
+  width: 24px;
+  height: 24px;
+  color: #111111;
+}
+
+/* Интерактивный ховер-эффект при наведении */
+.about-clinic__video:hover .about-clinic__youtube-float-btn {
+  background: #ffcd33 !important; /* Яркое золото при наведении */
+  transform: scale(1.08) !important; /* Легкое приятное увеличение */
+  box-shadow: 0 8px 24px rgba(242, 191, 36, 0.4);
+}
+
+/* ==========================================================================
+   РОДНОЙ МЕДИА-АДАПТИВ
+   ========================================================================== */
 @media (max-width: 1200px) {
-  .about-clinic__grid {
-    grid-template-columns: 1fr;
-  }
-
-  .about-clinic__content {
-    max-width: 100%;
-  }
-
-  .about-clinic__gallery {
-    max-width: 700px;
-  }
+  .about-clinic__grid { grid-template-columns: 1fr; }
+  .about-clinic__content { max-width: 100%; }
+  .about-clinic__gallery { max-width: 700px; }
 }
 
 @media (max-width: 768px) {
-  .about-clinic {
-    padding: 60px 0;
+  .about-clinic { padding: 60px 0; }
+  .about-clinic__content h2 { font-size: 42px; }
+  .about-clinic__doctor h3 { font-size: 30px; }
+  .about-clinic__content p, .about-clinic__doctor p { font-size: 16px; }
+  
+  .about-clinic__video img { height: 420px; }
+  .about-clinic__photos img { height: 140px; }
+  
+  .about-clinic__youtube-float-btn {
+    width: 46px !important;
+    height: 46px !important;
+    bottom: 16px !important;
+    left: 16px !important;
   }
-
-  .about-clinic__content h2 {
-    font-size: 42px;
+  .about-clinic__youtube-float-btn svg {
+    width: 20px;
+    height: 20px;
   }
+}
 
-  .about-clinic__doctor h3 {
+
+
+
+
+
+/* ==========================================================================
+   СТИЛИ МОДАЛЬНОГО ОКНА ДЛЯ ОНЛАЙН ПЛЕЕРА YOUTUBE
+   ========================================================================== */
+
+/* Общий темный оверлей на весь экран */
+.about-clinic__video-modal {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(17, 17, 17, 0.85); /* Глубокое затемнение */
+  backdrop-filter: blur(8px); /* Размываем сайт под видео */
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999; /* Железно поверх шапки сайта и всех компонентов */
+  animation: fadeInModal 0.25s ease-out;
+}
+
+/* Тело модального окна */
+.video-modal__body {
+  position: relative;
+  width: 90%;
+  max-width: 960px; /* Идеальный размер для HD видео */
+  background: #000000;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+}
+
+/* Кнопка "Закрыть" (Крестик) */
+.video-modal__close-btn {
+  position: absolute;
+  top: -45px;
+  right: -10px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 36px;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 1;
+}
+
+.video-modal__close-btn:hover {
+  color: #ffcd33; /* Твое фирменное золото при наведении */
+}
+
+/* Пуленепробиваемый контейнер под пропорции видео 16:9 (Responsive iframe) */
+.video-modal__iframe-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* Соотношение сторон 16:9 */
+  height: 0;
+  overflow: hidden;
+}
+
+.video-modal__iframe-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Анимация плавного появления */
+@keyframes fadeInModal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Корректировка крестика на мобилках */
+@media (max-width: 768px) {
+  .video-modal__close-btn {
+    top: -40px;
+    right: 5px;
     font-size: 30px;
-  }
-
-  .about-clinic__content p,
-  .about-clinic__doctor p {
-    font-size: 16px;
-  }
-
-  .about-clinic__video img {
-    height: 420px;
-  }
-
-  .about-clinic__video-overlay {
-    width: 190px;
-    height: 190px;
-  }
-
-  .about-clinic__photos img {
-    height: 140px;
   }
 }

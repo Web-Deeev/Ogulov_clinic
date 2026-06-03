@@ -1,0 +1,269 @@
+.about-official-intro {
+  padding: 60px 0;
+  background-color: #ffffff;
+}
+
+/* Настоящая сетка 50/50 по заветам SOLID */
+.about-official__grid-50-50 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: start;
+}
+
+.about-official__content-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.about-official__title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+}
+
+.about-official__subtitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+.about-official__paragraph {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4a4a4a;
+  margin-bottom: 16px;
+}
+
+.about-official__paragraph--highlight {
+  background-color: #f9f6fa; /* Легкий фирменный оттенок под текст */
+  border-left: 4px solid #ffcd33;
+  padding: 16px;
+  border-radius: 0 8px 8px 0;
+}
+
+/* Направления работы */
+.about-official__directions-box {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.about-official__directions-intro {
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.about-official__directions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.about-official__directions-list li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.about-official__directions-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #ffcd33;
+  font-weight: bold;
+}
+
+/* Кнопка */
+.about-official__method-btn {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 12px;
+  color: #ffcd33;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.about-official__method-btn:hover {
+  transform: translateX(4px);
+}
+
+/* Правая колонка и липкий Sticky-эффект */
+.about-official__content-right {
+  position: sticky;
+  top: 100px; /* Фиксируется при скролле с отступом от шапки */
+  width: 100%;
+}
+
+.about-official__sticky-image-box {
+  width: 100%;
+  height: 600px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+}
+
+.about-official__main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.about-official__main-img:hover {
+  transform: scale(1.02);
+}
+
+/* Мобильная адаптивность */
+@media (max-width: 992px) {
+  .about-official__grid-50-50 {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .about-official__content-right {
+    position: static;
+  }
+  .about-official__sticky-image-box {
+    height: 350px;
+  }
+}
+
+
+/* 1. В сетке меняем align-items с start на stretch (это заставит обе колонки быть одинаковой высоты по вертикали) */
+.about-official__grid-50-50 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: stretch; /* Обязательно stretch! Колонки станут равны по высоте */
+}
+
+/* 2. Правой колонке даем flex, чтобы внутренний бокс заполнил всю высоту вертикали */
+.about-official__content-right {
+  position: sticky;
+  top: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 100px); /* Учитываем отступ sticky, чтобы не ломать высоту */
+}
+
+/* 3. Убираем жесткий хардкод высоты (600px) и заставляем бокс тянуться на 100% от родительской колонки */
+.about-official__sticky-image-box {
+  width: 100%;
+  height: 100%; /* Занимает всю доступную высоту вертикали */
+  flex-grow: 1; /* Растягивается на максимум */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+}
+
+/* 4. Картинка теперь гарантированно заполнит весь бокс без искажения пропорций */
+.about-official__main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Картинка заполнит блок, аккуратно подрезавшись по краям */
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+
+
+
+/* Контейнер оверлея над картинкой */
+.about-clinic__video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(43, 37, 33, 0.1) 60%);
+  
+  /* 🟢 Смещаем контент в нижний левый угол */
+  display: flex;
+  flex-direction: row;       /* Ставим иконку и текст в один ряд */
+  justify-content: flex-start; /* Прижимаем к левому краю */
+  align-items: flex-end;      /* Прижимаем к нижнему краю */
+  
+  padding: 24px;             /* Отступы от краев в нижнем левом углу */
+  gap: 16px;                 /* Расстояние между иконкой ▶ и текстом */
+  box-sizing: border-box;
+}
+
+/* Круглая кнопка PLAY */
+.about-clinic__video-overlay .play-button {
+  width: 48px !important;    /* Чуть уменьшаем размер для угла */
+  height: 48px !important;
+  background-color: #ffffff;
+  color: #a47bb0;            /* Твой фирменный цвет клиники */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;            /* Чтобы кружок не сжимался */
+  margin-bottom: 0 !important; /* Сбрасываем старый нижний отступ */
+}
+
+/* Текст «Смотреть презентацию» */
+.about-clinic__video-overlay span {
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding-bottom: 12px;      /* Выравниваем визуально по центру кружка */
+}
+
+/* Эффект при наведении на весь баннер */
+.about-official__main-img-wrapper:hover .about-clinic__video-overlay {
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(43, 37, 33, 0.2) 60%);
+}
+
+.about-official__main-img-wrapper:hover .play-button {
+  transform: scale(1.05);
+  transition: transform 0.2s ease;
+}
+/* ==========================================================================
+   ФИРМЕННАЯ КНОПКА-КАПСУЛА (СИНХРОНИЗИРОВАНО С DOCTOR CARD)
+   ========================================================================== */
+.about-official__method-btn {
+  display: inline-block;
+  margin-top: 28px;
+  padding: 10px 28px;
+  
+  font-size: 13px;
+  font-weight: 700;                 
+  color: #2c2520 !important;        /* Темные буквы по умолчанию */
+  background-color: #ffcd33;        /* Фирменный золотисто-желтый фон */
+  
+  text-align: center;
+  text-decoration: none;
+  border: none !important;          
+  
+  /* 🟢 КАПСУЛА: Идеальное скругление по заветам консистентности */
+  border-radius: 50px !important;   
+  
+  transition: all 0.25s ease;
+  cursor: pointer;
+  width: fit-content;
+}
+
+/* Эффект наведения (hover) — Полная инверсия по твоему гайдлайну */
+.about-official__method-btn:hover {
+  background-color: #2c2520 !important; /* При наведении плавно чернеет */
+  color: #ffffff !important;            /* Буквы становятся белыми */
+  transform: translateY(-1px);          /* Легкий микро-отклик */
+}
+
+/* Клик */
+.about-official__method-btn:active {
+  transform: translateY(0);
+}
