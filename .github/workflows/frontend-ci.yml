@@ -1,0 +1,32 @@
+name: React Frontend CI
+
+# Робот запускается при отправке кода в ветки main или master
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Шаг 1: Скачиваем код фронтенда
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    # Шаг 2: Включаем Node.js версии 20 (движок для сборки React)
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+
+    # Шаг 3: Быстро устанавливаем все библиотеки из package.json
+    - name: Install dependencies
+      run: npm ci
+
+    # Шаг 4: Проверяем, собирается ли проект на Vite командой npm run build
+    - name: Build project
+      run: npm run build
