@@ -134,7 +134,7 @@ export default function DoctorPersonalPage() {
               {doctor.name || 'Специалист центра'}
             </h1>
 
-            {doctor.exp && <span className="doctor-personal__badge-exp">{doctor.exp} лет</span>}
+            {doctor.exp && <span className="doctor-personal__badge-exp">{doctor.exp}</span>}
             <div className="doctor-personal__divider" aria-hidden="true"></div>
             
             <div className="doctor-personal__bio">
