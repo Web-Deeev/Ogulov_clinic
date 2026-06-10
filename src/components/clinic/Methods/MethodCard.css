@@ -160,3 +160,35 @@
   height: 100% !important;
   z-index: 1 !important;
 }
+
+
+/* ==========================================================================
+   ФИКС ГЕОМЕТРИИ КАРТОЧКИ ВНУТРИ СЛАЙДЕРА НА ГЛАВНОЙ
+   ========================================================================== */
+
+/* Жестко фиксируем ширину карточки внутри карусели, чтобы флекс её не сжимал */
+.universal-native-slide .method-card {
+  width: 320px !important;
+  min-width: 320px !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+/* Растягиваем контентную плашку по высоте */
+.universal-native-slide .method-card__content {
+  flex-grow: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+/* Принудительно отображаем 3 строки краткого описания в слайдере */
+.universal-native-slide .method-card__desc {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
