@@ -1,0 +1,27 @@
+/* Находим класс описания внутри карточки */
+.method-card__desc {
+  font-size: 14px;
+  color: #4a5568;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  line-height: 1.5;
+  
+  /* 🎯 СЕНЬОР-ФИКС: Жестко заставляем отображать 3-4 строки в любом месте сайта */
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Показываем ровно 3 строки (или поставьте 4) */
+  -webkit-box-orient: vertical;  
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  /* Защита: убираем фиксированную высоту, если она была, чтобы текст не скрывался полностью */
+  height: auto; 
+}
+
+/* Проверяем контентный блок карточки */
+.method-card__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-grow: 1;
+  padding: 16px;
+}

@@ -213,7 +213,7 @@
 .shop-card-counter-wrapper .counter-value {
   font-weight: 700 !important;
   font-size: 14px !important;
-  color: #070707 !important;              
+  color: #e5ff00 !important;              
   user-select: none !important;
 }
 
@@ -565,7 +565,7 @@
   border: 2px solid #007bff !important;   /* Синяя рамка */
   border-radius: 10px !important;         
   padding: 0 15px !important;
-  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.06) !important;
+  box-shadow: 0 4px 10px rgba(255, 238, 0, 0.281) !important;
   user-select: none !important;
   width: auto !important;                 /* Отменяем растягивание на всю ширину */
 }
@@ -629,4 +629,40 @@
   display: flex !important;
   flex-direction: column !important;
   height: 100% !important;
+}
+
+
+/* Плавный эффект ховера для иконки лайка */
+.shop-product-card-container:hover .shop-card-favorite-btn svg {
+  stroke: #d9a74a; /* Контур становится золотым при наведении на карточку */
+}
+
+/* Если товар уже в избранном, ховер не перебивает красный цвет */
+.shop-product-card-container:hover .shop-card-favorite-btn svg[fill="#dc3545"] {
+  stroke: #dcbd35;
+}
+
+/* Элегантное легкое масштабирование картинки товара при ховере на саму карточку */
+.shop-card-image-link .shop-product-img {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.shop-product-card-container:hover .shop-product-img {
+  transform: scale(1.04);
+}
+
+
+/* Базовый transition для картинки товара */
+.shop-card-image-link .shop-product-img {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+/* При наведении на карточку картинка упруго увеличивается на 4% */
+.shop-product-card-container:hover .shop-product-img {
+  transform: scale(1.04);
+}
+
+/* Подсветка золотом клиники контура пустого сердечка при ховере на саму карточку */
+.shop-product-card-container:hover .shop-card-favorite-btn svg[fill="none"] {
+  stroke: #d9a74a;
 }

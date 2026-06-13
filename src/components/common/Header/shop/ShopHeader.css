@@ -1,0 +1,197 @@
+/* ==========================================================================
+   ФИНАЛЬНЫЕ СТИЛИ ШАПКИ МАГАЗИНА (ShopHeader.css)
+   ========================================================================== */
+
+.shop-header {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #dee2e6 !important;
+  width: 100% !important;
+}
+
+.shop-header-top-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-top: 15px !important;
+  padding-bottom: 15px !important;
+  gap: 15px !important;
+}
+
+.shop-sub-logo-link {
+  display: block !important;
+  text-decoration: none !important;
+}
+
+.shop-logo-img {
+  transition: transform 0.2s ease !important;
+}
+
+.shop-logo-img:hover {
+  transform: scale(1.02) !important;
+}
+
+.shop-center {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  flex-grow: 1 !important;
+  max-width: 600px !important;
+}
+
+.shop-info-menu {
+  display: flex !important;
+  gap: 20px !important;
+}
+
+.shop-info-menu a {
+  font-size: 0.88rem !important;
+  color: #495057 !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+  transition: color 0.2s ease !important;
+}
+
+.shop-info-menu a:hover,
+.shop-info-menu a.shop-active {
+  color: #198754 !important;
+}
+
+.shop-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+}
+
+.shop-cart {
+  background-color: #198754 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  transition: all 0.2s ease !important;
+  white-space: nowrap !important;
+}
+
+/* ==========================================================================
+   ЭТАЛОННАЯ СЕТКА КАТЕГОРИЙ (ОДИН В ОДИН КАК НА ШОП.ОГУЛОВ.КОМ)
+   ========================================================================== */
+/* 1. Внешняя обертка — ТЕПЕРЬ СЖАТА СТРОГО ПО ШИРИНЕ БАННЕРА */
+/* =========================================================================
+   🎯 СЕНЬОР-ФИКС: Идеальная подгонка полосы под ширину и геометрию баннера
+   ========================================================================= */
+
+/* =========================================================================
+   🎯 СЕНЬОР-ФИКС: Расширяем полосу категорий точно по границам баннера
+   ========================================================================= */
+
+/* 1. Внешняя обертка — теперь полностью подстраивается под ширину карусели */
+.shop-menu-container {
+  width: 100% !important;
+  /* 🎯 ИСПРАВЛЕНО: Увеличиваем до 1320px (размер стандартного контейнера Bootstrap),
+     чтобы полоса могла свободно расшириться до реальных краев баннера */
+  max-width: 1320px !important;    
+  background-color: #ffc107 !important; 
+  margin: 0 auto 16px auto !important; /* Центрируем полосу на экране */
+  padding: 0 !important;          
+  border-radius: 6px !important;   
+  border: 1px solid rgba(0, 0, 0, 0.04) !important; 
+  overflow: hidden !important;     
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important; 
+}
+
+/* 2. Внутренний ряд — убираем боковые отступы, которые зажимали ячейки внутри */
+.shop-menu-row {
+  background: transparent !important; 
+  width: 100% !important;
+  margin: 0 !important;       
+  /* 🎯 ИСПРАВЛЕНО: Ставим padding: 0, чтобы крайние кнопки прилипали ровно к углам полосы */
+  padding: 0 !important;      
+}
+
+/* 3. Список категорий */
+.shop-menu-list {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important; /* Растягивает элементы от края до края на всю ширину */
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 100% !important;
+}
+
+/* 4. Ячейка пункта меню (разделители) */
+.shop-menu-item {
+  /* 🎯 ИСПРАВЛЕНО: Разрешаем ячейкам немного растягиваться, если на экране есть свободное место,
+     чтобы тёмные разделители равномерно заполнили всю ширину баннера */
+  flex: 1 0 auto !important; 
+  width: auto !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+.shop-menu-item:last-child {
+  border-right: none !important;
+}
+
+/* 5. Кнопка категории — многострочная, по ширине букв */
+.shop-menu-btn {
+  color: #ffffff !important; 
+  font-weight: 500 !important;
+  font-size: 0.82rem !important; 
+  border: none !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  
+  padding: 12px 10px !important; /* Компактные боковые паддинги, ширину распределяет flex */
+  width: 100% !important; 
+  text-align: center !important; 
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center;
+  min-height: 48px; 
+  
+  white-space: normal !important; 
+  text-overflow: clip !important; 
+  overflow: visible !important;
+  
+  word-wrap: break-word !important;
+  word-break: keep-all !important; 
+  
+  transition: all 0.2s ease-in-out !important;
+}
+
+/* Подсветка кнопок */
+.shop-menu-btn:hover,
+.shop-menu-btn.active {
+  color: #000000 !important;
+  font-weight: 600 !important;
+  background: rgba(0, 0, 0, 0.05) !important; 
+}
+
+/* Мобильная адаптивность — плавная пальцевая прокрутка ленты на смартфонах */
+@media (max-width: 1340px) {
+  .shop-menu-container {
+    margin: 8px 15px 16px 15px !important; 
+    width: calc(100% - 30px) !important;
+  }
+  .shop-menu-list {
+    justify-content: flex-start !important; 
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+  }
+  .shop-menu-list::-webkit-scrollbar {
+    display: none !important;
+  }
+  .shop-menu-item {
+    flex: 0 0 auto !important; /* На мобилках возвращаем авто-ширину для скролла */
+    border-right: 1px solid rgba(0, 0, 0, 0.08) !important;
+  }
+  .shop-menu-btn {
+    padding: 10px 14px !important;
+    min-height: 44px;
+  }
+}

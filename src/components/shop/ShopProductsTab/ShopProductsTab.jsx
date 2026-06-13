@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useShop } from '../ShopMainDetails/ShopContext'; 
 import { filterAndSortProducts } from './shopHelpers.js'; 
 import ShopSidebar from './ShopSidebar'; 
-import ShopBanner from "../ShopHeader/ShopBanner"; 
+import ShopBanner from "../ShopHome/ShopBanner"; 
 
 // ЖЕЛЕЗОБЕТОННЫЙ ФИКС ИМПОРТА: Подтягиваем карточку по её реальному имени на диске
 import ProductCard from '../ShopMainDetails/ShopProductCards'; 
@@ -100,6 +100,7 @@ export default function ShopProductsTab() {
       </div>
     );
   }
+
   return (
     <div className="container my-4">
       {isMainLanding && <ShopBanner />} 

@@ -33,7 +33,7 @@
 .faq-modern-list {
   display: flex;
   flex-direction: column;
-  gap: 18px; /* Зазор между карточками */
+  gap: 18px;
 }
 
 /* ==========================================================================
@@ -42,27 +42,26 @@
 .faq-modern-card {
   background: #ffffff;
   border: 1px solid rgba(232, 228, 220, 0.7);
-  border-radius: 16px; /* Современное глубокое закругление углов */
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 15px rgba(44, 37, 32, 0.02); /* Мягкая парящая тень */
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 4px 15px rgba(44, 37, 32, 0.02);
+  transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              border-color 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), 
+              box-shadow 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Эффект ховера: карточка плавно приподнимается при наведении */
 .faq-modern-card:hover {
   transform: translateY(-2px);
   border-color: rgba(227, 188, 114, 0.4); /* Мягкое золотое свечение границ */
   box-shadow: 0 8px 25px rgba(227, 188, 114, 0.08);
 }
 
-/* Состояние, когда карточка раскрыта пользователем */
 .faq-modern-card--open {
   border-color: #e3bc72; /* Фирменное благородное золото клиники */
   box-shadow: 0 10px 30px rgba(227, 188, 114, 0.12);
   background-color: #ffffff;
 }
 
-/* Шапка карточки */
 .faq-modern-card__header {
   padding: 24px 28px;
   display: flex;
@@ -83,11 +82,11 @@
 }
 
 .faq-modern-card:hover .faq-modern-card__question {
-  color: #e3bc72; /* Текст вопроса слегка золотеет при наведении кусора */
+  color: #08479b;
 }
 
 .faq-modern-card--open .faq-modern-card__question {
-  color: #2c2520; /* Возвращаем глубокий темный цвет при открытии */
+  color: #2c2520;
 }
 
 /* Круглая капсула-подложка для стрелочки */
@@ -100,49 +99,71 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  transition: all 0.25s ease;
+  transition: background-color 0.25s ease;
 }
 
 .faq-modern-card__arrow {
   font-size: 22px;
   line-height: 1;
   color: #70655c;
-  transform: rotate(-90deg) translateY(1px); /* Смотрит строго вниз по умолчанию */
-  display: inline-block;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s ease;
+  /* 🎯 СЕНЬОР-ФИКС: убрали rotate отсюда, теперь за него отвечает framer-motion */
+  transition: color 0.25s ease; 
 }
 
-/* Анимация стрелки и кружка при открытии карточки */
 .faq-modern-card--open .faq-modern-card__arrow-wrapper {
-  background-color: #2c2520; /* Кружок становится стильным темным */
+  background-color: #ecc101; /* Кружок становится стильным темным */
 }
 
 .faq-modern-card--open .faq-modern-card__arrow {
-  transform: rotate(90deg) translateY(1px); /* Стрелка плавно разворачивается вверх */
   color: #ffffff; /* Сама стрелочка белеет */
 }
 
-/* ВЫСОКОПРОИЗВОДИТЕЛЬНОЕ CSS-РАСКРЫТИЕ ПАНЕЛИ НА GRID БЕЗ ЛАГОВ И JS */
+/* 🎯 СЕНЬОР-ФИКС: Очистили обертку от CSS-грида. 
+   Framer Motion берет управление переполнением на себя */
 .faq-modern-card__body-wrapper {
-  display: grid;
-  grid-template-rows: 0fr; /* Изначально высота скрыта */
-  transition: grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.faq-modern-card--open .faq-modern-card__body-wrapper {
-  grid-template-rows: 1fr; /* Разворачивается ровно под высоту текста */
+  overflow: hidden;
+  width: 100%;
 }
 
 .faq-modern-card__body-content {
-  overflow: hidden; /* Обрезает контент в момент анимации */
+  width: 100%;
 }
 
 .faq-modern-card__answer {
   padding: 0 28px 24px 28px;
   font-size: 15px;
   line-height: 1.6;
-  color: #554d46;
+  color: #fc0000;
   margin: 0;
-  border-top: 1px solid rgba(232, 228, 220, 0.3); /* Тонкая разделительная черта */
+  border-top: 1px solid rgba(255, 0, 0, 0.3);
   padding-top: 16px;
 }
+
+
+
+/* Находим в твоем CSS эти классы и обновляем их свойства */
+
+.faq-modern-card__body-wrapper {
+  overflow: hidden;
+  width: 100%;
+}
+
+.faq-modern-card__body-content {
+  width: 100%;
+  /* Линия теперь здесь, чтобы она появлялась мгновенно, а текст выплывал из-под нее */
+  border-top: 1px solid rgba(232, 228, 220, 0.4); 
+  padding: 16px 28px 24px 28px;
+}
+
+.faq-modern-card__answer {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #0c0c0c;
+  margin: 0;
+  /* Убрали отсюда border-top и padding-top, перенесли в родительский __body-content */
+}
+
+
+
+
+

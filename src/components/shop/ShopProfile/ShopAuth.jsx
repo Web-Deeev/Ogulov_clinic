@@ -171,7 +171,7 @@ const ShopAuth = () => {
         )}
 
         {/* Форма 2: Регистрация */}
-        {authMethod === 'register' && (
+         {authMethod === 'register' && (
           <form onSubmit={handleRegisterSubmit}>
             <div className="mb-2">
               <label className="form-label small fw-medium text-muted mb-1">Номер телефона (ваш логин)</label>
@@ -196,7 +196,7 @@ const ShopAuth = () => {
                   placeholder="Иван" 
                   required 
                   value={registerForm.firstName}
-                  onChange={handleRegisterChange}
+                  onChange={(e) => setRegisterForm({ ...registerForm, firstName: e.target.value })}
                   disabled={loading}
                 />
               </div>
@@ -209,7 +209,7 @@ const ShopAuth = () => {
                   placeholder="Иванов" 
                   required 
                   value={registerForm.lastName}
-                  onChange={handleRegisterChange}
+                  onChange={(e) => setRegisterForm({ ...registerForm, lastName: e.target.value })}
                   disabled={loading}
                 />
               </div>
@@ -224,7 +224,7 @@ const ShopAuth = () => {
                 placeholder="name@example.com" 
                 required 
                 value={registerForm.regEmail}
-                onChange={handleRegisterChange}
+                onChange={(e) => setRegisterForm({ ...registerForm, regEmail: e.target.value })}
                 disabled={loading}
               />
             </div>
@@ -239,7 +239,7 @@ const ShopAuth = () => {
                   placeholder="Минимум 6 символов" 
                   required 
                   value={registerForm.regPassword}
-                  onChange={handleRegisterChange}
+                  onChange={(e) => setRegisterForm({ ...registerForm, regPassword: e.target.value })}
                   disabled={loading}
                 />
                 <button 

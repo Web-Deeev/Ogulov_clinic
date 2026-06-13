@@ -8,7 +8,7 @@ export default function ClinicFAQ() {
   const [activeIndex, setActiveIndex] = useState(-1);
 
   const toggleFAQ = (index) => {
-    // Жесткая проверка: если кликнули на уже открытый индекс — закрываем (-1), иначе открываем новый
+    // Если кликнули на уже открытый индекс — закрываем (-1), иначе открываем новый
     setActiveIndex(activeIndex === index ? -1 : index);
   };
 
@@ -37,11 +37,11 @@ export default function ClinicFAQ() {
         <div className="faq-modern-list">
           {faqData.map((item, index) => (
             <FAQItem 
-              key={`faq-item-${index}`} // Используем индекс для стабильного ключа в DOM
+              key={`faq-item-${index}`} // Стабильный строковый ключ для React Virtual DOM
               question={item.question} 
               answer={item.answer} 
-              isOpen={activeIndex === index} // Жесткое сравнение по индексам в обход кривых ID
-              onToggle={() => toggleFAQ(index)} // Передаем индекс текущей итерации
+              isOpen={activeIndex === index} 
+              onToggle={() => toggleFAQ(index)} 
             />
           ))}
         </div>

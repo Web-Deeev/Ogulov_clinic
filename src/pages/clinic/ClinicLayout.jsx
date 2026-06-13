@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, useMatch } from 'react-router-dom';
-import Header from '../../components/common/Header/Header'; 
-import Footer from '../../components/common/Footer/Footer'; 
+import Header from '../../components/common/Header/clinic/Header'; 
+import Footer from '../../components/common/Footer/clinic/Footer'; 
 import ContactSection from '../../components/clinic/Home/ContactSection'; 
 
 export default function ClinicLayout() {

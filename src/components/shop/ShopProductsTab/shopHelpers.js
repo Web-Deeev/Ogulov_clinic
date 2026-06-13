@@ -4,6 +4,20 @@ export const parsePrice = (priceStr) => {
 };
 
 /**
+ * Безопасное извлечение слага категории из данных Django DRF (строка или объект)
+ */
+const extractCategorySlug = (category) => {
+  if (!category) return '';
+  if (typeof category === 'string') return category.toLowerCase();
+  if (typeof category === 'object') {
+    // Проверяем стандартные поля Django-сериализатора: slug, затем title, затем id
+    const slug = category.slug || category.title || category.name || category.id || '';
+    return String(slug).toLowerCase();
+  }
+  return String(category).toLowerCase();
+};
+
+/**
  * Универсальный продакшн-конвейер фильтрации и сортировки товаров клиники Огулова
  */
 export const filterAndSortProducts = ({
@@ -40,27 +54,25 @@ export const filterAndSortProducts = ({
   } else {
     // 2. СТРОГАЯ ФИЛЬТРАЦИЯ СТРАНИЦ КАТЕГОРИЙ (С учетом архитектуры Django)
     result = products.filter(product => {
-      const prodCat = product.category ? product.category.toLowerCase() : '';
-      const actCat = activeCategory.toLowerCase();
+      // Применяем безопасный экстрактор слага
+      const prodCat = extractCategorySlug(product.category);
+      const actCat = String(activeCategory || '').toLowerCase();
 
       // ЖЕЛЕЗОБЕТОННЫЙ ФИКС БАДОВ: 
-      // Если мы в основном разделе БАД (id: 'bad'), пропускаем товары, чьи категории 
-      // либо равны 'bad', либо содержат 'bad', либо это их дочерние элементы (из твоего JSON)
       if (actCat === 'bad') {
         return prodCat === 'bad' || prodCat.includes('bad') || ['vitauct', 'fulvo', 'tea', 'herbs-honey', 'bee-power', 'health'].includes(prodCat);
       }
 
       // ЖЕЛЕЗОБЕТОННЫЙ ФИКС ДЛЯ ОСТАЛЬНЫХ КАТЕГОРИЙ (Учитываем дочерние слаги Django):
-      // Товар подходит, если его категория напрямую совпадает с сайдбаром (например, 'books')
-      // ИЛИ если дочерний слаг Django включает в себя имя родителя (например, 'pvvk' в разделе 'equipment')
       return prodCat === actCat || prodCat.startsWith(actCat) || actCat.startsWith(prodCat);
     });
 
     // 3. ФИЛЬТРАЦИЯ ПО КЛИКАМ НА ПЛИТКИ-ОКОШКИ БАДОВ
     if (activeSubcategory && !activeSubcategory.startsWith('all')) {
       result = result.filter(product => {
-        const prodCat = product.category ? product.category.toLowerCase() : '';
-        const activeSub = activeSubcategory.toLowerCase();
+        // Применяем безопасный экстрактор слага
+        const prodCat = extractCategorySlug(product.category);
+        const activeSub = String(activeSubcategory || '').toLowerCase();
 
         // Синхронизируем фронтенд-префиксы 'bady-' с чистыми слагами Django на лету (Паттерн Адаптер)
         return prodCat === activeSub || prodCat === activeSub.replace('bady-', '');

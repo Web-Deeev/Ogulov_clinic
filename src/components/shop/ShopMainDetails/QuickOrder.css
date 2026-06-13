@@ -1,0 +1,81 @@
+/* Базовые стили оверлея и карточки модалки */
+.quick-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(44, 37, 32, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2500;
+  animation: quickFadeIn 0.3s ease forwards;
+}
+
+.quick-modal-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+  border-radius: 20px;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  animation: quickScaleUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* 🎯 ТВОЙ UI-ЭФФЕКТ ДЛЯ МОДАЛКИ: Копируем нежно-зеленый круг */
+.success-icon-wrapper-modal {
+  width: 88px;
+  height: 88px;
+  background: #f0fdf4; /* Твой нежно-зеленый */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px auto;
+  border: 2px solid #bbf7d0;
+  animation: successScaleIn 0.5s cubic-bezier(0.34, 1.7, 0.64, 1) forwards;
+}
+
+/* Твоя сочная упругая галочка */
+.success-checkmark-modal {
+  font-size: 44px;
+  color: #22c55e; /* Твой сочный зеленый */
+  font-weight: bold;
+  line-height: 1;
+  transform: scale(0);
+  animation: checkmarkPop 0.3s 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Кнопка закрытия успеха в стиле бренда клиники */
+.quick-modal-close-success-btn {
+  background: #2c2520;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.3s ease;
+}
+
+.quick-modal-close-success-btn:hover {
+  background: #e3bc72; /* Золотой ховер клиники */
+}
+
+.quick-modal-close-success-btn:active {
+  transform: scale(0.97);
+}
+
+/* Остальные микро-стили для полей ввода */
+.quick-modal-close-btn { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 24px; color: #a0aec0; cursor: pointer; }
+.quick-modal-input-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; text-align: left; }
+.quick-modal-input-group label { font-size: 13px; font-weight: 600; color: #70655c; }
+.quick-modal-input-group input { padding: 12px; border-radius: 10px; border: 1px solid #e8e4dc; outline: none; font-size: 14px; }
+.quick-modal-submit-btn { width: 100%; padding: 14px; background: #2c2520; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+.quick-modal-product-badge { background: #f4f1ea; padding: 10px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 20px; text-align: left; }
+
+/* Анимации оверлея */
+@keyframes quickFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes quickScaleUp { from { transform: scale(0.9) translateY(10px); opacity: 0; } to { transform: scale(1) translateY(0); opacity: 1; } }

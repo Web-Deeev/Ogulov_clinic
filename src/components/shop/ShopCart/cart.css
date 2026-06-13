@@ -17,3 +17,4 @@ form.row.align-items-start {
 html, body, #root, .shop-page-wrapper {
   overflow-x: clip !important;        /* Заменяем hidden на clip, чтобы не ломать sticky */
 }
+

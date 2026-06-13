@@ -60,9 +60,12 @@ export default function ShopCheckout() {
         }
       }
 
+      const rawFullName = `${userProfile.last_name || ''} ${userProfile.first_name || ''}`.trim();
+      const computedFullName = rawFullName || userProfile.name || userProfile.username || prev.customer_name;
+
       setFormData(prev => ({
         ...prev,
-        customer_name: userProfile.first_name || userProfile.name || prev.customer_name,
+        customer_name: computedFullName, // 👈 Передаем полностью собранное ФИО
         phone: formattedPhone,
         delivery_address: userProfile.address || prev.delivery_address
       }));
